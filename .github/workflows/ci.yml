@@ -39,3 +39,36 @@ jobs:
         run: |
           export ROBOTUTOR_COURSES_BIN="$CARGO_TARGET_DIR/debug/robotutor-courses"
           python3 desktop/check_native_courses.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Exercise Chromium research on macOS
+        working-directory: desktop/chromium
+        run: |
+          npm ci --no-audit
+          node install.cjs
+          export ROBOTUTOR_RESEARCH_HELPER="$GITHUB_WORKSPACE/lab/target/debug/robotutor-research"
+          node_modules/.bin/electron smoke.cjs "$(mktemp -d)"
+  research-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev xvfb
+      - run: cargo test --locked --manifest-path desktop/course-window/Cargo.toml --bin robotutor-research
+      - run: cargo build --locked --manifest-path desktop/course-window/Cargo.toml --bin robotutor-research
+      - working-directory: desktop/chromium
+        run: |
+          npm ci --no-audit
+          node node_modules/electron/install.js
+          sudo install -D -o root -g root -m 4755 node_modules/electron/dist/chrome-sandbox /usr/local/libexec/robotutor/chrome-sandbox
+          node install.cjs
+          export ROBOTUTOR_RESEARCH_HELPER="$GITHUB_WORKSPACE/desktop/course-window/target/debug/robotutor-research"
+          xvfb-run -a node_modules/.bin/electron smoke.cjs "$(mktemp -d)"
+  research-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo test --locked --manifest-path desktop/course-window/Cargo.toml --bin robotutor-research

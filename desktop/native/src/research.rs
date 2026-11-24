@@ -22,9 +22,9 @@ impl Window {
         }
         let dir = workspace(folder, visit);
         rt.secure(&dir)?;
-        let binary = env::current_exe()?.with_file_name("robotutor-research.exe");
+        let binary = env::current_exe()?.with_file_name(format!("robotutor-research{}", env::consts::EXE_SUFFIX));
         if !binary.is_file() {
-            return Err("Install the research browser with Robotutor.cmd --rebuild.".into());
+            return Err("Build the research browser using the Robotutor desktop launcher.".into());
         }
         self.0 = Some(
             command(binary)

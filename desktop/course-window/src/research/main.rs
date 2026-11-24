@@ -1,10 +1,10 @@
 #![cfg_attr(all(windows, not(test)), windows_subsystem = "windows")]
 #[cfg(windows)]
 mod browser;
-#[cfg(windows)]
 mod google;
-#[cfg(windows)]
 mod notebook;
+#[cfg(unix)]
+mod portable;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     if std::env::args().nth(1).as_deref() == Some("--version") {
@@ -13,6 +13,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     #[cfg(windows)]
     return browser::run();
-    #[cfg(not(windows))]
-    Err("The research browser requires Windows WebView2.".into())
+    #[cfg(unix)]
+    portable::run()
 }

@@ -49,20 +49,7 @@ fn bounds(y: f64, w: f64, h: f64) -> Rect {
 }
 // This script runs only on supported public article paths. It never inspects input values,
 // selects text, attaches event listeners, or walks the full document text.
-const METADATA: &str = r#"(() => {
-  if (document.querySelector('input[type=password]')) return null;
-  const root=document.querySelector('main,article,[role=main]') || document.body;
-  if (!root) return null;
-  const headings=[];
-  for (const h of root.querySelectorAll('h1,h2')) {
-    if (headings.length===6) break;
-    if (h.checkVisibility({checkVisibilityCSS:true}) && !h.closest('form,[contenteditable=true]')) {
-      const text=h.innerText.trim().slice(0,100);
-      if (text) headings.push(text);
-    }
-  }
-  return {href:location.href,title:document.title.slice(0,160),headings};
-})()"#;
+const METADATA: &str = include_str!("metadata.js");
 
 fn collect(
     view: &WebView,

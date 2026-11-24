@@ -186,7 +186,7 @@
         el("google").disabled = s.waiting;
         el("message").textContent = s.message;
         el("book").hidden = !s.expanded;
-        el("engine").textContent = "Chromium-based WebView2 " + s.runtime;
+        el("engine").textContent = (s.engine || "Chromium-based WebView2") + " " + s.runtime;
         el("rows").replaceChildren();
         for (const r of s.rows) {
           const li = document.createElement("li");
