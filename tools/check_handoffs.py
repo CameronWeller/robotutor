@@ -14,7 +14,11 @@ def verify(root):
         parent = row["predecessor"]
         if name in seen or (parent is not None and parent not in seen):
             raise ValueError(f"Invalid session or predecessor for {name}")
-        for repo, revision in [(root, row["work"]), (archive, row["archive"])]:
+        work_repository = row.get("work_repository", "code")
+        if work_repository not in {"code", "archive"}:
+            raise ValueError(f"Unknown work repository for {name}: {work_repository}")
+        work_root = archive if work_repository == "archive" else root
+        for repo, revision in [(work_root, row["work"]), (archive, row["archive"])]:
             if git(repo, "rev-parse", "--verify", revision + "^{commit}") != revision:
                 raise ValueError(f"Expected a full commit ID for {name}")
             git(repo, "merge-base", "--is-ancestor", revision, "HEAD")
