@@ -53,6 +53,26 @@ app.whenReady().then(async () => {
       fs.writeFileSync(path.join(workspace, 'notebook-' + width + '.png'), capture.toPNG());
     }
   }
+  await click('toggle');
+  await until(() => toolbar.executeJavaScript('document.getElementById("toggle").getAttribute("aria-pressed") === "true"'), 'recording enabled');
+  assert.equal(rows().length, 1, 'starting recording in the notebook must not record the hidden page');
+  for (const [action, target] of [
+    ['back', 'https://accounts.example.org/settings'],
+    ['forward', 'https://science.nasa.gov/earth/sample'],
+    ['reload', 'https://science.nasa.gov/earth/sample'],
+  ]) {
+    let loaded = false;
+    web.once('did-finish-load', () => { loaded = true; });
+    await toolbar.executeJavaScript('document.querySelector("[data-action=' + action + ']").click()');
+    await until(() => loaded, action + ' navigation');
+    assert.equal(web.getURL(), target);
+    assert.ok(win.contentView.children[0].getVisible(), action + ' should reveal the resource');
+    await until(() => toolbar.executeJavaScript('document.getElementById("book").hidden'), 'notebook dismissed');
+    if (action === 'back') assert.equal(rows().length, 1);
+    else await until(() => rows().length === 2, 'visible resource recorded');
+    await click('notebook');
+    await until(() => !win.contentView.children[0].getVisible(), 'notebook opened');
+  }
   await click('clear');
   await toolbar.executeJavaScript('document.querySelector("[data-action=clear]").click()');
   await until(() => rows().length === 0, 'confirmed deletion');

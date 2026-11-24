@@ -63,6 +63,10 @@ async function open() {
     content.setVisible(!expanded);
     content.setBounds({x: 0, y: top, width, height: h-top});
   }
+  function revealPage() {
+    expanded = false;
+    layout();
+  }
   async function render() {
     if (toolbar.isDestroyed()) return;
     layout();
@@ -73,11 +77,11 @@ async function open() {
   }
   async function observe() {
     const at = epoch, url = web.getURL();
-    if (!recording || !publicPage(url)) return;
+    if (!recording || expanded || !publicPage(url)) return;
     const article = notebook('source', url);
     if (article === null) return;
     const data = article ? await web.executeJavaScript(metadata) : null;
-    if (recording && epoch === at && url === web.getURL() && (!article || data?.href === url))
+    if (recording && !expanded && epoch === at && url === web.getURL() && (!article || data?.href === url))
       notebook('record', url, data);
   }
   function fail() {
@@ -93,16 +97,26 @@ async function open() {
       case 'height': height = Math.max(70, Math.min(320, Number(request.value) || 90)); break;
       case 'go': {
         const target = notebook('destination', request.value);
-        if (target && publicPage(target)) {expanded = false; message = ''; await web.loadURL(target);}
+        if (target && publicPage(target)) {revealPage(); message = ''; await web.loadURL(target);}
         else message = 'Enter a search or public HTTPS address.';
         break;
       }
       case 'toggle': epoch++; recording = !recording; if (recording) await observe(); break;
-      case 'notebook': expanded = !expanded; break;
+      case 'notebook': epoch++; expanded = !expanded; break;
       case 'clear': epoch++; recording = false; notebook('clear'); break;
-      case 'back': if (web.navigationHistory.canGoBack()) web.navigationHistory.goBack(); break;
-      case 'forward': if (web.navigationHistory.canGoForward()) web.navigationHistory.goForward(); break;
-      case 'reload': web.reload(); break;
+      case 'back':
+        if (web.navigationHistory.canGoBack()) {
+          revealPage();
+          web.navigationHistory.goBack();
+        }
+        break;
+      case 'forward':
+        if (web.navigationHistory.canGoForward()) {
+          revealPage();
+          web.navigationHistory.goForward();
+        }
+        break;
+      case 'reload': revealPage(); web.reload(); break;
       case 'google':
         if (waiting) break;
         if (account) {account = ''; break;}
