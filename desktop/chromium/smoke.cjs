@@ -46,8 +46,12 @@ app.whenReady().then(async () => {
   for (const [width,height] of [[1040,750],[560,440]]) {
     win.setContentSize(width,height);
     await until(() => toolbar.executeJavaScript('innerWidth === '+width), 'resizing');
-    const capture = await toolbar.capturePage();
-    fs.writeFileSync(path.join(workspace,'notebook-'+width+'.png'),capture.toPNG());
+    assert.ok(await toolbar.executeJavaScript(
+      'document.getElementById("clear").getBoundingClientRect().right <= innerWidth'));
+    if (process.env.ROBOTUTOR_CAPTURE_RESEARCH === '1') {
+      const capture = await toolbar.capturePage();
+      fs.writeFileSync(path.join(workspace, 'notebook-' + width + '.png'), capture.toPNG());
+    }
   }
   await click('clear');
   await toolbar.executeJavaScript('document.querySelector("[data-action=clear]").click()');
