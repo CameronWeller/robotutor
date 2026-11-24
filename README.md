@@ -5,3 +5,11 @@ Robotutor is a Rust tutor for one learner across visits. Start the desktop with 
 The LMS and course interface are included in this tree. The private development archive is optional for contributors. Authorized maintainers can run `git submodule update --init logs` and submit reviewed Markdown using `python3 tools/append_transcript.py --entry ID logs/YYYY/MM/DD/codex-topic-01.md < reviewed.md`. The helper pushes directly to the archive. Refresh its local branch before intentionally checkpointing the gitlink.
 
 Robotutor is licensed under AGPL-3.0. Nunito is distributed under the accompanying SIL Open Font License in web/brand/OFL.txt.
+
+## Teaching commitments
+
+Begin with a small, useful discovery question. A learner can correct what Robotutor inferred, inspect why the tutor chose its next move, and return to unfinished work. Credit independent reasoning at the point where it appears, record the help given, and revisit the skill in a different task to assess retention. The same lesson state supports terminal and native desktop clients. The [educational charter](docs/foundation/educational-charter.md) describes how these choices serve the learner.
+
+## Maintaining the private archive
+
+After a reviewed append, refresh the submodule with `git -C logs fetch origin main` and `git -C logs merge --ff-only origin/main` from a clean submodule checkout. Run `python3 tools/transcript_changes.py` to compare dated records to the private review inventory. Run `python3 tools/check_handoffs.py` to verify the recorded code and archive commits. Stage the gitlink with `git add logs` only when recording a new checkpoint.

@@ -1,5 +1,12 @@
-name: Native macOS desktop
-on: [push, pull_request, workflow_dispatch]
+name: Robotutor contributor checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: contributor-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -9,7 +16,10 @@ jobs:
       - uses: actions/checkout@v4
       - run: cargo test --locked --manifest-path lab/Cargo.toml --all-targets
       - run: cargo test --locked --manifest-path lms/Cargo.toml
+      - run: python3 -m unittest discover -s tests
       - run: python3 -m unittest discover -s tools -p 'test_append_transcript.py'
+      - name: Confirm contributor checkout excludes development transcripts
+        run: test ! -e logs/.archive-format
   macos:
     runs-on: macos-15
     timeout-minutes: 25
