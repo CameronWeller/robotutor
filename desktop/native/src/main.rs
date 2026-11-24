@@ -6,7 +6,7 @@ mod instance;
 #[path = "../../../lab/src/lms_client.rs"]
 mod lms_client;
 mod practice;
-#[cfg(windows)]
+
 mod research;
 mod runtime;
 mod theme;
@@ -59,7 +59,7 @@ struct Desktop {
     course_result: Option<Receiver<ResultString>>,
     tools: tools::Panels,
     inspect_offset: u64,
-    #[cfg(windows)]
+
     research: research::Window,
 }
 fn preceding_turns<'a>(history: &'a [(String, String)], question: &str) -> &'a [(String, String)] {
@@ -118,7 +118,7 @@ impl Desktop {
             course_result: None,
             tools: tools::Panels::default(),
             inspect_offset: 0,
-            #[cfg(windows)]
+
             research: research::Window::default(),
         };
         app.refresh(requested)?;
@@ -144,7 +144,7 @@ impl Desktop {
     }
     fn open(&mut self, key: String) -> Result<()> {
         let (folder, visit) = self.runtime.visit(&key)?;
-        #[cfg(windows)]
+
         self.research.close();
         // Release the old journal writer before starting another session in the same workspace.
         self.tutor.take();
@@ -363,7 +363,7 @@ impl Desktop {
         }
         self.page = page;
     }
-    #[cfg(windows)]
+
     fn refresh_resources(&mut self) -> Result<()> {
         self.tools.resource_check = Some(std::time::Instant::now());
         self.tools.resources.clear();
@@ -371,7 +371,7 @@ impl Desktop {
         Ok(())
     }
     fn inspect(&mut self) -> Result<()> {
-        #[cfg(windows)]
+
         self.refresh_resources()?;
         let o = runtime::command(&self.runtime.tutor)
             .arg("--inspect-journal")
@@ -480,7 +480,7 @@ impl Desktop {
         } else {
             self.personal.profile(name, reset)?
         };
-        #[cfg(windows)]
+
         self.research.close();
         self.tutor.take();
         self.key.clear();
@@ -525,7 +525,7 @@ impl Desktop {
                     self.notice = e.to_string()
                 }
             }
-            #[cfg(windows)]
+
             if ui.button("Research browser").clicked() {
                 if let Err(error) = self
                     .research
@@ -734,12 +734,12 @@ impl Desktop {
 }
 impl eframe::App for Desktop {
     fn update(&mut self, ctx: &egui::Context, _: &mut eframe::Frame) {
-        #[cfg(windows)]
+
         if self.research.finished_with_error() {
             self.notice =
                 "The research browser closed unexpectedly. Reopen it from this lesson.".into();
         }
-        #[cfg(windows)]
+
         if self.page == Page::Inspector
             && self
                 .tools

@@ -18,9 +18,9 @@ use tempfile::NamedTempFile;
 #[derive(Default)]
 pub struct Panels {
     pub events: Vec<Value>,
-    #[cfg(windows)]
+
     pub resources: Vec<Value>,
-    #[cfg(windows)]
+
     pub resource_check: Option<Instant>,
     selected: usize,
     reviews: Vec<Value>,
@@ -31,7 +31,7 @@ pub struct Panels {
 }
 impl Panels {
     pub fn inspector(&mut self, ui: &mut Ui) {
-        #[cfg(windows)]
+
         ui.collapsing(format!("Research resources ({})", self.resources.len()), |ui| {
             ui.label("Resources available in this lesson can help explain how a learner approached a question. Mastery still requires evidence from the learner.");
             for source in &self.resources {

@@ -13,3 +13,5 @@ Begin with a small, useful discovery question. A learner can correct what Robotu
 ## Maintaining the private archive
 
 After a reviewed append, refresh the submodule with `git -C logs fetch origin main` and `git -C logs merge --ff-only origin/main` from a clean submodule checkout. Run `python3 tools/transcript_changes.py` to compare dated records to the private review inventory. Run `python3 tools/check_handoffs.py` to verify the recorded code and archive commits. Stage the gitlink with `git add logs` only when recording a new checkpoint.
+
+The research browser uses Chromium on Windows (WebView2), macOS, and Linux. On the Unix launchers, Node.js 22.12 or newer and npm install the pinned Electron runtime. Linux builds also require GTK and WebKitGTK 4.1 development libraries for the separate course window. Research recording starts paused. Each lesson owns its notebook and browser profile. Optional Google account verification uses a registered Desktop OAuth client supplied through ROBOTUTOR_GOOGLE_CLIENT_FILE.
