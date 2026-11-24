@@ -3,7 +3,6 @@ import argparse
 from contextlib import closing
 import os
 from pathlib import Path
-import shlex
 import shutil
 import subprocess
 import sys
@@ -55,10 +54,12 @@ def main():
     command = [str(program), "--repo", str(repo), "--state", str(state)]
     if args.include_thread:
         subprocess.run([sys.executable, *command, "include-thread", args.include_thread], check=True)
-    hook.parent.mkdir(parents=True, exist_ok=True)
-    hook_cmd = " ".join(shlex.quote(s.replace("\\", "/")) for s in [sys.executable, *command, "trailer"])
-    hook.write_bytes(("#!/bin/sh\n" + MARKER + '\n[ -n "$CODEX_THREAD_ID" ] || exit 0\n'
-                      + hook_cmd + ' "$1" "${2:-}" || echo "Robotutor session trailer unavailable" >&2\n').encode())
+    # Old installers added private session links to code commits.
+    if hook.exists() and MARKER in hook.read_text(encoding="utf-8"):
+        if hook.read_text(encoding="utf-8").splitlines()[1:3] == [MARKER, '[ -n "$CODEX_THREAD_ID" ] || exit 0']:
+            hook.unlink()
+        else:
+            p.error("Remove the archive trailer from the customized hook before reinstalling")
     pythonw = Path(sys.executable).with_name("pythonw.exe")
     worker = [str(pythonw), *command, "start"]
     env = dict(os.environ, RT_ARCHIVE_PYTHON=str(pythonw), RT_ARCHIVE_ARGS=subprocess.list2cmdline(worker[1:]))
@@ -76,7 +77,7 @@ def main():
     (state / "stop").unlink(missing_ok=True)
     if not running:
         subprocess.run(worker, check=True, **quiet_process())
-    print("Installed the per-user login recorder and repository commit hook.")
+    print("Installed the per-user login recorder.")
     print(subprocess.list2cmdline([sys.executable, *command, "status"]))
 
 

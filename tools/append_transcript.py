@@ -81,6 +81,11 @@ def publish(repo, path, content, entry):
         raise RuntimeError("Concurrent writers kept updating the branch. Retry with the same entry ID.")
 
 def outbox_folder(repo):
+    root = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "--show-toplevel"], text=True, **quiet_process()
+    ).strip()
+    if Path(root).resolve() != Path(repo).resolve() or not (Path(root) / ".archive-format").is_file():
+        raise ValueError("Initialize the private archive and use its checkout as --repo")
     common = subprocess.check_output(
         ["git", "-C", str(repo), "rev-parse", "--path-format=absolute", "--git-common-dir"],
         text=True, **quiet_process(),
