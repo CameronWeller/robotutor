@@ -1,0 +1,143 @@
+{
+  "revision": 1,
+  "scope": {
+    "goal": "I want to learn to be a better person",
+    "purpose": "The learner chooses consideration in everyday conversations and wants practice making space when they have cut someone off. They may change the value, change the exercise or end the plan.",
+    "setting": "An adult practising with fictional everyday and volunteer-group exchanges in a private tutoring session. The learner can write words, describe an action or pass. Personal names, recordings and reports from other people are unnecessary.",
+    "horizon": "Six weeks, two 15-minute sessions a week, with an optional fresh scenario around week four."
+  },
+  "intake_question": "What does better mean to you in a situation you care about? You can choose a small action to practise, explore a fictional example first, or leave that question open.",
+  "scope_reply": "I value consideration. I sometimes jump in while someone is explaining something. I'd like to practise giving them the turn back. Let's start with made-up situations, and let me decide later whether this is still useful.",
+  "evidence_mode": "written_artifact",
+  "criterion_claim": "In a fictional exchange, the learner can write or describe a response that recognizes their own interruption and gives the other speaker a real opportunity to continue before pressing their own point.",
+  "limit": "A reviewed response supports a claim about that response in that exercise. A self-report describes the learner’s own account. Daily conduct, another person's experience, sincerity, and moral character remain unknown. The learner may pass or change direction.",
+  "calendar_minutes": 180,
+  "reserve_minutes": 60,
+  "session_minutes": 15,
+  "facets": [
+    {
+      "id": 1, "name": "Returning an interrupted turn",
+      "performance": "Notice that one's contribution cut off an unfinished turn and make room for its speaker to finish or pass.",
+      "min_minutes": 30, "source_url": "https://ggia.berkeley.edu/practice/Active_listening"
+    },
+    {
+      "id": 2, "name": "Choosing values and weighing tradeoffs",
+      "performance": "Choose a value in one's own words, name a competing concern, and describe a feasible action or a reason to revise the aim.",
+      "min_minutes": 15, "source_url": "https://iris.who.int/bitstream/handle/10665/331901/9789240003910-eng.pdf"
+    },
+    {
+      "id": 3, "name": "Checking an interpretation",
+      "performance": "Separate what a speaker said from an inference and offer a way for the speaker to correct the inference.",
+      "min_minutes": 15, "source_url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/listening-skills-for-maximum-success/"
+    },
+    {
+      "id": 4, "name": "Taking responsibility for a missed commitment",
+      "performance": "Name one's part in a fictional missed commitment, propose one feasible repair, and leave the other person free to decline.",
+      "min_minutes": 15, "source_url": "https://ggia.berkeley.edu/practice/making_an_effective_apology"
+    },
+    {
+      "id": 5, "name": "Disagreement and boundaries",
+      "performance": "Express a difference or a limit in a fictional discussion while leaving the other participant a choice about further discussion.",
+      "min_minutes": 15, "source_url": "https://ggia.berkeley.edu/practice/Active_listening"
+    },
+    {
+      "id": 6, "name": "Sharing time and effort",
+      "performance": "Describe who bears the work in two possible arrangements and identify a question whose answer could change the choice.",
+      "min_minutes": 15
+    },
+    {
+      "id": 7, "name": "Deciding whether the practice still fits",
+      "performance": "Compare a written rehearsal with an optional recollection, tag how each is known, and choose whether to keep, change or end the practice.",
+      "min_minutes": 15
+    }
+  ],
+  "discovery": {
+    "material": {
+      "sources": [
+        {
+          "publisher": "Greater Good in Action, University of California, Berkeley", "url": "https://ggia.berkeley.edu/practice/Active_listening", "held": false,
+          "labels": [{"key": "gg-turns", "text": "Take turns.", "facets": [1, 5]}]
+        },
+        {
+          "publisher": "Program on Negotiation at Harvard Law School", "url": "https://www.pon.harvard.edu/daily/negotiation-skills-daily/listening-skills-for-maximum-success/", "held": false,
+          "labels": [{"key": "pon-paraphrase", "text": "Paraphrase: Confirm Understanding", "facets": [3]}]
+        },
+        {
+          "publisher": "Greater Good in Action, University of California, Berkeley", "url": "https://ggia.berkeley.edu/practice/making_an_effective_apology", "held": false,
+          "labels": [{"key": "gg-amends", "text": "Making an Effective Apology", "facets": [4]}]
+        },
+        {
+          "publisher": "World Health Organization", "url": "https://iris.who.int/bitstream/handle/10665/331901/9789240003910-eng.pdf", "held": true,
+          "labels": [{"key": "who-values", "text": "Part 3: ACTING ON YOUR VALUES", "facets": [2]}]
+        }
+      ],
+      "owner_aims": [
+        {"key": "shared-effort", "facet": 6, "reason": "An editor offers fair distribution of work as a possible application of the learner's value. The learner decides whether to spend time on it."},
+        {"key": "change-course", "facet": 7, "reason": "The learner explicitly asks to decide whether the practice is useful. Reserve space to revise the aim or stop."}
+      ],
+      "challenges": [
+        {"facet": 2, "evidence": "who-values", "question": "Where can the learner choose the value that a practice serves and revisit it when another obligation matters more?"}
+      ]
+    },
+    "first_map": [
+      {"facet": 1, "name": "Returning an interrupted turn", "evidence": ["gg-turns"]},
+      {"facet": 3, "name": "Checking an interpretation", "evidence": ["pon-paraphrase"]}
+    ],
+    "additions": [
+      {"facet": 2, "name": "Choosing values and weighing tradeoffs", "evidence": ["who-values"]},
+      {"facet": 4, "name": "Taking responsibility for a missed commitment", "evidence": ["gg-amends"]},
+      {"facet": 5, "name": "Disagreement and boundaries", "evidence": ["gg-turns"]},
+      {"facet": 6, "name": "Sharing time and effort", "owner_aim": "shared-effort"},
+      {"facet": 7, "name": "Deciding whether the practice still fits", "owner_aim": "change-course"}
+    ]
+  },
+  "proposal": {
+    "units": [
+      {"id": 101, "facet": 1, "title": "Give an unfinished thought room", "performance": "Write what you could say or do after cutting across a speaker in a fictional conversation, then leave the next turn available.", "minutes": 15, "requires": []},
+      {"id": 102, "facet": 2, "title": "What does consideration ask of you here?", "performance": "In a fictional time conflict, name two things you care about and choose which action fits this occasion, including a decision to change course.", "minutes": 15, "requires": []},
+      {"id": 103, "facet": 3, "title": "Check the story you filled in", "performance": "Given a partner's ambiguous remark about a schedule, mark what was said and offer a paraphrase they could correct.", "minutes": 15, "requires": []},
+      {"id": 104, "facet": 4, "title": "A promised task is still undone", "performance": "Draft an account of a missed volunteer task and an achievable remedy without requesting reassurance or assuming acceptance.", "minutes": 15, "requires": []},
+      {"id": 105, "facet": 5, "title": "Stay in disagreement or pause", "performance": "In a fictional planning dispute, state one limit and make clear how either person could pause the exchange.", "minutes": 15, "requires": []},
+      {"id": 106, "facet": 6, "title": "Who stays late to clean up?", "performance": "Compare a rotation with volunteered shifts and ask one question about the burden before proposing a split.", "minutes": 15, "requires": []},
+      {"id": 107, "facet": 7, "title": "Keep, change or release this goal", "performance": "Label what appears in a rehearsal and what comes from recollection, then decide whether a different practice would serve you better.", "minutes": 15, "requires": []},
+      {"id": 108, "facet": 1, "title": "Reopen a decision in a group chat", "performance": "Respond when a message you posted closes discussion over an unfinished contribution, leaving the contributor space to finish or pass.", "minutes": 15, "requires": [101]}
+    ]
+  },
+  "first_pack": {
+    "unit": 101,
+    "source_url": "https://ggia.berkeley.edu/practice/Active_listening",
+    "locator": "Active Listening, How to Do It, item 5, Avoid judgment, opening of the final sentence",
+    "excerpt": "Try not to interrupt with counterarguments",
+    "lesson": "Sometimes two people start talking together and both are happy to continue. Here the speaker has explicitly said they lost their turn. You can notice your part and stop advancing your own point. Give the speaker a choice about finishing. Any words or described action that does this can work.",
+    "worked": "In a rehearsal a volunteer says, 'The last bus leaves at—'. You jump in with a plan for rides. They stop. One possible repair is, 'I jumped ahead. You were telling me about the last bus. Want to finish?' Then you wait. They can continue, change the subject or pass.",
+    "practice": "A friend in a fictional scene is halfway through an idea for a weekend meal. You answer before hearing the rest. Try two possible repairs, one in words and one as a described action. What makes room for them in each?",
+    "practice_response": "In words: ‘I jumped in halfway through your idea. Did you want to finish?’ Then I wait. As an action, I stop mid-sentence, gesture back toward my friend to offer the turn, and wait. In both versions I hold my meal suggestion so they can choose whether to go on.",
+    "practice_feedback": "Your spoken version names the interruption, and the pause makes the invitation real. In the second version, stopping keeps your own suggestion from taking over. A gesture can be ambiguous, so if your friend seems unsure, you could add ‘Go ahead if you like.’",
+    "check": "In a fictional club meeting someone says, 'My concern about moving the start time is—'. You begin explaining your preferred time. They stop and say, 'I hadn't finished.' Write or describe your next turn.",
+    "criterion": "The response recognizes that the learner cut into an unfinished turn and leaves the other participant an opportunity to continue or pass before the learner presses their own proposal.",
+    "rubric": "Assess only what the submitted reply or action description does in this scene. A brief acknowledgment or an unambiguous described gesture can recognize the overlap. A pause or offered next turn can return it. The wording, dialect, degree of formality, and use of an apology are the learner's choice. A pass or an account of everyday behavior supplies no written performance for this criterion.",
+    "attempts": {
+      "demonstrated": {"response": "I cut in. You still had the floor. [I stop talking and give them the next turn.]", "feedback": "You named what happened and stopped your argument while they had the choice to continue. Those two features are visible in this written rehearsal."},
+      "revisit": {"response": "Sorry I cut in, but we really should start at six. It fixes everything.", "feedback": "You noticed the interruption. The rest of the line goes straight back to your start time. Where could you stop so the speaker has the next turn?"},
+      "unobserved": {"response": "I already give everyone space in meetings. I'd like to pass on the scene.", "feedback": "We can pass. Your account can guide the next choice of practice. This scene stays open."}
+    }
+  },
+  "return_pack": {
+    "show_source_during_check": false,
+    "unit": 108,
+    "source_url": "https://ggia.berkeley.edu/practice/Active_listening",
+    "locator": "Active Listening, How to Do It, item 7, Take turns, final clause of the first sentence",
+    "excerpt": "ask if it’s OK for you to share your thoughts and feelings",
+    "lesson": "In group chat the interruption can be a decision that appears final while someone is still contributing. Reopen the decision, identify what your message cut off, and leave room for the other person to continue, wait or pass. The exercise uses text so a partner's private details can stay private.",
+    "worked": "You post 'Booked for Tuesday' while a teammate is putting a condition in the chat. They reply that their point was unfinished. You could write, 'I closed that too quickly. I'll hold the booking. If you'd like to finish your point, I'll wait.' That leaves control of the next contribution with them.",
+    "practice": "In a fictional project chat you post a final room choice as someone is typing. They say they still had a concern. Draft a short follow-up without asking them to justify the concern in public.",
+    "check": "In a fictional group order you post 'I'll submit the order now.' Another member replies, 'Wait, I was halfway through the dietary notes.' Write your next message or describe a chat action and message. They can choose whether to share further details.",
+    "criterion": "The written response recognizes that the learner's message cut off an unfinished contribution and reopens the exchange so the contributor can finish or pass before the order proceeds.",
+    "rubric": "Look for acknowledgment of the prematurely closed turn and an actual opening to continue. The learner may pause the order, reopen discussion or describe an equivalent accessible action. Accept varied styles. Do not infer that someone accepted the repair, changed their diet or felt heard. Only the new written artifact can evidence this transfer exercise.",
+    "attempts": {
+      "demonstrated": {"response": "I jumped to submit while you were still writing. I'll hold the order. You can finish your note if you want to.", "feedback": "Your message reopens the order and gives the other member a choice. That is an instance of the same practice in a new medium."},
+      "revisit": {"response": "I know you were typing, but I just submitted the order. Send me every detail now.", "feedback": "You identified the overlap. Submitting immediately closed the decision, and the request makes disclosure compulsory. What could you pause while leaving them a choice?"},
+      "unobserved": {"response": "A friend says I have become a much better listener.", "feedback": "I can record that as your report of a friend's comment. If you want to try the fictional chat, a line you write here can be reviewed. You can also move on."}
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "better-person",
+  "statement": "I want to learn to be a better person",
+  "regime": "Formative",
+  "targets": [3],
+  "nodes": [
+    {"id": 1, "name": "Name what 'better' means to you, in your own tradition and words", "misconceptions": ["adopts the tutor's values instead of stating their own"], "sources": ["learner-supplied"]},
+    {"id": 2, "name": "Understand one framework you chose (its claims and practices)", "prereqs": [1], "misconceptions": ["summarises the framework as generic self-help"], "sources": ["learner-chosen-text"]},
+    {"id": 3, "name": "Keep a small daily practice and reflect on it weekly", "prereqs": [1], "misconceptions": ["treats a missed day as a failure of character"], "sources": ["learner-supplied"]}
+  ],
+  "families": [
+    {"id": 101, "node": 1, "facet": "Explain", "checker": "SelfReport", "cue": "None", "stem": "In two or three sentences: what would being 'better' look like in an ordinary week for you?", "key": "learner-owned statement"},
+    {"id": 201, "node": 2, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 0.0, "variants": 10, "stem": "In your chosen text, what does it say about {topic}? Quote the line you are relying on.", "key": "accurate to the learner's chosen source"},
+    {"id": 202, "node": 2, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 0.3, "variants": 10, "stem": "Explain {practice} from your chosen text to a friend who has never read it, in your own words.", "key": "faithful to the chosen source"},
+    {"id": 301, "node": 3, "facet": "Apply", "checker": "SelfReport", "cue": "None", "variants": 365, "stem": "Did you do today's practice? Anything you noticed?", "key": "practice log"},
+    {"id": 302, "node": 3, "facet": "Explain", "checker": "SelfReport", "cue": "None", "variants": 52, "stem": "Looking back at this week's log, what pattern do you see, and what would you change?", "key": "weekly reflection"}
+  ]
+}

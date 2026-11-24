@@ -1,0 +1,57 @@
+# ILLUSTRATIVE, NON-NORMATIVE PSEUDOCODE
+# Not executable; not a chosen architecture, grading policy, or learning theory.
+# All evidence judgments below are supplied by a human for a tabletop exercise.
+# No model, automatic grader, mastery score, or persistence is implemented.
+
+function consider_response(observation, supplied_feedback):
+    # observation: task, response, assistance = "none reported" | "reported" | "unknown"
+    # supplied_feedback: "ambiguous" | "incorrect" | "correct"
+    # This enumeration is a toy convenience, not a sufficient assessment model.
+
+    if supplied_feedback == "ambiguous":
+        return {
+            action: "clarify",
+            reason: "The response cannot yet be interpreted reliably.",
+            claim: "No conclusion about understanding."
+        }
+
+    if supplied_feedback == "incorrect":
+        return {
+            action: "ask for reasoning",
+            reason: "An incorrect response alone does not identify its cause.",
+            claim: "This response was judged incorrect; the cause remains unknown."
+        }
+
+    if observation.assistance != "none reported":
+        return {
+            action: "offer an independently attempted check",
+            reason: "Correctness does not establish independent performance.",
+            claim: "Correct response. Assistance: " + observation.assistance + "."
+        }
+
+    return {
+        action: "offer a changed-example check",
+        reason: "One correct response is insufficient to establish understanding.",
+        claim: "Correct response with no assistance reported, not verified absence of help."
+    }
+
+# One example, chosen only to make the conversation concrete:
+observation = {
+    task: "What is 3/4 + 1/4?",
+    response: "1",
+    assistance: "unknown"
+}
+supplied_feedback = "correct"  # scripted, not generated or validated by this mock
+result = consider_response(observation, supplied_feedback)
+
+# Expected toy output:
+# action: offer an independently attempted check
+# reason: Correctness does not establish independent performance.
+# claim: Correct response. Assistance: unknown.
+
+# Deliberately unresolved:
+# How is assistance known without treating disclosure as proof?
+# What makes a new task comparable, independent, or informative?
+# When should the learner choose a different action or stop?
+# What evidence would justify a stronger claim, and over what time interval?
+# Should the same action apply across subjects, accessibility needs, and goals?

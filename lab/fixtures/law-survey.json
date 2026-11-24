@@ -1,0 +1,382 @@
+{
+  "revision": 1,
+  "scope": {
+    "goal": "I want to learn the law",
+    "purpose": "An adult beginner wants a broad civic and intellectual education and wants to read and challenge a legal argument.",
+    "jurisdiction": "United States survey. Use federal material for federal questions. Identify the relevant state, Tribal Nation or comparison jurisdiction before sourcing its rules.",
+    "horizon": "36 weeks, three 40-minute sessions per week"
+  },
+  "calendar_minutes": 4320,
+  "reserve_minutes": 960,
+  "session_minutes": 40,
+  "facets": [
+    {
+      "id": 1,
+      "name": "Legal sources and research",
+      "performance": "Locate governing text, name its issuer, scope and date, check its status and identify what the cited passage supports.",
+      "min_minutes": 120,
+      "source_url": "https://hls.harvard.edu/academics/degree-programs/jd-program/"
+    },
+    {
+      "id": 2,
+      "name": "Philosophy of law",
+      "performance": "Distinguish legal validity, moral legitimacy and enforcement. Develop two defensible accounts of the same disputed rule and answer an objection.",
+      "min_minutes": 160,
+      "source_url": "https://law.yale.edu/centers-workshops/yale-center-law-and-philosophy"
+    },
+    {
+      "id": 3,
+      "name": "Constitutional law",
+      "performance": "Analyze an institutional power and a claimed right using the relevant actor, constitutional text, applicable authority and a change of facts.",
+      "min_minutes": 200,
+      "source_url": "https://www.archives.gov/founding-docs/constitution-transcript"
+    },
+    {
+      "id": 4,
+      "name": "Legislation and administrative law",
+      "performance": "Trace a measure from enabling law to an agency action and identify a procedural or interpretive question in a dated source packet.",
+      "min_minutes": 120,
+      "source_url": "https://www.archives.gov/federal-register/laws/administrative-procedure/553.html"
+    },
+    {
+      "id": 5,
+      "name": "Torts",
+      "performance": "Apply the elements of a named jurisdiction's civil wrong to facts, including a defense, causal uncertainty and a possible remedy.",
+      "min_minutes": 160,
+      "source_url": "https://hls.harvard.edu/academics/degree-programs/jd-program/"
+    },
+    {
+      "id": 6,
+      "name": "Contracts",
+      "performance": "Evaluate formation, performance, defenses and a requested remedy in a disputed exchange using a jurisdiction-specific rule.",
+      "min_minutes": 160,
+      "source_url": "https://hls.harvard.edu/academics/degree-programs/jd-program/"
+    },
+    {
+      "id": 7,
+      "name": "Property and land use",
+      "performance": "Separate competing interests in land or a thing, identify the source of each interest and explain a limit or remedy.",
+      "min_minutes": 120,
+      "source_url": "https://hls.harvard.edu/academics/degree-programs/jd-program/"
+    },
+    {
+      "id": 8,
+      "name": "Criminal law",
+      "performance": "Map alleged conduct and the required mental state to a supplied offense, identify an unproven element and consider a defense.",
+      "min_minutes": 80,
+      "source_url": "https://hls.harvard.edu/academics/degree-programs/jd-program/"
+    },
+    {
+      "id": 9,
+      "name": "Criminal procedure",
+      "performance": "Locate the stage and public actor in an investigation or prosecution and explain the contested procedure and remedy using the packet.",
+      "min_minutes": 80,
+      "source_url": "https://www.uscourts.gov/forms-rules/current-rules-practice-procedure/federal-rules-criminal-procedure"
+    },
+    {
+      "id": 10,
+      "name": "Civil procedure and remedies",
+      "performance": "Trace a claim through forum, notice, decision and possible relief. Explain why the same underlying dispute can yield a different procedural outcome.",
+      "min_minutes": 120,
+      "source_url": "https://www.uscourts.gov/about-federal-courts/types-cases/civil-cases"
+    },
+    {
+      "id": 11,
+      "name": "Evidence and proof",
+      "performance": "Identify the fact to be established and distinguish an objection to using an exhibit from an argument about how much it proves.",
+      "min_minutes": 80,
+      "source_url": "https://www.uscourts.gov/forms-rules/current-rules-practice-procedure/federal-rules-evidence"
+    },
+    {
+      "id": 12,
+      "name": "Organizations and commercial regulation",
+      "performance": "Draw the actors and obligations in a transaction and locate a distinct governance, creditor or tax question requiring its own authority.",
+      "min_minutes": 80,
+      "source_url": "https://hls.harvard.edu/academics/programs-of-study/law-and-business-program-of-study/"
+    },
+    {
+      "id": 13,
+      "name": "Family and succession",
+      "performance": "Identify controlling jurisdiction, relationship, instrument and missing facts in a fictional family or succession matter.",
+      "min_minutes": 80,
+      "source_url": "https://selfhelp.courts.ca.gov/wills-estates-probate"
+    },
+    {
+      "id": 14,
+      "name": "Work, equality and public benefits",
+      "performance": "Trace an employment or benefits dispute to the responsible institution, source of protection, process and evidentiary question.",
+      "min_minutes": 80,
+      "source_url": "https://www.dol.gov/general/aboutdol/majorlaws"
+    },
+    {
+      "id": 15,
+      "name": "Tribal legal orders and overlapping jurisdiction",
+      "performance": "Locate a named nation's own governing text and identify which jurisdictional questions need additional authorities and facts.",
+      "min_minutes": 80,
+      "source_url": "https://www.cherokee.org/media/lsufapj1/constitution-of-the-cherokee-nation-1999-online.pdf"
+    },
+    {
+      "id": 16,
+      "name": "Comparative and public international law",
+      "performance": "Compare a legal institution across two named jurisdictions and separately trace an international obligation to its instrument and domestic implementation question.",
+      "min_minutes": 160,
+      "source_url": "https://www.courdecassation.fr/en/about-court"
+    },
+    {
+      "id": 17,
+      "name": "Professional ethics and access to justice",
+      "performance": "Identify a conflict of role or duty, locate the applicable professional rule and explain how an access barrier changes realistic choices.",
+      "min_minutes": 80,
+      "source_url": "https://www.calbar.ca.gov/legal-professionals/rules/rules-professional-conduct/current-rules-professional-conduct"
+    },
+    {
+      "id": 18,
+      "name": "Legal writing, argument and dispute resolution",
+      "performance": "Write an attributed analysis for a specified reader, state a serious counterargument, distinguish available remedies and compare litigation with negotiation.",
+      "min_minutes": 160,
+      "source_url": "https://hls.harvard.edu/academics/degree-programs/jd-program/"
+    }
+  ],
+  "proposal": {
+    "units": [
+      {
+        "id": 101,
+        "facet": 1,
+        "title": "Has this bill become law?",
+        "performance": "Locate Article I, section 7, clause 2 and use its opening words to identify a missing condition for presentment in an ordinary federal bill scenario.",
+        "minutes": 40,
+        "requires": []
+      },
+      {
+        "id": 102,
+        "facet": 2,
+        "title": "Can a valid rule be unjust?",
+        "performance": "Separate a claim about a rule's legal standing from one about moral obligation and supply a reason for each in a fictional community.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 103,
+        "facet": 3,
+        "title": "Who claims the power to act?",
+        "performance": "Draw a power map for a federal and a state actor in a fictional dispute and locate the distinct constitutional provisions each side invokes.",
+        "minutes": 160,
+        "requires": [
+          101
+        ]
+      },
+      {
+        "id": 104,
+        "facet": 4,
+        "title": "Follow an agency's authority",
+        "performance": "Trace a fictional measure through the supplied enabling statute, published rule and enforcement action, marking where a challenge could arise.",
+        "minutes": 160,
+        "requires": [
+          101
+        ]
+      },
+      {
+        "id": 105,
+        "facet": 5,
+        "title": "When an injury gives rise to a civil claim",
+        "performance": "Apply the supplied state's negligence rule to a damaged bicycle, identify a contested causal link and test it against an altered fact.",
+        "minutes": 160,
+        "requires": []
+      },
+      {
+        "id": 106,
+        "facet": 6,
+        "title": "Did the parties reach an agreement?",
+        "performance": "Annotate the parties' messages about a bicycle repair with evidence for and against formation under the supplied state's service-contract rule.",
+        "minutes": 160,
+        "requires": []
+      },
+      {
+        "id": 107,
+        "facet": 7,
+        "title": "Whose use of the parcel is at issue?",
+        "performance": "Diagram a fictional lease, easement and local land-use restriction, showing the source and limits of each claimed interest.",
+        "minutes": 160,
+        "requires": []
+      },
+      {
+        "id": 108,
+        "facet": 8,
+        "title": "What must the prosecution prove?",
+        "performance": "Match facts to the elements and defense in a dated offense packet, indicating a plausible innocent explanation of one fact.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 109,
+        "facet": 9,
+        "title": "Locate the procedural question",
+        "performance": "Place a disputed search, charge and hearing on a timeline and explain which supplied standard governs the challenged event.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 110,
+        "facet": 10,
+        "title": "Can this court hear this claim?",
+        "performance": "Choose between two hypothetical forums using their supplied jurisdiction rules, then distinguish a procedural dismissal from a finding on the merits.",
+        "minutes": 160,
+        "requires": []
+      },
+      {
+        "id": 111,
+        "facet": 11,
+        "title": "What does the repair log establish?",
+        "performance": "Identify a disputed fact, make an argument about admission under a supplied rule and separately weigh the shop's repair log.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 112,
+        "facet": 12,
+        "title": "Who transacted with the customer?",
+        "performance": "Map shop, owner, creditor and customer, then identify the documents and authorities needed to test a liability or tax claim.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 113,
+        "facet": 13,
+        "title": "Which facts control this inheritance question?",
+        "performance": "Classify the relationships, property and testamentary document in a supplied state packet and identify one fact that changes its scope.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 114,
+        "facet": 14,
+        "title": "Challenge a denial of benefits",
+        "performance": "Trace a fictional denial through the packet's eligibility text, notice and review process and give both sides' accounts of a disputed fact.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 115,
+        "facet": 15,
+        "title": "Which government supplied this law?",
+        "performance": "Read a named Tribal Nation's own constitutional provision alongside a federal source and identify the facts needed for a jurisdictional inquiry.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 116,
+        "facet": 16,
+        "title": "Compare one institution across two legal orders",
+        "performance": "Compare the treatment of a reasoned prior decision in named U.S. and French court materials, identifying each source's institutional role.",
+        "minutes": 160,
+        "requires": []
+      },
+      {
+        "id": 117,
+        "facet": 17,
+        "title": "Who is owed a professional duty?",
+        "performance": "Use an assigned jurisdiction's adopted ethics rule to examine a possible conflict, then explain how cost or language access affects the options.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 118,
+        "facet": 18,
+        "title": "Write both sides of a short dispute",
+        "performance": "Write a short, sourced memo on a new accident for a nonlawyer reader, fairly present the strongest competing reading and identify a missing fact.",
+        "minutes": 160,
+        "requires": [
+          105
+        ]
+      },
+      {
+        "id": 201,
+        "facet": 1,
+        "title": "Read, distinguish and update an opinion",
+        "performance": "Trace a quotation to an opinion, identify the deciding court, distinguish holding from commentary and document a current-status check.",
+        "minutes": 160,
+        "requires": [
+          101
+        ]
+      },
+      {
+        "id": 202,
+        "facet": 2,
+        "title": "Two theories judge the same objection",
+        "performance": "Apply a source-based account and a moral account of legal authority to one hard case, then revise the argument after a serious objection.",
+        "minutes": 120,
+        "requires": [
+          102
+        ]
+      },
+      {
+        "id": 203,
+        "facet": 3,
+        "title": "A constitutional rights claim with a changed actor",
+        "performance": "Use supplied constitutional text and a dated opinion to analyze a fictional restriction, then reassess the claim with a different actor.",
+        "minutes": 120,
+        "requires": [
+          103,
+          201
+        ]
+      },
+      {
+        "id": 205,
+        "facet": 5,
+        "title": "Trace cause, defense and redress",
+        "performance": "Evaluate a defense and competing explanations for the loss in a new state-law packet, then connect an available remedy to the established harm.",
+        "minutes": 120,
+        "requires": [
+          105
+        ]
+      },
+      {
+        "id": 206,
+        "facet": 6,
+        "title": "What follows a broken promise?",
+        "performance": "Compare performance and remedy in a disputed exchange with an earlier service contract and identify a possible goods-law issue to research.",
+        "minutes": 120,
+        "requires": [
+          106
+        ]
+      },
+      {
+        "id": 216,
+        "facet": 16,
+        "title": "From treaty text to domestic effect",
+        "performance": "Locate an international obligation in a supplied treaty and distinguish the separate domestic question about implementation or an available remedy.",
+        "minutes": 120,
+        "requires": [
+          101
+        ]
+      },
+      {
+        "id": 218,
+        "facet": 18,
+        "title": "A closing file for the community repair shop",
+        "performance": "Submit a sourced decision memo on a new shop dispute, analyze claims and defenses in contract and tort, compare forum, proof and negotiated options, then revise one conclusion after a changed fact.",
+        "minutes": 200,
+        "requires": [
+          110,
+          111,
+          117,
+          118,
+          205,
+          206
+        ]
+      }
+    ]
+  },
+  "first_pack": {
+    "unit": 101,
+    "source_url": "https://www.archives.gov/founding-docs/constitution-transcript",
+    "locator": "U.S. Constitution, Article I, section 7, clause 2, from the opening words through the first occurrence of President",
+    "excerpt": "Every Bill which shall have passed the House of Representatives and the Senate, shall, before it become a Law, be presented to the President",
+    "lesson": "Read the sentence as a sequence. For an ordinary federal bill, look for passage by each named chamber and then for presentation to the President. Keep your conclusion inside the part of the clause you have read.",
+    "worked": "A newsletter reports that the House passed an ordinary federal bill and the Senate has taken no action. The text also names the Senate. The reported events do not yet meet the stated condition for presentment.",
+    "practice": "The Senate passed a separate ordinary federal bill. The House scheduled debate and has yet to vote. What fact is missing before this proposal reaches presentment? Point to the words you used.",
+    "check": "Both chambers passed the same ordinary federal bill. A headline immediately calls it law. Using only this excerpt, identify the step the headline has left unverified and cite its location.",
+    "criterion": "Identify presentment to the President and ground that inference in Article I, section 7, clause 2.",
+    "rubric": "Record location and interpretation separately. Accept a correct citation or an unambiguous pointer to the relevant words. Credit the inference when the learner identifies presentation to the President as the missing information. A claim that a signature is always indispensable goes beyond the excerpt. Ask which words support it, offer the remainder of the clause, and leave that further question open for separate review."
+  }
+}

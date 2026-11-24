@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS reviews (
+ id INTEGER PRIMARY KEY, receipt TEXT NOT NULL UNIQUE, session TEXT NOT NULL,
+ stage TEXT NOT NULL, digest TEXT NOT NULL, packet TEXT NOT NULL, luna TEXT NOT NULL, model TEXT NOT NULL,
+ created INTEGER NOT NULL DEFAULT(unixepoch()), candidate TEXT, analysis TEXT,
+ status TEXT NOT NULL DEFAULT 'pending', resolved INTEGER NOT NULL DEFAULT 0, error TEXT NOT NULL DEFAULT ''
+);

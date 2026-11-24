@@ -1,0 +1,36 @@
+{
+  "locator": "Washington Superior Court Civil Rules, CR 3(a), CR 4(a), (b), (d)(1), CR 8(a), (b), CR 26(a), (b)(1), and CR 56(c), (e)",
+  "scope": "An ordinary fictional civil dispute in Washington State superior court, from reading the pleadings to reasoning about disputed evidence. Other courts and special proceedings have their own rules.",
+  "reading": [
+    "CR 8(a). The party asserting a claim briefly states its basis and asks the court for relief. An allegation in the complaint represents that party's account. Whether it is true can still be contested.",
+    "CR 4(a), (b), (d)(1). The summons directs the defendant to respond, identifies the parties and court, and warns of possible default. For this ordinary action, the summons and complaint are served together.",
+    "CR 8(b). A responding party admits or denies allegations and states defenses. A party with insufficient knowledge to form a belief may say so, which has the effect of a denial.",
+    "CR 3(a). Subject to the rule's exceptions, an action can begin by serving the summons and complaint or by filing the complaint. Avoid a universal filing-first timeline. This lesson does not cover tolling, service exceptions, or calculating deadlines.",
+    "CR 26(a), (b)(1). Parties may obtain relevant, nonprivileged information through methods including depositions and requests for production of documents, subject to the rule’s limits.",
+    "CR 56(c), (e). On a properly supported summary judgment motion, a bare denial alone cannot show a genuine factual dispute. The court considers the record. To grant judgment, it must find no genuine dispute over a material fact and the moving party must be entitled to judgment under the law."
+  ],
+  "sources": {
+    "CR 3": "https://www.courts.wa.gov/court_rules/pdf/CR/SUP_CR_03_00_00.pdf",
+    "CR 4": "https://www.courts.wa.gov/court_rules/pdf/CR/SUP_CR_04_00_00.pdf",
+    "CR 8": "https://www.courts.wa.gov/court_rules/pdf/CR/SUP_CR_08_00_00.pdf",
+    "CR 26": "https://www.courts.wa.gov/court_rules/pdf/CR/SUP_CR_26_00_00.pdf",
+    "CR 56": "https://www.courts.wa.gov/court_rules/pdf/CR/SUP_CR_56_00_00.pdf"
+  },
+  "steps": [
+    {
+      "objective": "Explain what an admission settles and what remains for the party asserting the claim to establish.",
+      "worked": "Rowan seeks the cost of repairing a gate. The contractor admits visiting the property but disputes damaging the gate. The visit places the contractor there. It leaves causation open, so the requested repair payment does not follow from the admission alone.",
+      "practice": "A studio says its courier broke a sculpture. The courier admits making the delivery. A colleague says that admission settles the studio's claim. What can you infer from it, and where does your colleague's reasoning go too far?"
+    },
+    {
+      "objective": "Choose evidence that could discriminate between two competing explanations, and explain the limits of that evidence.",
+      "worked": "In a gate dispute, a quote for repairs helps estimate cost. It cannot tell us whether the hinge was broken before the contractor arrived. Two dated inspections bracketing the visit could narrow the interval. Even then, timing alone may not identify who broke it. CR 26 permits discovery of relevant, nonprivileged information subject to limits.",
+      "practice": "The studio says the sculpture cracked in transit. The courier says it cracked during unpacking. You can seek a signed delivery receipt, a photo taken at handoff, or sworn testimony from the unpacker. Which would you seek first, and why would it distinguish those explanations better than an alternative? Give a possible finding that would change your view and one thing it would still leave unresolved."
+    },
+    {
+      "objective": "Decide whether conflicting evidence raises a genuine dispute over a material fact on a summary judgment motion.",
+      "worked": "In a gate case, disagreement about the truck's color need not affect liability. Conflicting firsthand accounts of the gate's condition immediately before the work may matter. CR 56(c) asks about a genuine dispute over a fact that could affect the result, and whether the movant is entitled to judgment under the law.",
+      "practice": "A courier offers a signed receipt for a sealed crate. The recipient offers a firsthand account of finding the sculpture cracked when the seal was first opened. Assume the disputed claim requires proof of damage in transit. What does each item support? Identify a material issue the record resolves or leaves open, and justify your conclusion."
+    }
+  ]
+}

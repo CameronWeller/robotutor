@@ -1,0 +1,192 @@
+[
+  {
+    "id": "writer-owner",
+    "subject": "writer",
+    "brief": "You volunteer at the fictional Bridge Street archive and draft its handout notices. Visitors often carry two items at once.",
+    "opening": "At this archive, the person named on the inside label keeps the item. Everything else goes to the desk named on its own label. Nia holds a folder labeled Nia and another labeled Map Desk. What should Nia do?",
+    "answer": "Keep the first folder and return the other to Map Desk.",
+    "practice": "Map Desk hands Sol two folders, one labeled Map Desk and one labeled Sol. Write the notice Sol should see.",
+    "changed": "At the archive, Remy carries two identical envelopes. One inside label reads Audio Desk and one reads Remy. Remy says the second envelope was borrowed first. Write a notice that tells Remy what to do with both and that will also work if Remy mentions them in reverse order.",
+    "transfer": "The archive lends recording equipment at a festival under the same ownership convention. A draft notice says 'Keep yours and leave the rest here.' The inside tags read Imani and Sound Desk. Write a better notice and design a test with a visitor that could reveal whether the notice sends either item to the wrong place.",
+    "changed_criteria": [
+      "Directs Remy to keep the envelope whose inside label says Remy.",
+      "Directs the envelope labeled Audio Desk to Audio Desk using its label, independent of borrowing or mention order."
+    ],
+    "transfer_criteria": [
+      "The notice distinguishes keeping the item tagged with the holder's name and taking the item tagged Sound Desk to Sound Desk.",
+      "The proposed test elicits an independent visitor's destinations for both tagged items and states the expected destinations or a specific error that would trigger revision."
+    ],
+    "conclusion": "The submitted notice and reader test can establish whether the simulated writer communicated both destinations."
+  },
+  {
+    "id": "writer-replacement",
+    "subject": "writer",
+    "brief": "You edit time changes for a fictional community arts bulletin. Readers may have already copied an earlier entry into their calendars.",
+    "opening": "Your bulletin's house rule uses Swap to replace an earlier event and Extra to add a second event. A Tuesday reading is labeled 'Swap: Thursday.' On what day should someone attend?",
+    "answer": "Come Thursday.",
+    "practice": "A Tuesday rehearsal now carries the label 'Extra: Thursday.' Write its calendar update for someone who saved Tuesday.",
+    "changed": "The studio list has 'Clay, Monday. Extra: Wednesday' and 'Ink, Friday. Swap: Saturday.' A reader had saved the original two entries. Write one short update they can use to fix their calendar.",
+    "transfer": "A new mobile food pantry uses the bulletin's labels. Its flyer reads 'Hill stop, AM. Swap: PM' and 'Dock stop, noon. Extra:' with the extra time torn off. Write the message you would send to people holding the old flyer and the question you would send to the organizer.",
+    "changed_criteria": [
+      "Keeps Monday and adds Wednesday for Clay.",
+      "Removes Friday and places Ink on Saturday."
+    ],
+    "transfer_criteria": [
+      "Moves Hill from AM to PM and preserves Dock at noon.",
+      "Flags an additional Dock visit with an unknown time and asks the organizer for that time without supplying a guessed one."
+    ],
+    "conclusion": "A written update can show whether the simulated editor preserves, replaces, or queries calendar information in these notices."
+  },
+  {
+    "id": "chemical-engineering-boundary",
+    "subject": "chemical-engineering",
+    "brief": "You prepare inventory notes for a fictional classroom water rig. You can add and subtract quantities but sometimes lose track of which pieces of equipment a report covers.",
+    "opening": "In this rig a W card encloses both left and right tanks. An L card encloses only the left tank. During a W card interval 8 kg enters the left tank from a bucket, 3 kg moves left to right and 2 kg leaves the right tank to the sink. Give the change in the W inventory.",
+    "answer": "It went up by 6 kg.",
+    "practice": "Use an L card for the same three water movements. Report the signed change and mark the entries that cross your boundary.",
+    "changed": "The new log for an L card says right to left 7 kg, left to drain 4 kg, tap to right 5 kg, left to right 6 kg. These are all the movements. Report the signed inventory change and mark each crossing.",
+    "transfer": "An exhibit carries the same rig conventions to two water bladders named left and right. The log says 5 kg from tap to left, 10 kg left to right and 3 kg right to drain. The boundary card is smudged and could be L or W. Write the inventory entry the manager can justify now and the detail needed to finalize it.",
+    "changed_criteria": [
+      "Reports a loss of 3 kg or signed change of -3 kg.",
+      "Counts 7 kg in, 4 kg out and 6 kg out across left's boundary, excluding the 5 kg tap-to-right flow."
+    ],
+    "transfer_criteria": [
+      "Provides both conditional results, -5 kg for L and +2 kg for W, with the corresponding boundaries.",
+      "Asks which boundary card applies or for evidence identifying it before submitting a single signed change."
+    ],
+    "conclusion": "The written balance can demonstrate conditional accounting for the stated boundary and water movements."
+  },
+  {
+    "id": "chemical-engineering-samples",
+    "subject": "chemical-engineering",
+    "brief": "You summarize results for a fictional classroom salt-water mixer using a paper log. Sample volume and stream volume can differ.",
+    "opening": "This log's house marks are Tray for a composite of equal sample volumes and Run for a composite weighted by the collected volume of each whole stream. Stream A contains 2 g/L, stream B 6 g/L, and each stream contributes 3 L. What concentration belongs in the Run entry?",
+    "answer": "4 g/L.",
+    "practice": "A has 2 g/L and contributes 1 L. B has 6 g/L and contributes 3 L. The assistant takes equal-sized samples. What concentrations belong in the Tray and Run entries?",
+    "changed": "Two streams yield equal-sized samples. North yields 2 L at 9 g/L and South yields 4 L at 3 g/L. The clerk copied 6 g/L to both the Tray and Run boxes. Repair the entries and show the amounts used.",
+    "transfer": "At a field station the two old log marks are still in use. Two equal-sized samples from separate deliveries measure 1 g/L and 5 g/L. The first delivery was 3 L. The second delivery volume has gone missing. The volunteer requests both composite entries. Supply what you can and ask for the missing measurement.",
+    "changed_criteria": [
+      "Leaves Tray at 6 g/L based on equal sample volumes.",
+      "Changes Run to 5 g/L using (18 g + 12 g) / (2 L + 4 L), or an equivalent weighted calculation."
+    ],
+    "transfer_criteria": [
+      "Reports Tray at 3 g/L using equal-sized samples.",
+      "States that a numerical Run entry requires the volume of the second delivery and asks for that volume or expresses (3 + 5v)/(3 + v) g/L conditionally."
+    ],
+    "conclusion": "The submitted calculation can show whether the simulated learner chooses the proper weights for a defined composite."
+  },
+  {
+    "id": "violin-rest-entry",
+    "subject": "violin",
+    "brief": "You write count-and-bow instructions for a fictional practice partner. Both of you can read a numbered beat grid.",
+    "opening": "In your partner's shorthand a hollow square means one silent beat; a filled square means begin a bow on that beat. In a three-beat bar the marks are hollow, filled D, hollow. When do you begin D?",
+    "answer": "On two.",
+    "practice": "In the same three-beat shorthand the marks are hollow, hollow, filled A. Write a single count-and-bow pass.",
+    "changed": "A four-beat exercise uses filled G, hollow, hollow, filled D. Your partner thinks D is on two. Write a cue that they can play twice and explain how a listener can check the D against a steady pulse.",
+    "transfer": "A puppet-theater rehearsal uses the same shorthand. Each scene starts with the stage manager's visible beat-one flash, which a remote listener cannot see. The grid is hollow, filled A, hollow, filled E. Design a repeatable text rehearsal cue and a recording setup that lets the remote listener verify both entrance positions.",
+    "changed_criteria": [
+      "The repeatable cue plays G on one, leaves two and three silent, and begins D on four on each pass.",
+      "Identifies an audible or otherwise independently observable numbered pulse so the listener can compare the D onset to beat four."
+    ],
+    "transfer_criteria": [
+      "The repeatable cue starts at the scene flash, leaves beats one and three silent, and places A on two and E on four.",
+      "Records a reference synchronized to the flash that lets a remote listener locate beat one and both later beats, such as an accented audible count or click track with a marked downbeat."
+    ],
+    "conclusion": "A text response can establish a rehearsal plan and an observable timing check. Actual playing requires a performance."
+  },
+  {
+    "id": "violin-bow-map",
+    "subject": "violin",
+    "brief": "You mark bow changes for a fictional violin duo. Your partner reads the duo's own bow-map symbols.",
+    "opening": "The duo writes Dot for a new bow in the opposite direction and Thread for another pitch on the moving bow. You begin D down-bow. The next mark is Dot A. Which way do you bow A?",
+    "answer": "Up.",
+    "practice": "Begin G up-bow, then play Thread D followed by Dot A. Mark the direction for all three pitches and where the direction changes.",
+    "changed": "Begin E up-bow. The next marks are Dot A, Thread D and Dot G. Your partner says a new note always means a new bow. Send a playable bow map and tell the partner where to watch for a change of pitch with no change of direction.",
+    "transfer": "A movement coach uses the duo's symbols to choreograph a silent bowing demonstration. The sequence is Start, Thread, Dot, Thread. The starting direction is blank. Give the coach a usable conditional sequence and a way for an observer to verify the direction changes during a rehearsal.",
+    "changed_criteria": [
+      "The plan places E up, A down, D down and G up in order.",
+      "Locates the A-to-D pitch change on the same down-bow and gives the partner that transition to observe."
+    ],
+    "transfer_criteria": [
+      "Supplies both possible sequences (down/down/up/up and up/up/down/down) or an equivalent direction-relative sequence explicitly contingent on the missing start.",
+      "Specifies observation of continuous direction at the two Thread marks and a reversal at the Dot mark, using visible bow motion or equivalent recorded evidence."
+    ],
+    "conclusion": "The artifact can demonstrate a playable bow map and a proposed observation. It cannot certify an executed bow change."
+  },
+  {
+    "id": "better-person-return-choice",
+    "subject": "better-person",
+    "brief": "You are a fictional reading-circle facilitator who wants a usable script after interrupting someone.",
+    "opening": "Your circle agreed on two phrases for an interrupted speaker. 'Hold it' means offer the floor once at the end. 'Park it' means leave the subject alone unless the speaker reopens it. Ari says 'Hold it.' When should you offer the floor?",
+    "answer": "At the end.",
+    "practice": "After an interruption, Ari says 'Park it.' Write what you will say now and what you will do at the end of the meeting.",
+    "changed": "During the next circle Bo says 'Park it' after you interrupt. Cai later says 'Hold it' after another interruption. Draft your closing script and a facilitation action that gives each speaker the choice they requested.",
+    "transfer": "A remote planning group adopts the circle's two phrases. A volunteer's private message is cut off after '...it', and the chair suggests naming the volunteer publicly at the close. Write your private reply and your plan for closing if there is no reply.",
+    "changed_criteria": [
+      "Leaves Bo's topic closed unless Bo independently reopens it.",
+      "Offers Cai the floor once at closing with wording or an action that permits declining."
+    ],
+    "transfer_criteria": [
+      "Privately asks which option the volunteer intended and describes the relevant choices in actionable terms.",
+      "The no-reply closing plan avoids publicly identifying or calling on the volunteer and leaves room for them to initiate a return."
+    ],
+    "conclusion": "The script and facilitation plan can be scored for the choices they offer. Character and future conduct are outside the rubric."
+  },
+  {
+    "id": "better-person-commitment",
+    "subject": "better-person",
+    "brief": "You coordinate a fictional neighborhood repair club. You want promises you make to someone else to fit what you can personally deliver.",
+    "opening": "A club card marked Mine records an action the signer controls. Ask records a request that depends on another person's choice. You can send the room request today. Lee decides whether to approve it. Which part fits on your Mine card?",
+    "answer": "Send the request today.",
+    "practice": "Lee offers to check dates but has no answer yet. Write your Mine entry and a separate Ask entry for booking the room.",
+    "changed": "Dana needs the spare key by 5. You can place your key at the desk by 4. Only the desk volunteer can agree to staff the desk until 5. Draft the two card entries and the update Dana can rely on before the volunteer replies.",
+    "transfer": "A mutual-aid chat borrows the club's card system. You can list the parcels by noon. A volunteer decides whether to drive them at 2. They reply 'I may have a conflict.' Write the message to recipients now and one follow-up you could carry out yourself.",
+    "changed_criteria": [
+      "Mine commits to placing the key at the desk by 4, an action under the writer's control.",
+      "Ask requests desk coverage until 5, and the update explicitly leaves pickup at 5 contingent on the volunteer's answer."
+    ],
+    "transfer_criteria": [
+      "The recipient message distinguishes the writer's noon listing commitment from the unconfirmed 2 o'clock delivery.",
+      "The writer chooses a specific follow-up they control, such as checking back at an identified time or sending recipients a timed status update, without assigning an obligation to the volunteer."
+    ],
+    "conclusion": "The drafted messages can demonstrate how the simulated writer communicates commitments and uncertainty. They do not measure personal virtue."
+  },
+  {
+    "id": "worship-invitation",
+    "subject": "worship",
+    "brief": "You prepare volunteer reader notes for a fictional congregation. Participants can decide for themselves whether to join an invitation.",
+    "opening": "This congregation's leaflet uses Candle for an optional spoken line or silence and Window for a silent pause for everyone. The reader sees Candle beside 'We wait beside the gate.' Is it possible to stay silent?",
+    "answer": "Yes.",
+    "practice": "Window appears beside 'Remember the garden.' Write the reader's cue for the congregation.",
+    "changed": "The new sheet has Window beside 'Watch the shore' followed by Candle beside 'Name one hope.' Write both reader cues in order for visitors who have never seen the icons.",
+    "transfer": "A fictional bedside service adopts the same icons. Its card shows Candle beside 'A word for this evening' and a torn icon beside 'Wait here.' Draft the volunteer's first cue and a question to the organizer before giving the second cue.",
+    "changed_criteria": [
+      "The first cue invites or observes a shared silent pause without requesting a spoken response.",
+      "The second cue permits a spoken hope or silence, with either choice open to visitors."
+    ],
+    "transfer_criteria": [
+      "The first cue gives participants a choice of speaking a word for this evening or remaining silent.",
+      "Asks whether the torn symbol is Window or Candle, or equivalently whether the line calls for collective silence or optional speech, before prescribing its use."
+    ],
+    "conclusion": "Reader notes can demonstrate interpretation of these fictional service directions. Belief and conviction are outside the rubric."
+  },
+  {
+    "id": "worship-voice",
+    "subject": "worship",
+    "brief": "You annotate a fictional service script for a reader and a congregation using a shared printed score.",
+    "opening": "In this score Bank means the designated reader speaks the words once. Bridge means the reader speaks and the gathered group is invited to echo once or listen. Next to 'Carry this light' the score says Bridge. Who says the line first?",
+    "answer": "The reader.",
+    "practice": "The line 'We open the door' has a Bank mark. Draft a margin cue that a first-time reader and visitor can both follow.",
+    "changed": "The next sheet gives Bridge for 'Let the river sing' and Bank for 'We listen.' Write a two-line speaking score that volunteers can read straight from the page.",
+    "transfer": "At a fictional outdoor vigil the same score marks are used. The printed Bank line is 'The path is open.' On the Bridge line 'Walk with us' the echo microphone fails. Draft workable cues for both lines that preserve participation choices even without amplification.",
+    "changed_criteria": [
+      "For the river line the reader leads once and the group can echo once or listen.",
+      "For 'We listen' only the designated reader is cued to speak the line once."
+    ],
+    "transfer_criteria": [
+      "Cues a single reader delivery of the Bank line without adding a group response.",
+      "For the Bridge line supplies a reader lead and a workable optional local echo or listening choice despite the failed microphone."
+    ],
+    "conclusion": "The speaking score can demonstrate role and participation directions within this fictional vigil. It supplies no evidence about worshippers' beliefs."
+  }
+]

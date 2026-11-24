@@ -1,0 +1,25 @@
+[package]
+name = "robotutor-courses"
+version = "0.1.0"
+edition = "2021"
+publish = false
+default-run = "robotutor-courses"
+
+[dependencies]
+wry = "0.57"
+tao = "0.34"
+
+[target.'cfg(windows)'.dependencies]
+base64 = "0.23"
+rand = "0.8"
+rusqlite = { version = "0.38", features = ["bundled"] }
+serde_json = "1"
+sha2 = "0.10"
+ureq = { version = "3", features = ["json"] }
+url = "2"
+webbrowser = "1"
+webview2-com = "0.39"
+
+[[bin]]
+name = "robotutor-research"
+path = "src/research/main.rs"

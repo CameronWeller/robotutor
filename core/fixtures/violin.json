@@ -1,0 +1,22 @@
+{
+  "name": "violin",
+  "statement": "I want to become a better violinist",
+  "regime": "Performance",
+  "targets": [4],
+  "nodes": [
+    {"id": 1, "name": "In-tune first-position notes on the A string", "misconceptions": ["places third finger by eye rather than by ear", "flattens high 2 after shifting back"], "sources": ["suzuki-book1-notes", "galamian-principles-ch2"]},
+    {"id": 2, "name": "Straight bow at a steady contact point", "misconceptions": ["drifts toward fingerboard on up-bows"], "sources": ["galamian-principles-ch4"]},
+    {"id": 3, "name": "Steady pulse at 72 bpm in eighth notes", "misconceptions": ["rushes string crossings"], "sources": ["suzuki-book1-notes"]},
+    {"id": 4, "name": "Play a short piece in tune, in time, with a clear tone", "prereqs": [1, 2, 3], "misconceptions": ["sacrifices pulse to fix intonation"], "sources": ["suzuki-book1-notes"]}
+  ],
+  "families": [
+    {"id": 101, "node": 1, "facet": "Apply", "checker": "Sensor", "cue": "None", "difficulty": 0.0, "variants": 20, "probes_misconception": 0, "stem": "Record the A major scale, one octave, quarter notes at 60. The pitch tracker reports mean absolute deviation in cents.", "key": "MAD <= 12 cents"},
+    {"id": 102, "node": 1, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": -0.5, "probes_misconception": 0, "stem": "How do you check your C-sharp on the A string without a tuner?", "key": "ringing tone or comparison with an open string"},
+    {"id": 103, "node": 1, "facet": "Apply", "checker": "Sensor", "cue": "None", "difficulty": 0.3, "variants": 20, "probes_misconception": 1, "stem": "Record a D-major passage that shifts to third position and back. The tracker reports per-note cents.", "key": "MAD <= 15 cents, high 2 within 10 cents"},
+    {"id": 201, "node": 2, "facet": "Apply", "checker": "SelfReport", "cue": "None", "difficulty": 0.0, "variants": 20, "stem": "Film 30 seconds of open-string long bows from the side and tell me where the contact point drifted.", "key": "self-observation; teacher review optional"},
+    {"id": 301, "node": 3, "facet": "Apply", "checker": "Sensor", "cue": "None", "difficulty": 0.0, "variants": 20, "probes_misconception": 0, "stem": "Record eighth notes with string crossings against a 72 bpm click. Onset detection reports timing deviation.", "key": "median onset error <= 25 ms"},
+    {"id": 302, "node": 3, "facet": "Apply", "checker": "Sensor", "cue": "None", "difficulty": 0.2, "variants": 20, "stem": "Record the same pattern at 72 bpm without the click for the second half. Onset detection reports drift.", "key": "tempo drift <= 3 bpm"},
+    {"id": 401, "node": 4, "facet": "Apply", "checker": "Sensor", "cue": "None", "difficulty": 0.8, "variants": 10, "novel_context": true, "stem": "Record 'Lightly Row' at 72 bpm. We measure intonation and timing; tone is reviewed by your teacher or by you.", "key": "MAD <= 15 cents and onset <= 30 ms"},
+    {"id": 402, "node": 4, "facet": "Apply", "checker": "Sensor", "cue": "None", "difficulty": 0.6, "variants": 10, "stem": "Record 'Song of the Wind' at 72 bpm.", "key": "MAD <= 15 cents and onset <= 30 ms"}
+  ]
+}

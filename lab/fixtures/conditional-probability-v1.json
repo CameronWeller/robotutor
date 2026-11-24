@@ -1,0 +1,22 @@
+{
+  "version": "teaching-evidence/1",
+  "capability": "probability/reference-group",
+  "initial": {
+    "prompt": "Of 100 people, 30 are in group B and 12 are in both A and B. What is the probability of A among members of B? Explain.",
+    "answer": "0.12 because 12 of the 100 people qualify.",
+    "expected": "0.4"
+  },
+  "probe": {
+    "prompt": "Which group belongs in the denominator when the question asks about members of B?",
+    "answer": "12/30, because the 30 members of B are the reference group."
+  },
+  "exposed": {
+    "prompt": "A spinner landed inside the circle on two fifths of its blue spins. Express this as a percentage.",
+    "expected": "40%"
+  },
+  "return": {
+    "prompt": "A branching diagram starts with enrolled and waitlisted applicants. The enrolled branch ends in 9 commuters and 6 residents. What fraction of enrolled applicants commute, and which branch did you count?",
+    "answer": "9/15. I used only the enrolled branch.",
+    "expected": "0.6"
+  }
+}

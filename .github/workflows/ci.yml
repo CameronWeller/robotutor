@@ -1,0 +1,31 @@
+name: Native macOS desktop
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  lab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo test --locked --manifest-path lab/Cargo.toml --all-targets
+      - run: cargo test --locked --manifest-path lms/Cargo.toml
+      - run: python3 -m unittest discover -s tools -p 'test_append_transcript.py'
+  macos:
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test the Rust desktop
+        run: |
+          export CARGO_TARGET_DIR="$GITHUB_WORKSPACE/lab/target"
+          echo "CARGO_TARGET_DIR=$CARGO_TARGET_DIR" >> "$GITHUB_ENV"
+          cargo test --locked --manifest-path lab/Cargo.toml --bin tutor
+          cargo test --locked --manifest-path desktop/native/Cargo.toml
+          cargo build --locked --manifest-path desktop/native/Cargo.toml
+          cargo build --locked --manifest-path lms/Cargo.toml
+          cargo build --locked --manifest-path lab/Cargo.toml --bin tutor
+          cargo build --locked --manifest-path desktop/course-window/Cargo.toml
+      - name: Exercise the course webview handoff
+        run: |
+          export ROBOTUTOR_COURSES_BIN="$CARGO_TARGET_DIR/debug/robotutor-courses"
+          python3 desktop/check_native_courses.py

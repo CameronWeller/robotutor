@@ -1,0 +1,436 @@
+{
+  "graph": {
+    "topic": "gear ratios",
+    "title": "Graph a gear ratio",
+    "prompt": "A gear turns the wheel three times per pedal turn. Choose the horizontal quantity, plot the readings for one and two pedal turns, then describe the relationship.",
+    "criterion": "Choose the input axis, plot both ordered pairs, and express the direction of dependence.",
+    "hint": "Use the input as x. Each step along x adds three wheel turns.",
+    "fields": [
+      {
+        "id": "axis",
+        "label": "Horizontal axis (turns)",
+        "kind": "choice",
+        "key": "Pedal turns",
+        "choices": [
+          "Pedal turns",
+          "Wheel turns"
+        ]
+      },
+      {
+        "id": "first",
+        "label": "One pedal turn",
+        "kind": "point",
+        "key": "1,3"
+      },
+      {
+        "id": "second",
+        "label": "Two pedal turns",
+        "kind": "point",
+        "key": "2,6"
+      },
+      {
+        "id": "relationship",
+        "label": "Relationship in words",
+        "kind": "choice",
+        "key": "The wheel makes three turns per pedal turn.",
+        "choices": [
+          "The wheel makes three turns per pedal turn.",
+          "The pedal makes three turns per wheel turn."
+        ]
+      }
+    ],
+    "next": "graph-transfer",
+    "support": "axes",
+    "mixed": "words"
+  },
+  "axes": {
+    "topic": "gear ratios",
+    "title": "Choose the input axis",
+    "prompt": "A cyclist controls the pedal turns and observes wheel turns. Label the horizontal input and vertical output.",
+    "criterion": "Distinguish the controlled and dependent quantities.",
+    "hint": "Which quantity does the cyclist change first?",
+    "fields": [
+      {
+        "id": "x",
+        "label": "Horizontal axis",
+        "kind": "choice",
+        "key": "Pedal turns",
+        "choices": [
+          "Pedal turns",
+          "Wheel turns"
+        ]
+      },
+      {
+        "id": "y",
+        "label": "Vertical axis",
+        "kind": "choice",
+        "key": "Wheel turns",
+        "choices": [
+          "Pedal turns",
+          "Wheel turns"
+        ]
+      }
+    ],
+    "next": "graph",
+    "support": "axes",
+    "mixed": null
+  },
+  "words": {
+    "topic": "gear ratios",
+    "title": "Explain the ratio in words",
+    "prompt": "Your points show (1,3) and (2,6). When pedal turns double, what happens to wheel turns, and why?",
+    "criterion": "Explain how doubling the input doubles the output while the ratio stays constant.",
+    "hint": "Compare the change from three wheel turns to six with the change from one pedal turn to two.",
+    "fields": [
+      {
+        "id": "relationship",
+        "label": "Explain the change",
+        "kind": "choice",
+        "choices": ["Wheel turns double because each pedal turn still gives three wheel turns.", "Wheel turns stay at three because the ratio stays at three."],
+        "key": "Wheel turns double because each pedal turn still gives three wheel turns."
+      }
+    ],
+    "next": "graph-transfer",
+    "support": "words",
+    "mixed": null
+  },
+  "graph-transfer": {
+    "topic": "gear ratios",
+    "title": "Graph a changed ratio",
+    "prompt": "A new gear produces two wheel turns per pedal turn. Choose the horizontal quantity and plot three and four pedal turns.",
+    "criterion": "Independently translate a changed ratio into coordinates.",
+    "hint": "Multiply the pedal turns by two to find wheel turns.",
+    "fields": [
+      {
+        "id": "axis",
+        "label": "Horizontal axis (turns)",
+        "kind": "choice",
+        "key": "Pedal turns",
+        "choices": [
+          "Pedal turns",
+          "Wheel turns"
+        ]
+      },
+      {
+        "id": "first",
+        "label": "Three pedal turns",
+        "kind": "point",
+        "key": "3,6"
+      },
+      {
+        "id": "second",
+        "label": "Four pedal turns",
+        "kind": "point",
+        "key": "4,8"
+      }
+    ],
+    "next": null,
+    "support": "axes",
+    "mixed": null
+  },
+  "table": {
+    "topic": "gear ratios",
+    "title": "Build a ratio table",
+    "prompt": "A gear produces four wheel turns per pedal turn. Fill the output column for each input.",
+    "criterion": "Preserve the same factor across the table.",
+    "hint": "Multiply each input by four.",
+    "fields": [
+      {
+        "id": "row1",
+        "label": "2 pedal turns → wheel turns",
+        "kind": "number",
+        "key": "8"
+      },
+      {
+        "id": "row2",
+        "label": "5 pedal turns → wheel turns",
+        "kind": "number",
+        "key": "20"
+      }
+    ],
+    "next": "graph-transfer",
+    "support": "table",
+    "mixed": null
+  },
+  "order": {
+    "topic": "experimental controls",
+    "title": "Order a fair comparison",
+    "prompt": "Arrange the steps of a fair comparison of two paper planes. Choose the action for each position.",
+    "criterion": "Set controls before observing either flight and compare only after measuring both.",
+    "hint": "Begin by fixing the launch conditions.",
+    "fields": [
+      {
+        "id": "step1",
+        "label": "Step 1",
+        "kind": "choice",
+        "key": "Fix launch conditions",
+        "choices": [
+          "Compare distances",
+          "Fix launch conditions",
+          "Fly and measure both planes"
+        ]
+      },
+      {
+        "id": "step2",
+        "label": "Step 2",
+        "kind": "choice",
+        "key": "Fly and measure both planes",
+        "choices": [
+          "Compare distances",
+          "Fix launch conditions",
+          "Fly and measure both planes"
+        ]
+      },
+      {
+        "id": "step3",
+        "label": "Step 3",
+        "kind": "choice",
+        "key": "Compare distances",
+        "choices": [
+          "Compare distances",
+          "Fix launch conditions",
+          "Fly and measure both planes"
+        ]
+      }
+    ],
+    "next": "experiment",
+    "support": "order",
+    "mixed": null
+  },
+  "repair": {
+    "topic": "gear ratios",
+    "title": "Repair a formula",
+    "prompt": "A sheet records pedal turns in A2 and wheel turns in B2. Each pedal turn produces three wheel turns. B2 currently uses =A2/3. Locate the error and test your repair with A2 = 4.",
+    "criterion": "Locate the operation error and check the corrected result.",
+    "hint": "The output is larger than the input.",
+    "fields": [
+      {
+        "id": "operation",
+        "label": "Correct formula",
+        "kind": "choice",
+        "key": "=A2*3",
+        "choices": [
+          "=A2/3",
+          "=A2*3",
+          "=3/A2"
+        ]
+      },
+      {
+        "id": "check",
+        "label": "Test output",
+        "kind": "number",
+        "key": "12"
+      }
+    ],
+    "next": "table",
+    "support": "repair",
+    "mixed": null
+  },
+  "case": {
+    "topic": "source evaluation",
+    "title": "Decide what the evidence supports",
+    "prompt": "A station log records one late train. A passenger says trains are always late. Which claim can this evidence support? Explain what further evidence would test the broader claim.",
+    "criterion": "Choose the bounded claim and propose sampling multiple scheduled arrivals.",
+    "hint": "Separate the single recorded observation from a claim about many days.",
+    "fields": [
+      {
+        "id": "claim",
+        "label": "Supported claim",
+        "kind": "choice",
+        "key": "One recorded train was late",
+        "choices": [
+          "All trains are late",
+          "One recorded train was late"
+        ]
+      },
+      {
+        "id": "reason",
+        "label": "Evidence needed",
+        "kind": "rubric"
+      }
+    ],
+    "next": "case-update",
+    "support": "case",
+    "mixed": null
+  },
+  "case-update": {
+    "topic": "source evaluation",
+    "title": "Reconsider a claim",
+    "prompt": "A month of complete records shows 18 late trains in 100 arrivals. Revise your claim and explain which evidence changed it.",
+    "criterion": "State the observed proportion and restrict the conclusion to the recorded month.",
+    "hint": "Compare late arrivals with all arrivals in the same period.",
+    "fields": [
+      {
+        "id": "revision",
+        "label": "Revised claim and evidence",
+        "kind": "rubric"
+      }
+    ],
+    "next": null,
+    "support": "case-update",
+    "mixed": null
+  },
+  "revise": {
+    "topic": "writing for an audience",
+    "title": "Write a public notice",
+    "prompt": "The east entrance closes Monday. The west entrance stays open. Draft a one-sentence notice for first-time visitors.",
+    "criterion": "Tell the reader when the closure occurs and which entrance to use.",
+    "hint": "Picture what a visitor needs to do on arrival.",
+    "fields": [
+      {
+        "id": "artifact",
+        "label": "Original notice",
+        "kind": "rubric"
+      }
+    ],
+    "next": "revision",
+    "support": "revision",
+    "mixed": null
+  },
+  "revision": {
+    "topic": "writing for an audience",
+    "title": "Revise a notice",
+    "prompt": "The west entrance has steps. The level entrance is on Oak Street. Revise your original notice so someone using a wheelchair can act on it.",
+    "criterion": "Retain the closure time and give an actionable level-access route.",
+    "hint": "Name the street and identify the level entrance.",
+    "fields": [
+      {
+        "id": "artifact",
+        "label": "Revised notice",
+        "kind": "rubric"
+      }
+    ],
+    "next": null,
+    "support": "revision",
+    "mixed": null
+  },
+  "experiment": {
+    "topic": "experimental controls",
+    "title": "Predict before a flight",
+    "prompt": "Two simulated planes launch at the same speed. Predict which travels farther with a longer wing in this model and choose a variable to keep fixed. The measured distances appear after you commit your prediction.",
+    "criterion": "Make a prediction before observing the result and control launch speed.",
+    "hint": "Vary one feature at a time.",
+    "fields": [
+      {
+        "id": "prediction",
+        "label": "Prediction",
+        "kind": "choice",
+        "choices": [
+          "Longer travels farther",
+          "Shorter travels farther",
+          "Same distance"
+        ]
+      },
+      {
+        "id": "control",
+        "label": "Keep fixed",
+        "kind": "choice",
+        "key": "Launch speed",
+        "choices": [
+          "Wing length",
+          "Launch speed"
+        ]
+      }
+    ],
+    "next": "measure",
+    "support": "experiment",
+    "mixed": null
+  },
+  "measure": {
+    "topic": "experimental controls",
+    "title": "Interpret a simulation",
+    "prompt": "In this model, distance in metres is wing length in cm × 0.4 at constant launch speed. Try two wing lengths, run the model, and explain how the observations bear on your saved prediction.",
+    "criterion": "Use two distinct positive wing lengths, the resulting distances, and the prior prediction to explain the modeled relationship.",
+    "hint": "Compare the measured change in distance to the change in length.",
+    "fields": [
+      {
+        "id": "interpretation",
+        "label": "Interpret your measurements",
+        "kind": "rubric"
+      }
+    ],
+    "next": null,
+    "support": "measure",
+    "mixed": null
+  },
+  "perform": {
+    "topic": "rhythm",
+    "title": "Perform a steady pulse",
+    "prompt": "Tap four beats at roughly one beat per second using the tap control or F6 in the terminal. Describe any other practice separately.",
+    "criterion": "Measure three intervals between direct taps. A description alone supplies self-report.",
+    "hint": "Count evenly before starting the first tap.",
+    "fields": [
+      {
+        "id": "taps",
+        "label": "Captured beat intervals (ms)",
+        "kind": "timing"
+      }
+    ],
+    "next": null,
+    "support": "perform",
+    "mixed": null
+  },
+  "retrieve": {
+    "topic": "unit rates",
+    "title": "Reconstruct a unit rate",
+    "prompt": "From memory, a pump moves 18 litres in 3 minutes. Give its rate in litres per minute.",
+    "criterion": "Reconstruct a unit rate without a cue.",
+    "hint": "Divide total litres by elapsed minutes.",
+    "fields": [
+      {
+        "id": "rate",
+        "label": "Litres per minute",
+        "kind": "number",
+        "key": "6"
+      }
+    ],
+    "next": "transfer",
+    "support": "retrieve",
+    "mixed": null
+  },
+  "transfer": {
+    "topic": "unit rates",
+    "title": "Transfer a unit rate",
+    "prompt": "A printer produces 28 pages in 4 minutes. At the same rate, how many pages will it produce in 9 minutes?",
+    "criterion": "Use a unit rate under changed conditions.",
+    "hint": "First find pages printed in one minute.",
+    "fields": [
+      {
+        "id": "pages",
+        "label": "Pages in nine minutes",
+        "kind": "number",
+        "key": "63"
+      }
+    ],
+    "next": null,
+    "support": "transfer",
+    "mixed": null
+  },
+  "annotate": {
+    "topic": "source evaluation",
+    "title": "Annotate a source",
+    "prompt": "Bring a short plain-text source. Select one sentence, quote it exactly, and explain what claim the sentence supports and what remains uncertain.",
+    "criterion": "Ground the claim in the quoted source and identify a limit to the evidence.",
+    "hint": "Look for a sentence you could point to if someone asked how you know.",
+    "fields": [
+      {
+        "id": "source",
+        "label": "Source document",
+        "kind": "document"
+      },
+      {
+        "id": "quotation",
+        "label": "Exact passage",
+        "kind": "passage"
+      },
+      {
+        "id": "annotation",
+        "label": "Claim and limit",
+        "kind": "rubric"
+      }
+    ],
+    "next": "case",
+    "support": "annotate",
+    "mixed": null
+  }
+}

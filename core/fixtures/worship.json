@@ -1,0 +1,17 @@
+{
+  "name": "worship",
+  "statement": "I want to learn how to worship God better",
+  "regime": "Formative",
+  "targets": [3],
+  "nodes": [
+    {"id": 1, "name": "Your tradition, community and the texts you treat as authoritative", "misconceptions": ["assumes the tutor will choose the tradition"], "sources": ["learner-supplied"]},
+    {"id": 2, "name": "Know the texts and forms of prayer your tradition teaches", "prereqs": [1], "misconceptions": ["conflates two traditions' practices"], "sources": ["learner-chosen-text"]},
+    {"id": 3, "name": "Sustain a rhythm of prayer or worship you have chosen", "prereqs": [1], "misconceptions": ["measures devotion by streaks"], "sources": ["learner-supplied"]}
+  ],
+  "families": [
+    {"id": 101, "node": 1, "facet": "Explain", "checker": "SelfReport", "cue": "None", "stem": "Which tradition or community do you worship within, and which texts or teachers do you want me to draw on?", "key": "learner-owned"},
+    {"id": 201, "node": 2, "facet": "Recall", "checker": "Rubric", "cue": "None", "difficulty": 0.0, "variants": 20, "stem": "From {text} (your chosen source), what does the passage {ref} say about {theme}?", "key": "accurate to the chosen source"},
+    {"id": 202, "node": 2, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 0.3, "variants": 20, "stem": "Your tradition describes {form} of prayer. Explain when and how it is used, citing {text}.", "key": "accurate to the chosen source"},
+    {"id": 301, "node": 3, "facet": "Apply", "checker": "SelfReport", "cue": "None", "variants": 365, "stem": "How was your time of prayer today? Anything you want to bring next time?", "key": "practice log; never scored"}
+  ]
+}

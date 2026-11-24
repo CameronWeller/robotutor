@@ -1,0 +1,18 @@
+[
+  {
+    "id": "luna-001",
+    "parent": null,
+    "sha256": "32510d1ff48f45edbdacef825993817306a2865b4f4d1403aab9e8dab683c370",
+    "diff": "Freeze the current terminal teaching prompt.",
+    "prediction": "Current teaching may already resolve competing interpretations.",
+    "against": "The tutor advances while the reasoning remains ambiguous."
+  },
+  {
+    "id": "luna-002",
+    "parent": "luna-001",
+    "sha256": "a92a4876e20cede73ab4e271ebaeada29fe0ccb48288af371f8e7f17796d1a66",
+    "diff": "Require one distinguishing question after a correct but ambiguous answer and adapt to the reply.",
+    "prediction": "More replies will change the next move and improve later independent transfer.",
+    "against": "Questions repeat the answer, replies do not change the lesson, or delayed transfer stays level or declines."
+  }
+]

@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+# WSLg can expose its compositor before Ubuntu's user session is available.
+if [[ -n ${WSL_DISTRO_NAME:-} && -S /mnt/wslg/runtime-dir/wayland-0 ]]; then
+    if [[ ! -S ${XDG_RUNTIME_DIR:-}/${WAYLAND_DISPLAY:-wayland-0} ]]; then
+        export WAYLAND_DISPLAY=/mnt/wslg/runtime-dir/wayland-0
+    fi
+    session_bus=${XDG_RUNTIME_DIR:-}/bus
+    if [[ ! -S $session_bus && ( -z ${DBUS_SESSION_BUS_ADDRESS:-} || ${DBUS_SESSION_BUS_ADDRESS:-} == "unix:path=$session_bus" ) ]]; then
+        # The credential service may need a user session bus under WSLg.
+        bus_cache="${XDG_RUNTIME_DIR:?}/robotutor-session-bus"
+        DBUS_SESSION_BUS_ADDRESS=$(
+            exec 9>"$bus_cache.lock"
+            flock -x 9 || exit 1
+            if [[ -s $bus_cache ]] && gdbus call --address "$(<"$bus_cache")" \
+                --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
+                --method org.freedesktop.DBus.GetId >/dev/null 2>&1; then
+                cat "$bus_cache"
+            else
+                address=$(env -u OPENROUTER_API_KEY dbus-daemon --session --fork --print-address=1 9>&-) || exit 1
+                printf '%s\n' "$address" >"$bus_cache"
+                printf '%s\n' "$address"
+            fi
+        )
+        export DBUS_SESSION_BUS_ADDRESS
+    fi
+fi
+root=$(cd -- "$(dirname -- "$0")/.." && pwd)
+settings=${XDG_CONFIG_HOME:-$HOME/.config}/robotutor/pilot.env
+if [[ -f $settings ]]; then source "$settings"; fi
+build=${ROBOTUTOR_BUILD_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/robotutor-pilot}
+export CARGO_TARGET_DIR="$build/target" CARGO_HOME="$build/cargo" TMPDIR="$build/tmp"
+export ROBOTUTOR_PORT=${ROBOTUTOR_PORT:-47321}
+state=${ROBOTUTOR_LMS_STATE:-${XDG_STATE_HOME:-$HOME/.local/state}/robotutor/lms}
+mkdir -p "$CARGO_TARGET_DIR" "$CARGO_HOME" "$TMPDIR" "$state"
+export ROBOTUTOR_ROOT="$root"
+cargo build --quiet --locked --manifest-path "$root/desktop/native/Cargo.toml"
+cargo build --quiet --locked --manifest-path "$root/lab/Cargo.toml" --bin tutor
+cargo build --quiet --locked --manifest-path "$root/lms/Cargo.toml"
+apps=${XDG_DATA_HOME:-$HOME/.local/share}/applications
+mkdir -p "$apps"
+cat >"$apps/robotutor-pilot.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Robotutor
+Exec="$root/tools/launch-pilot" %u
+Terminal=false
+Categories=Education;
+MimeType=x-scheme-handler/robotutor;
+EOF
+xdg-mime default robotutor-pilot.desktop x-scheme-handler/robotutor
+exec "$CARGO_TARGET_DIR/debug/robotutor-desktop" "$@"

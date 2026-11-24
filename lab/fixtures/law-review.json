@@ -1,0 +1,9 @@
+{
+  "status": "Fixed synthetic review inputs for the offline example. No professional sign-off.",
+  "author": 11,
+  "reviewer": 22,
+  "source_pin": "be3a1b4389b52d401f8cc0931d3ca1b99faa9a3fdbbe0b20efb5de580bff3023",
+  "program_digest": "296b73ffb863830b99db477bfc1361909404bb4094e699622b36a541d55cf067",
+  "draft_receipt": "eb89ffae2a84eeea3cd0eaabe3540f5b3911a294450adc147f067def032898c3",
+  "discovery_digest": "9f36ff4e7c8b318d31eecbfe2b1fd81754943fa09c48e28beb435622d073d1f1"
+}

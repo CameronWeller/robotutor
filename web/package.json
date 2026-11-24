@@ -1,0 +1,6 @@
+{
+  "name": "robotutor-web",
+  "private": true,
+  "scripts": { "test": "node tests/workflow.cjs" },
+  "devDependencies": { "playwright": "1.61.1" }
+}

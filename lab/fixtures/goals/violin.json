@@ -1,0 +1,397 @@
+{
+  "revision": 1,
+  "scope": {
+    "goal": "I want to become a better violinist",
+    "purpose": "A returning adult first-position player wants to play an easy duet with a friend, keep the pulse through rests, and shape a short melody.",
+    "setting": "Home practice with violin, a printed score and a metronome. The learner already reads quarter notes and rests and can play short open-string patterns comfortably. A local violin teacher can witness particular trials with permission. Text-only sessions are always available.",
+    "horizon": "Eight weeks, four 20-minute sessions a week, with listening, counting, breaks and reflection included in session time."
+  },
+  "calendar_minutes": 640,
+  "reserve_minutes": 160,
+  "session_minutes": 20,
+  "intake_question": "What would better playing let you do, what can you comfortably play now, how much time is available, and how would you like feedback on your playing?",
+  "scope_reply": "I am returning to violin. I can read simple first-position music and play open strings comfortably. I want to play an easy duet with a friend. I lose count through rests and want to shape the melody. I can set aside 20 minutes four times a week for eight weeks. A local teacher can witness a few checks if I agree on the day. I prefer no recordings.",
+  "criterion_claim": "Keep the pulse through a written quarter rest and begin the following bowed note on its written beat without a cue.",
+  "limit": "The strongest result here is two simulated, consented teacher observations of rest re-entry on fresh open-string tasks. Text can show the learner's intended counting. A self-report or a declined observation leaves the playing unassessed. Tone, intonation, posture and independent ensemble readiness need their own appropriate observations. Stop an uncomfortable playing task and offer silent score work or rest.",
+  "evidence_mode": "witnessed_performance",
+  "facets": [
+    {
+      "id": 1,
+      "name": "Pulse and re-entry",
+      "performance": "Keep the pulse through a written quarter rest and start the following bowed note on its written beat in a fresh pattern.",
+      "min_minutes": 30,
+      "source_url": "https://viva.pressbooks.pub/openmusictheory/chapter/simple-meter-and-time-signatures/"
+    },
+    {
+      "id": 2,
+      "name": "Bowing and tone",
+      "performance": "On two neighboring strings, use separate and slurred bows to produce the intended starts and releases in a short melody.",
+      "min_minutes": 40,
+      "source_url": "https://www.abrsm.org/sites/default/files/2024-12/Bowed%20Strings%202024%20Practical%20syllabus%20%281%20Violin%2020241211%29.pdf"
+    },
+    {
+      "id": 3,
+      "name": "Intonation and listening",
+      "performance": "Compare a stopped note with a stable pitch reference, make a deliberate adjustment if needed and check the note again in a melody.",
+      "min_minutes": 60,
+      "source_url": "https://www.abrsm.org/sites/default/files/2024-12/Bowed%20Strings%202024%20Practical%20syllabus%20%281%20Violin%2020241211%29.pdf"
+    },
+    {
+      "id": 4,
+      "name": "Reading from a fresh score",
+      "performance": "Preview key, meter and starting note, then read an unfamiliar first-position line through to its next bar line.",
+      "min_minutes": 40,
+      "source_url": "https://www.abrsm.org/sites/default/files/2024-12/Bowed%20Strings%202024%20Practical%20syllabus%20%281%20Violin%2020241211%29.pdf"
+    },
+    {
+      "id": 5,
+      "name": "Phrasing and repertoire",
+      "performance": "Play a short first-position tune twice with a chosen phrase destination, and have a listener describe the audible contrast.",
+      "min_minutes": 60,
+      "source_url": "https://www.abrsm.org/sites/default/files/2024-12/Bowed%20Strings%202024%20Practical%20syllabus%20%281%20Violin%2020241211%29.pdf"
+    },
+    {
+      "id": 6,
+      "name": "Sustainable practice and repair",
+      "performance": "Adapt a practice block when it becomes uncomfortable or unproductive and choose a manageable task for the following session.",
+      "min_minutes": 40,
+      "source_url": "https://www.bapam.org.uk/return-to-play/"
+    },
+    {
+      "id": 7,
+      "name": "Playing with a partner",
+      "performance": "Give or follow an agreed cue, keep a shared pulse, and recover at a named landmark during a short duet.",
+      "min_minutes": 60
+    }
+  ],
+  "proposal": {
+    "units": [
+      {
+        "id": 101,
+        "facet": 1,
+        "title": "Make room for a silent beat",
+        "performance": "Play a fresh two-bar open-D line in four, maintaining the pulse and placing both entries after rests on the written counts.",
+        "minutes": 15,
+        "requires": []
+      },
+      {
+        "id": 102,
+        "facet": 2,
+        "title": "Two neighboring open strings",
+        "performance": "Alternate D and A in short, separate strokes and ask a teacher to mark any unintended string sounding at a crossing.",
+        "minutes": 30,
+        "requires": []
+      },
+      {
+        "id": 103,
+        "facet": 3,
+        "title": "Return to a pitch reference",
+        "performance": "In first position, compare a stopped A on the D string with open A. Describe the comparison and repeat the stopped note after releasing the hand.",
+        "minutes": 45,
+        "requires": []
+      },
+      {
+        "id": 104,
+        "facet": 4,
+        "title": "Preview a four-bar part",
+        "performance": "Mark the key, meter, starting note and one rest on a fresh four-bar first-position score, then attempt one reading at a comfortable pulse.",
+        "minutes": 30,
+        "requires": []
+      },
+      {
+        "id": 105,
+        "facet": 5,
+        "title": "Where does the phrase arrive?",
+        "performance": "Mark a destination note on an original four-bar tune and try two shapes. Ask a consenting listener which note sounded most prominent each time.",
+        "minutes": 45,
+        "requires": []
+      },
+      {
+        "id": 106,
+        "facet": 6,
+        "title": "Design a manageable practice block",
+        "performance": "Divide one session among playing, silent score study and rest. Stop an uncomfortable exercise and choose a listening or reading task for the rest of the block.",
+        "minutes": 30,
+        "requires": []
+      },
+      {
+        "id": 107,
+        "facet": 7,
+        "title": "Meet a partner at a cue",
+        "performance": "Agree on a count-in and a re-entry bar with a partner, play a four-bar call and response and compare where each player heard the re-entry.",
+        "minutes": 45,
+        "requires": [
+          101
+        ]
+      },
+      {
+        "id": 201,
+        "facet": 1,
+        "title": "Carry the pulse across a bar line",
+        "performance": "Read and play an unfamiliar open-A line in three. Continue counting a rest within a bar and a rest at the end of a different bar, then re-enter on time.",
+        "minutes": 15,
+        "requires": [
+          101
+        ]
+      },
+      {
+        "id": 202,
+        "facet": 2,
+        "title": "Choose a bowing for the tune",
+        "performance": "Try two slur groupings in a phrase that crosses strings. Select one and have a listener mark whether its intended note connections came through.",
+        "minutes": 30,
+        "requires": [
+          102
+        ]
+      },
+      {
+        "id": 203,
+        "facet": 3,
+        "title": "Test a note inside a melody",
+        "performance": "Choose a target note which can be checked against an open string. Play the measure, compare the note with the reference and check it again in the original measure.",
+        "minutes": 45,
+        "requires": [
+          103
+        ]
+      },
+      {
+        "id": 204,
+        "facet": 4,
+        "title": "Read a new second part",
+        "performance": "Prepare silently, then read an unfamiliar four-bar second part at a chosen pulse. Mark where the first reading departed from the score and try that bar separately.",
+        "minutes": 30,
+        "requires": [
+          104
+        ]
+      },
+      {
+        "id": 205,
+        "facet": 5,
+        "title": "Give the duet melody a shape",
+        "performance": "Prepare two contrasting four-bar phrases from the duet and ask a listener to mark the intended arrival in each from the playing.",
+        "minutes": 45,
+        "requires": [
+          105
+        ]
+      },
+      {
+        "id": 206,
+        "facet": 6,
+        "title": "Repair a difficulty and plan the next block",
+        "performance": "From a practice log choose one difficult bar. Try a slower or off-instrument task, document what changed, and decide what to revisit after a break.",
+        "minutes": 30,
+        "requires": [
+          106
+        ]
+      },
+      {
+        "id": 207,
+        "facet": 7,
+        "title": "Play the duet and recover together",
+        "performance": "Play the prepared phrases with a partner. Test a planned pause, use the agreed landmark to regroup, and each report which cue worked.",
+        "minutes": 45,
+        "requires": [
+          107,
+          205
+        ]
+      }
+    ]
+  },
+  "first_pack": {
+    "unit": 101,
+    "source_url": "local:violin/open-string-cards/four",
+    "locator": "Original open-string card, Counting in four, directions",
+    "excerpt": "For this card a click is a quarter-note beat. Keep the count going during a rest. A two-beat note begins once and continues across the next click.",
+    "lesson": "Count one, two, three, four with a comfortable click. Bow a single open string on the marked sounds and leave the rests silent. Put the violin down if playing feels uncomfortable. You can continue by counting or marking beats on paper.",
+    "worked": "In a bar of four, an open D lasting two beats, a one-beat rest and a final quarter note fill the bar. The first note occupies counts one and two. Count three silently and begin the last note on four.",
+    "practice": "Tap one bar with sounds on beats one and four and two silent beats between. Count the pulses through the gap. Now try the same rhythm on open D if comfortable.",
+    "check": "Set a comfortable click in 4/4 and take a one-bar count-in. Play this new line on open D without a counting prompt. The first bar has a quarter note, a quarter rest and a half note. The second has two quarter notes, a quarter rest and a quarter note. If you want your playing assessed, invite your teacher to note the actual re-entries. You can also mark the entries on paper.",
+    "criterion": "After a silent beat, re-enter on beat three of bar one and beat four of bar two, each on the click without an extra beat or teacher cue.",
+    "rubric": "A consenting human observer identifies both re-entry beats against the shared pulse and whether a cue was needed. Correct unprompted entries on both support this task. A missed rest, extra beat or prompted entry calls for guided counting and a fresh later check. A correct written map can establish beat accounting. Playing remains unobserved from text alone. Stop the exercise upon discomfort.",
+    "attempts": {
+      "demonstrated": {
+        "response": "Simulated live teacher report, with the player's permission: both written rests were silent. The bow sounded again with click three of the first bar and click four of the second bar, with no cue from me.",
+        "feedback": "Your teacher marked both independent re-entries on the written beats. Next time, try carrying the same pulse into a different meter."
+      },
+      "revisit": {
+        "response": "Simulated live teacher report, with the player's permission: the first return aligned with click three. In the second bar the player waited through click four and sounded the last note on the following click.",
+        "feedback": "Your teacher marked the first entry on time. In bar two, tap the silent third beat and say four as you tap the return. Try a new line after a break."
+      },
+      "unobserved": {
+        "response": "I counted it on paper and I think I played it right. I prefer to keep my playing private.",
+        "feedback": "You can mark the re-entry beats on paper for feedback on counting. Your playing stays unassessed. No recording is needed."
+      }
+    },
+    "practice_response": "With the learner's agreement, the simulated teacher counted the four clicks aloud. The learner tapped on one and four, leaving two and three silent, and then played the pattern on open D while the teacher continued counting.",
+    "practice_feedback": "Your teacher marked two silent beats between those taps. The spoken counts helped you place the last tap on four. Try the next pattern with your own count. If you invite your teacher to listen, ask them to hold their cue."
+  },
+  "return_pack": {
+    "show_source_during_check": false,
+    "unit": 201,
+    "source_url": "local:violin/open-string-cards/three",
+    "locator": "Original open-string card, Counting over a bar line, directions",
+    "excerpt": "On this card a bar holds three quarter-note beats. Keep a silent beat’s place even when it ends a bar. The next bar starts on the very next beat.",
+    "lesson": "Use a comfortable three-beat pulse on open A. Continue counting through silence and let the count return to one at the bar line. If playing becomes uncomfortable, stop and trace the bars on paper.",
+    "worked": "Play a quarter note on count one, hold a half note through counts two and three, then start a new note on the next one. The bar line itself takes no time.",
+    "practice": "Count a repeating bar in three. Sustain open A for two beats and leave the third silent. Tap the first beat of the next bar instead of playing it.",
+    "check": "With a fresh three-beat count-in, play the following new line on open A without a counting prompt. The first bar has a quarter rest followed by a half note. The second has a half note followed by a quarter rest. The third has three quarter notes. A teacher you invite may note when the bow first sounds and when it resumes after bar two.",
+    "criterion": "Re-enter on beat two after the opening rest and on beat one of bar three after bar two's final rest, each on the click without an extra beat or cue.",
+    "rubric": "A consenting human observer records the initial entry and the cross-bar re-entry against the pulse. Both correct without a cue support this transfer in three. If one is late, identify that beat, practise counting over the bar line and retry on fresh material later. Self-report and written counts support discussion. Credit for playing requires witnessed performance. Stop upon discomfort.",
+    "attempts": {
+      "demonstrated": {
+        "response": "Simulated live teacher report, with the player's permission: the player held the opening beat silent and entered on beat two. After bar two's silent third beat, the next note aligned with the first click of bar three without a cue.",
+        "feedback": "Your teacher observed the silent opening and both entrances on the pulse. The same skill has now appeared in four and in three. Try it at your next duet rehearsal."
+      },
+      "revisit": {
+        "response": "Simulated live teacher report, with the player's permission: the first entry came on beat two. Across the second bar line the player added a silent click and began on beat two of bar three.",
+        "feedback": "The teacher's note places the extra beat between bars two and three. With the instrument down, count two full bars in three and tap the first beat after the second bar. Save a new played check for another attempt."
+      },
+      "unobserved": {
+        "response": "I kept the three-beat count in my head. No one was there and I do not want to record it.",
+        "feedback": "You can describe where you re-entered and we can compare the counts with the score. The return performance stays unassessed until you choose a witnessed check."
+      }
+    }
+  },
+  "discovery": {
+    "material": {
+      "sources": [
+        {
+          "publisher": "Open Music Theory",
+          "url": "https://viva.pressbooks.pub/openmusictheory/chapter/simple-meter-and-time-signatures/",
+          "held": false,
+          "labels": [
+            {
+              "key": "omt-count",
+              "text": "Counting in Simple Meter",
+              "facets": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "publisher": "Associated Board of the Royal Schools of Music",
+          "url": "https://www.abrsm.org/sites/default/files/2024-12/Bowed%20Strings%202024%20Practical%20syllabus%20%281%20Violin%2020241211%29.pdf",
+          "held": false,
+          "labels": [
+            {
+              "key": "abr-tone",
+              "text": "control of tone",
+              "facets": [
+                2
+              ]
+            },
+            {
+              "key": "abr-pitch",
+              "text": "pitch and interval awareness",
+              "facets": [
+                3
+              ]
+            },
+            {
+              "key": "abr-reading",
+              "text": "Sight-reading",
+              "facets": [
+                4
+              ]
+            },
+            {
+              "key": "abr-shape",
+              "text": "musical shaping",
+              "facets": [
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "publisher": "British Association for Performing Arts Medicine",
+          "url": "https://www.bapam.org.uk/return-to-play/",
+          "held": true,
+          "labels": [
+            {
+              "key": "bap-return",
+              "text": "Returning to Playing and Performance for Instrumental Musicians",
+              "facets": [
+                6
+              ]
+            },
+            {
+              "key": "bap-load",
+              "text": "return to playing in a gradual way",
+              "facets": [
+                6
+              ]
+            }
+          ]
+        }
+      ],
+      "owner_aims": [
+        {
+          "key": "duet-cues",
+          "facet": 7,
+          "reason": "The learner wants to play with a friend. Include counting in, coordinating entries and recovering together at an agreed landmark."
+        }
+      ],
+      "challenges": [
+        {
+          "facet": 6,
+          "evidence": "bap-load",
+          "question": "How will this returning player share a session between playing and off-instrument work, and decide to stop an uncomfortable task?"
+        }
+      ]
+    },
+    "first_map": [
+      {
+        "facet": 1,
+        "name": "Pulse and re-entry",
+        "evidence": [
+          "omt-count"
+        ]
+      },
+      {
+        "facet": 2,
+        "name": "Bowing and tone",
+        "evidence": [
+          "abr-tone"
+        ]
+      },
+      {
+        "facet": 3,
+        "name": "Intonation and listening",
+        "evidence": [
+          "abr-pitch"
+        ]
+      },
+      {
+        "facet": 4,
+        "name": "Reading from a fresh score",
+        "evidence": [
+          "abr-reading"
+        ]
+      },
+      {
+        "facet": 5,
+        "name": "Phrasing and repertoire",
+        "evidence": [
+          "abr-shape"
+        ]
+      },
+      {
+        "facet": 7,
+        "name": "Playing with a partner",
+        "owner_aim": "duet-cues"
+      }
+    ],
+    "additions": [
+      {
+        "facet": 6,
+        "name": "Sustainable practice and repair",
+        "evidence": [
+          "bap-return",
+          "bap-load"
+        ]
+      }
+    ]
+  }
+}

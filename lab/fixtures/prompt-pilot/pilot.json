@@ -1,0 +1,24 @@
+{
+  "baseline": "luna-001",
+  "candidate": "luna-002",
+  "simulations": [
+    "explicit",
+    "agent"
+  ],
+  "cases": [
+    "writer-owner",
+    "writer-replacement",
+    "chemical-engineering-boundary",
+    "chemical-engineering-samples",
+    "violin-rest-entry",
+    "violin-bow-map",
+    "better-person-return-choice",
+    "better-person-commitment",
+    "worship-invitation",
+    "worship-voice"
+  ],
+  "seed": 20261123,
+  "call_limit": 540,
+  "token_limit": 1500000,
+  "budget_microusd": 2000000
+}

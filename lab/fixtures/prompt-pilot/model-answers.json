@@ -1,0 +1,122 @@
+{
+  "writer-owner": {
+    "changed": {
+      "success": "Keep the envelope whose inside label reads Remy. Take the envelope whose inside label reads Audio Desk to Audio Desk.",
+      "recall_error": "Keep whichever envelope you borrowed first. Bring the other one back to the archive counter.",
+      "application_error": "Keep the one labeled Remy. Give the Audio Desk envelope back to whoever first handed it to you."
+    },
+    "transfer": {
+      "success": "Keep the item with your name on the inside tag. Take the one tagged Sound Desk to Sound Desk. I would give Imani both items and the notice, then ask them to show where each goes. I'd revise it if they left their own item or set the Sound Desk item down here.",
+      "recall_error": "Return equipment here when you leave the festival. Ask a visitor whether they understand the notice.",
+      "application_error": "Keep the item tagged with your name and take the Sound Desk item to Sound Desk. I'd read the notice aloud and ask Imani if it sounds clear."
+    }
+  },
+  "writer-replacement": {
+    "changed": {
+      "success": "Keep Clay on Monday and pencil in Wednesday as well. Cross out Friday's Ink session and move it to Saturday.",
+      "recall_error": "Move Clay to Wednesday and Ink to Saturday. You can erase both of the original dates.",
+      "application_error": "Clay still meets Monday and now also Wednesday. Put Ink on Saturday too, but keep Friday just in case."
+    },
+    "transfer": {
+      "success": "Hill is moving from morning to afternoon. Dock is still at noon, with one more visit whose time we can't read. I'd ask the organizer what time the additional Dock visit is.",
+      "recall_error": "Hill has both a morning and afternoon stop. The Dock schedule is unreadable, so skip the noon stop until a new flyer arrives.",
+      "application_error": "Move Hill to the afternoon and keep Dock at noon. I'd announce another Dock stop at 1, since it's probably the next hour."
+    }
+  },
+  "chemical-engineering-boundary": {
+    "changed": {
+      "success": "For left I get +7 - 4 - 6 = -3 kg. Tap to right never enters left.",
+      "recall_error": "The tap adds 5 and the drain removes 4, so the inventory went up 1 kg. Left and right transfers stay inside the rig.",
+      "application_error": "For left I counted 7 coming in from right and 4 going out to the drain, so +3 kg. I left both other entries off."
+    },
+    "transfer": {
+      "success": "If the card covers left only, 5 in minus 10 out is -5 kg. For both bladders, 5 in minus 3 to drain is +2 kg. Which boundary was marked on the original card?",
+      "recall_error": "Use +2 kg since the exhibit gained 5 and lost 3 overall. The water that went between the bladders doesn't change anything.",
+      "application_error": "I need to know which card it was. W gives +2 kg. For L, I counted 5 in, 10 out and 3 drained, so I get -8 kg."
+    }
+  },
+  "chemical-engineering-samples": {
+    "changed": {
+      "success": "Tray is (9+3)/2 = 6 g/L because the samples match in size. Run contains 2 times 9 plus 4 times 3, or 30 g in 6 L, so 5 g/L.",
+      "recall_error": "Leave 6 g/L in both boxes. There are two readings, so I added them and divided by two.",
+      "application_error": "Tray is 6 g/L for equal samples. For Run I multiplied 9 by 4 L and 3 by 2 L and divided by 6 L, giving 7 g/L."
+    },
+    "transfer": {
+      "success": "Tray is 3 g/L from equal sample volumes. How many liters came in the second delivery? I need that to weight the 5 g/L reading for Run.",
+      "recall_error": "I would enter 3 g/L for both records. Both samples were the same size.",
+      "application_error": "Tray is 3 g/L. For Run I'll use 3 L for each delivery because the samples were equal and put 3 g/L there too."
+    }
+  },
+  "violin-rest-entry": {
+    "changed": {
+      "success": "One bow G, two rest, three rest, four bow D. Repeat those four beats. Record a count of one-two-three-four alongside the violin and listen for D beginning with four.",
+      "recall_error": "Play G on one and D on two, then leave the rest of the bar quiet. Do it twice.",
+      "application_error": "G on one, rest two and three, D on four, twice. To check, listen to a recording of just the two notes and see if D sounds clean."
+    },
+    "transfer": {
+      "success": "At each flash count one silently, bow A on two, rest on three, bow E on four. Put a numbered spoken count on the recording starting at the flash. Compare the starts of A and E with two and four.",
+      "recall_error": "Start A when the scene flashes, then E on two. Record the scene audio so the listener hears both notes in order.",
+      "application_error": "Count from the flash and cue rest, A, rest, E. I'd send just the bow audio since the person onstage can see the flash."
+    }
+  },
+  "violin-bow-map": {
+    "changed": {
+      "success": "E up, A down, D still down, G up. Watch A into D: the finger changes pitch while the bow keeps traveling down.",
+      "recall_error": "E up, A down, D up, G down. Swap direction each time you hear the pitch change.",
+      "application_error": "E up, A down, D down, G down. Watch the A-to-D finger change while the bow keeps moving."
+    },
+    "transfer": {
+      "success": "If Start is down, use down/down/up/up. If Start is up, use up/up/down/down. Have an observer watch the bow against a fixed mark: it keeps traveling at each Thread and turns around at the Dot.",
+      "recall_error": "Alternate direction for all four gestures. The observer can count four bow changes.",
+      "application_error": "Use down/down/up/up and ask the observer to watch for a reversal only on the third gesture. I assume the first gesture must be down."
+    }
+  },
+  "better-person-return-choice": {
+    "changed": {
+      "success": "I'll leave Bo's topic alone unless Bo brings it back. At closing I'll ask once, 'Cai, would you like the floor now, or shall we wrap up?' Then I'll follow Cai's lead.",
+      "recall_error": "I'd end with 'Bo and Cai, let's both hear what you wanted to say.' I'd stay until both get a turn.",
+      "application_error": "I won't reopen Bo's point. At closing I'll say, 'Cai, now it's your turn; we'll wait while you finish.'"
+    },
+    "transfer": {
+      "success": "Privately: 'Did you want one offer of the floor at closing, or would you rather bring it back yourself?' With no reply, I'll close without naming them and leave the chat open if they choose to return.",
+      "recall_error": "I'll tell the chair that the volunteer probably wanted to speak. I'll call on them at closing if I haven't heard back.",
+      "application_error": "I'll ask privately, 'Did you mean hold it or park it?' If I don't hear back, I'll name them once in front of everyone in case they meant hold."
+    }
+  },
+  "better-person-commitment": {
+    "changed": {
+      "success": "Mine: I'll place my key at the desk by 4. Ask: can the desk volunteer cover the counter until 5? Dana, I'll have the key there by 4; I'm waiting to hear whether pickup at 5 will be possible.",
+      "recall_error": "Mine: Dana will have the key at 5. Ask: let Dana know where the desk is. I'd tell Dana we're all set.",
+      "application_error": "Mine: I'll put the key at the desk by 4. Ask: could you staff the desk until 5? I'd text Dana that they can definitely pick it up at 5."
+    },
+    "transfer": {
+      "success": "I'll post the parcel list by noon. Delivery at 2 is still unconfirmed. I'll check with the driver by 1 and send you an update then, even if I still don't have a delivery time.",
+      "recall_error": "Your parcels will be on their way at 2. I'll tell the driver everyone's counting on them.",
+      "application_error": "I'll list the parcels by noon. We're waiting for confirmation about the 2 o'clock trip. For follow-up, the driver needs to update all recipients by 1."
+    }
+  },
+  "worship-invitation": {
+    "changed": {
+      "success": "First: let us pause together in silence as we watch the shore. Next: you may speak one hope aloud or hold it in silence.",
+      "recall_error": "First tell us one thing you see on the shore. Then everyone should say one hope aloud.",
+      "application_error": "Pause quietly for 'Watch the shore.' Next invite everyone to take a turn saying a hope aloud before the group moves on."
+    },
+    "transfer": {
+      "success": "You may speak a word for this evening or remain silent. I'd ask the organizer whether 'Wait here' was marked for a shared silent pause or for a choice of speech or silence.",
+      "recall_error": "Please go around the bed and say a word for this evening. Then we'll all read 'Wait here' together.",
+      "application_error": "You may offer a word for this evening or keep silence. For 'Wait here,' I'd lead a silent pause because the wording sounds quiet."
+    }
+  },
+  "worship-voice": {
+    "changed": {
+      "success": "Reader: 'Let the river sing.' Group: echo that line once if you wish, or listen. Reader alone, once: 'We listen.'",
+      "recall_error": "Everyone together: 'Let the river sing.' Everyone together: 'We listen.'",
+      "application_error": "Reader leads 'Let the river sing,' then the group may echo once or listen. The reader says 'We listen' twice so everyone hears it."
+    },
+    "transfer": {
+      "success": "The reader speaks 'The path is open' once. The reader then leads 'Walk with us.' People nearby may echo once in their natural voices or simply listen.",
+      "recall_error": "Ask everyone to repeat both lines loudly enough to reach the back without a microphone.",
+      "application_error": "Reader alone: 'The path is open,' once. The reader leads 'Walk with us,' and now everyone must shout it back once because the echo mic is out."
+    }
+  }
+}

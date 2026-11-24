@@ -1,0 +1,564 @@
+{
+  "revision": 1,
+  "scope": {
+    "goal": "I want to learn chemical engineering",
+    "purpose": "Build an introductory engineering survey for a learner comfortable with arithmetic, units and line graphs. Read a flowsheet, check whether measurements fit a model and defend a process choice.",
+    "setting": "Individual or classroom, using supplied records and paper or spreadsheet models. All named process fluids are water. Reaction models use synthetic conversion data with no chemical identity.",
+    "horizon": "24 weeks with three 40-minute meetings per week. Reserve 12 of the 72 meetings for retrieval, feedback, absence and rework."
+  },
+  "calendar_minutes": 2880,
+  "reserve_minutes": 480,
+  "session_minutes": 40,
+  "intake_question": "Are you hoping to understand how processes work, prepare for a degree course, or make design decisions in a particular setting? Which math can you use comfortably and how much time would you like to spend?",
+  "scope_reply": "I can use arithmetic, units and graphs. I want to understand how engineers reason about a process, from readings to a design choice. I can study three forty-minute sessions a week for twenty-four weeks using water examples and recorded data.",
+  "criterion_claim": "Report the signed change in total water inventory over a stated interval in kilograms for the specified boundary.",
+  "limit": "A matching number and unit provide evidence of this calculation on this item. They leave boundary selection, reasoning, source interpretation, practical operation, laboratory competence and independent design unassessed. The survey samples a discipline. Multicomponent separations, chemical applications of kinetics and supervised laboratory work require additional study.",
+  "evidence_mode": "quantity",
+  "facets": [
+    {
+      "id": 1,
+      "name": "Material balances",
+      "performance": "Choose the inventory, boundary and interval, convert matched flow rates to masses and close balances on individual and combined units.",
+      "min_minutes": 80,
+      "source_url": "https://cheme.mit.edu/academics/undergraduate-students/undergraduate-programs/course10/"
+    },
+    {
+      "id": 2,
+      "name": "Mathematical models and measurement",
+      "performance": "Keep dimensions consistent, estimate a slope and propagate a supplied measurement range to decide whether a balance discrepancy is resolved.",
+      "min_minutes": 120,
+      "source_url": "https://cse.umn.edu/college/four-year-plans/chemical-engineering-four-year-plan"
+    },
+    {
+      "id": 3,
+      "name": "Energy balances",
+      "performance": "Draw an energy boundary, distinguish stored energy from transferred energy and calculate a consistent heat duty from supplied water data.",
+      "min_minutes": 120,
+      "source_url": "https://cheme.mit.edu/academics/undergraduate-students/undergraduate-programs/course10/"
+    },
+    {
+      "id": 4,
+      "name": "Thermodynamics and equilibrium",
+      "performance": "Read a pure-water property diagram, recognize phase coexistence and state the additional data needed to predict a rate.",
+      "min_minutes": 120,
+      "source_url": "https://cheme.mit.edu/academics/undergraduate-students/undergraduate-programs/course10/"
+    },
+    {
+      "id": 5,
+      "name": "Momentum transport and fluid flow",
+      "performance": "Use measured water flow and pressure differences to compare flow resistance and evaluate the range over which a fitted model applies.",
+      "min_minutes": 80,
+      "source_url": "https://cheme.mit.edu/academics/undergraduate-students/undergraduate-programs/course10/"
+    },
+    {
+      "id": 6,
+      "name": "Heat and mass transfer",
+      "performance": "Estimate heat flow or water-vapor flux using supplied driving forces, areas and coefficients, then identify the limiting resistance from data.",
+      "min_minutes": 160,
+      "source_url": "https://cheme.mit.edu/academics/undergraduate-students/undergraduate-programs/course10/"
+    },
+    {
+      "id": 7,
+      "name": "Separation processes",
+      "performance": "Close a phase-resolved balance around a supplied separation unit and distinguish recovery, product composition and environmental cost.",
+      "min_minutes": 120,
+      "source_url": "https://sampleplan.umn.edu/duluth/chemical-engineering-bsche"
+    },
+    {
+      "id": 8,
+      "name": "Reaction kinetics and reactor models",
+      "performance": "Use supplied dimensionless conversion data to compare candidate rate models and explain how mixing or residence time affects a model prediction.",
+      "min_minutes": 120,
+      "source_url": "https://cse.umn.edu/college/four-year-plans/chemical-engineering-four-year-plan"
+    },
+    {
+      "id": 9,
+      "name": "Dynamics and control",
+      "performance": "Infer time lag and accumulation from a water-process history, then distinguish the response to a disturbance from a feedback action.",
+      "min_minutes": 120,
+      "source_url": "https://cse.umn.edu/college/four-year-plans/chemical-engineering-four-year-plan"
+    },
+    {
+      "id": 10,
+      "name": "Process design, economics and sustainability",
+      "performance": "Compare feasible process alternatives on equal service, calculate annual resource and cost consequences and defend a recommendation under uncertainty.",
+      "min_minutes": 120,
+      "source_url": "https://cheme.mit.edu/academics/undergraduate-students/undergraduate-programs/course10/"
+    },
+    {
+      "id": 11,
+      "name": "Process safety and engineering judgment",
+      "performance": "Interpret a hypothetical failure record, identify who could be affected and document the evidence required before accepting a control or design.",
+      "min_minutes": 80,
+      "source_url": "https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-engineering-programs-2025-2026/"
+    },
+    {
+      "id": 12,
+      "name": "Experiment design and technical communication",
+      "performance": "Choose measurements that can discriminate between two plausible models and communicate both the result and its uncertainty to a decision maker.",
+      "min_minutes": 120,
+      "source_url": "https://cse.umn.edu/college/four-year-plans/chemical-engineering-four-year-plan"
+    }
+  ],
+  "proposal": {
+    "units": [
+      {
+        "id": 101,
+        "facet": 1,
+        "title": "Did the holding tank gain water?",
+        "performance": "Use constant inlet and outlet water mass-flow readings to report the signed water inventory change across one tank over a stated interval.",
+        "minutes": 40,
+        "requires": []
+      },
+      {
+        "id": 102,
+        "facet": 2,
+        "title": "A meter reports kilograms per minute",
+        "performance": "Construct a units ledger for a water-flow record, compute a finite-difference slope and distinguish a meter resolution from a measured change.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 103,
+        "facet": 3,
+        "title": "Where did the energy cross?",
+        "performance": "Complete a water reservoir energy ledger with supplied heat inputs, losses and stored energy change. State the assumption that allows a simplified balance.",
+        "minutes": 160,
+        "requires": [
+          101
+        ]
+      },
+      {
+        "id": 104,
+        "facet": 4,
+        "title": "Read a water phase map",
+        "performance": "Locate recorded pure-water states on a supplied pressure-temperature diagram, identify when two phases can coexist and explain why the diagram alone supplies no transition time.",
+        "minutes": 160,
+        "requires": []
+      },
+      {
+        "id": 105,
+        "facet": 5,
+        "title": "Which branch resists water flow?",
+        "performance": "Use tabulated water flow and pressure-loss measurements on two branches to fit an empirical relation and identify where extrapolation becomes uncertain.",
+        "minutes": 120,
+        "requires": [
+          102
+        ]
+      },
+      {
+        "id": 106,
+        "facet": 6,
+        "title": "Follow heat through a wall",
+        "performance": "Use a supplied water-to-water exchanger record to estimate heat flow, identify the temperature driving force and compare two thermal resistance models.",
+        "minutes": 160,
+        "requires": [
+          103
+        ]
+      },
+      {
+        "id": 107,
+        "facet": 7,
+        "title": "Account for ice and liquid at a screen",
+        "performance": "Trace the ice and liquid water in a recorded split. Calculate ice recovery and ice mass fraction in the collected stream and explain how improving one can reduce the other.",
+        "minutes": 160,
+        "requires": [
+          101,
+          104
+        ]
+      },
+      {
+        "id": 108,
+        "facet": 8,
+        "title": "Which rate model fits the conversion history?",
+        "performance": "Compare constant-slope and proportional-to-remaining-amount predictions against synthetic conversion observations. Explain how a change of phase in water differs from a chemical reaction.",
+        "minutes": 160,
+        "requires": [
+          102
+        ]
+      },
+      {
+        "id": 109,
+        "facet": 9,
+        "title": "Why did level keep rising?",
+        "performance": "Interpret recorded water-level, inlet and outlet trends. Distinguish a steady inventory from a steady flow and identify the disturbance, measured variable and feedback action.",
+        "minutes": 160,
+        "requires": [
+          101,
+          102
+        ]
+      },
+      {
+        "id": 110,
+        "facet": 10,
+        "title": "Compare two water recovery proposals",
+        "performance": "Calculate annual water use, energy use and net annual cost for two fictional designs with equal service. Identify the value assumption that changes the ranking.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 111,
+        "facet": 11,
+        "title": "Read a near-miss report",
+        "performance": "Review a fictional water overflow and an unreliable level sensor. Identify a possible consequence, a safeguard sharing the same sensor and an independent observation needed for review.",
+        "minutes": 120,
+        "requires": []
+      },
+      {
+        "id": 112,
+        "facet": 12,
+        "title": "What observation would change the decision?",
+        "performance": "Draft a sampling and reporting plan for a supplied water process. Separate repeated measurement, independent replication and systematic bias in a short note.",
+        "minutes": 120,
+        "requires": [
+          102
+        ]
+      },
+      {
+        "id": 201,
+        "facet": 1,
+        "title": "Draw one boundary around two basins",
+        "performance": "Report the signed change in combined water inventory across two connected basins, separating interval totals crossing the outer boundary from a transfer between the basins.",
+        "minutes": 40,
+        "requires": [
+          101
+        ]
+      },
+      {
+        "id": 202,
+        "facet": 2,
+        "title": "Is there evidence of a missing stream?",
+        "performance": "Propagate stated meter intervals through a water balance, compare the possible residuals with zero and say which additional reading would help.",
+        "minutes": 120,
+        "requires": [
+          101,
+          102
+        ]
+      },
+      {
+        "id": 206,
+        "facet": 6,
+        "title": "Trace water through a membrane",
+        "performance": "From supplied water-vapor partial pressures on each side of a membrane, area and effective permeance, calculate water flux and total transport rate. Compare two explanations when the observed rate falls.",
+        "minutes": 120,
+        "requires": [
+          102
+        ]
+      },
+      {
+        "id": 207,
+        "facet": 7,
+        "title": "What the phase split leaves open",
+        "performance": "Compare supplied ice-separation reports at equal throughput using yield, purity and energy per kilogram recovered. Identify what pure-water tests cannot establish about separating mixture components.",
+        "minutes": 80,
+        "requires": [
+          103,
+          107
+        ]
+      },
+      {
+        "id": 208,
+        "facet": 8,
+        "title": "What changes when residence times differ?",
+        "performance": "Match each of two supplied residence-time distributions to a synthetic dimensionless conversion lookup and explain why equal mean time can yield different mean conversion.",
+        "minutes": 120,
+        "requires": [
+          108
+        ]
+      },
+      {
+        "id": 209,
+        "facet": 9,
+        "title": "A steady daily total hides a transient",
+        "performance": "Reconstruct a water inventory trajectory from successive unequal flows and compare it with the zero net daily change. Explain what a slowly sampled level monitor misses.",
+        "minutes": 120,
+        "requires": [
+          109
+        ]
+      },
+      {
+        "id": 210,
+        "facet": 10,
+        "title": "Recommend a water service design",
+        "performance": "Submit an annotated flowsheet and decision memo for two rainwater storage and reuse designs meeting the same demand. Test water and energy balances, cost, sensor failure and the consequence of a drier year.",
+        "minutes": 200,
+        "requires": [
+          103,
+          109,
+          110,
+          111,
+          112
+        ]
+      }
+    ]
+  },
+  "discovery": {
+    "material": {
+      "sources": [
+        {
+          "publisher": "Massachusetts Institute of Technology, Department of Chemical Engineering",
+          "url": "https://cheme.mit.edu/academics/undergraduate-students/undergraduate-programs/course10/",
+          "held": false,
+          "labels": [
+            {
+              "key": "mit-balances",
+              "text": "Mass and energy balances",
+              "facets": [
+                1,
+                3
+              ]
+            },
+            {
+              "key": "mit-equilibria",
+              "text": "Thermodynamics of physical and chemical equilibria",
+              "facets": [
+                4
+              ]
+            },
+            {
+              "key": "mit-transport",
+              "text": "Heat, mass and momentum transfer",
+              "facets": [
+                5,
+                6
+              ]
+            },
+            {
+              "key": "mit-economics",
+              "text": "Basic engineering economics",
+              "facets": [
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "publisher": "University of Minnesota Twin Cities, College of Science and Engineering",
+          "url": "https://cse.umn.edu/college/four-year-plans/chemical-engineering-four-year-plan",
+          "held": false,
+          "labels": [
+            {
+              "key": "umn-math",
+              "text": "Numerical Methods",
+              "facets": [
+                2
+              ]
+            },
+            {
+              "key": "umn-kinetics",
+              "text": "Reaction Kinetics",
+              "facets": [
+                8
+              ]
+            },
+            {
+              "key": "umn-control",
+              "text": "Process Control",
+              "facets": [
+                9
+              ]
+            },
+            {
+              "key": "umn-lab",
+              "text": "Junior and senior chemical engineering laboratories with writing",
+              "facets": [
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "publisher": "University of Minnesota Duluth, Swenson College of Science and Engineering",
+          "url": "https://sampleplan.umn.edu/duluth/chemical-engineering-bsche",
+          "held": false,
+          "labels": [
+            {
+              "key": "umd-separations",
+              "text": "Separations",
+              "facets": [
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "publisher": "ABET Engineering Accreditation Commission",
+          "url": "https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-engineering-programs-2025-2026/",
+          "held": true,
+          "labels": [
+            {
+              "key": "abet-hazards",
+              "text": "Chemical engineering program criterion including hazards associated with processes",
+              "facets": [
+                11
+              ]
+            }
+          ]
+        }
+      ],
+      "owner_aims": [
+        {
+          "key": "resource-tradeoff",
+          "facet": 10,
+          "reason": "Include energy and water use alongside the cost comparison because the learner wants to justify design choices. Preserve this scope choice during review."
+        }
+      ],
+      "challenges": [
+        {
+          "facet": 11,
+          "evidence": "abet-hazards",
+          "question": "Which learner task examines a failure mode, its consequence and the independence of a proposed safeguard?"
+        }
+      ]
+    },
+    "first_map": [
+      {
+        "facet": 1,
+        "name": "Material balances",
+        "evidence": [
+          "mit-balances"
+        ]
+      },
+      {
+        "facet": 3,
+        "name": "Energy balances",
+        "evidence": [
+          "mit-balances"
+        ]
+      },
+      {
+        "facet": 4,
+        "name": "Thermodynamics and equilibrium",
+        "evidence": [
+          "mit-equilibria"
+        ]
+      },
+      {
+        "facet": 5,
+        "name": "Momentum transport and fluid flow",
+        "evidence": [
+          "mit-transport"
+        ]
+      },
+      {
+        "facet": 6,
+        "name": "Heat and mass transfer",
+        "evidence": [
+          "mit-transport"
+        ]
+      },
+      {
+        "facet": 7,
+        "name": "Separation processes",
+        "evidence": [
+          "umd-separations"
+        ]
+      },
+      {
+        "facet": 8,
+        "name": "Reaction kinetics and reactor models",
+        "evidence": [
+          "umn-kinetics"
+        ]
+      }
+    ],
+    "additions": [
+      {
+        "facet": 2,
+        "name": "Mathematical models and measurement",
+        "evidence": [
+          "umn-math"
+        ]
+      },
+      {
+        "facet": 9,
+        "name": "Dynamics and control",
+        "evidence": [
+          "umn-control"
+        ]
+      },
+      {
+        "facet": 10,
+        "name": "Process design, economics and sustainability",
+        "owner_aim": "resource-tradeoff"
+      },
+      {
+        "facet": 11,
+        "name": "Process safety and engineering judgment",
+        "evidence": [
+          "abet-hazards"
+        ]
+      },
+      {
+        "facet": 12,
+        "name": "Experiment design and technical communication",
+        "evidence": [
+          "umn-lab"
+        ]
+      }
+    ]
+  },
+  "first_pack": {
+    "unit": 101,
+    "source_url": "https://www.usgs.gov/publications/water-budget-methods",
+    "locator": "Richard W. Healy, Water-budget methods (2010), USGS summary, first sentence.",
+    "excerpt": "A water budget is an accounting of water movement into and out of, and storage change within, some control volume.",
+    "lesson": "Circle the tank. Inventory is the water mass inside that boundary at a moment. Over an interval, change in inventory equals mass entering minus mass leaving. For constant readings in kilograms per minute, multiply each reading by elapsed minutes before subtracting. All quantities here are water masses or mass-flow rates.",
+    "worked": "One tank receives 5 kg/min and discharges 3 kg/min for 3 minutes. The only boundary crossings are 15 kg in and 9 kg out. The change is +6 kg. A starting inventory of 20 kg would leave 26 kg in the tank.",
+    "practice": "A second tank receives and discharges 3 kg/min throughout four minutes. Will its mass change? Sketch the two streams and explain how water can keep moving while the mass in storage stays steady.",
+    "check": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+    "criterion": "Report the signed change in total water inventory over a stated interval in kilograms for the specified boundary.",
+    "rubric": "Compare the signed interval change with +10 kg. Score the reported quantity only. An explanation, diagram or claim about steady state would require a separate judgment.",
+    "quantity": {
+      "value": 10,
+      "unit": "kg"
+    },
+    "attempts": {
+      "demonstrated": {
+        "response": "10 kg",
+        "feedback": "The tank gained 10 kg across the five minutes. The rate difference is 2 kg/min. Multiplying by the interval gives the storage change."
+      },
+      "revisit": {
+        "response": "2 kg",
+        "feedback": "The inlet exceeds the outlet by 2 kg each minute. Mark each of the five minutes on a line and add the five changes."
+      },
+      "unobserved": {
+        "response": "I need help telling a rate from an amount.",
+        "feedback": "Write kg/min beside the two meter readings and minutes beside the interval. We can do the first minute together and save a different problem for independent practice."
+      }
+    },
+    "practice_response": "The entering mass is 3 kg/min × 4 min = 12 kg and the leaving mass is also 12 kg. The change is 0 kg although water moves through the tank the whole time.",
+    "practice_feedback": "Your two 12 kg arrows balance over the same four minutes. The tank keeps its original mass while water moves through it. This establishes a steady water inventory for these constant flows. Temperature would require its own evidence."
+  },
+  "return_pack": {
+    "show_source_during_check": false,
+    "unit": 201,
+    "source_url": "https://water.usgs.gov/ogw/modflow/mf6io_6.0.3.pdf",
+    "locator": "MODFLOW 6, Description of Input and Output, v6.0.3, groundwater flow model, water budget discussion, printed page 21, sentence beginning The total budget, first clause.",
+    "excerpt": "The total budget as printed in the output does not include internal flows between model cells",
+    "lesson": "When two basins are inside one boundary, water moving from one to the other leaves one local inventory and enters the other. Those entries cancel in their sum. The source gives the analogous rule for model cells. Our exercise records all transfers directly in kilograms.",
+    "worked": "Two indoor pools exchange 7 kg of water. Both lie inside the boundary. A delivery adds 3 kg from outside and a drain carries 1 kg away. The paired pools gain 2 kg during the interval.",
+    "practice": "A 5 kg transfer leaves the left basin and enters the right, with both covered and no other transfers. Draw separate boundaries and then one combined boundary. Which of the three inventories changed?",
+    "check": "Two covered basins together contain 25 kg of water at the start of an interval. The delivery log records 2 kg entering from outside. A maintenance log records 11 kg moved from the west basin to the east basin. An outlet collects 8 kg outside the pair. These are all water movements. For one boundary enclosing both basins, report the signed change in total inventory over the interval. Enter a signed whole number followed by kg.",
+    "criterion": "Report the signed change in total water inventory over a stated interval in kilograms for the specified boundary.",
+    "rubric": "Compare the combined interval change with -6 kg. The 11 kg transfer crosses only the internal boundary. Score the reported signed quantity. Drawing the correct boundary or explaining cancellation is a separate performance.",
+    "quantity": {
+      "value": -6,
+      "unit": "kg"
+    },
+    "attempts": {
+      "demonstrated": {
+        "response": "-6 kg",
+        "feedback": "The pair lost 6 kg. The external ledger records 2 kg entering and 8 kg leaving. The 11 kg transfer cancels when the basins are combined."
+      },
+      "revisit": {
+        "response": "5 kg",
+        "feedback": "Draw one loop around both basins and trace each logged movement. Which arrows cross the loop? Use just those crossings to calculate the change."
+      },
+      "unobserved": {
+        "response": "I am unsure which transfers count.",
+        "feedback": "Start by drawing the two basins inside a single box. We can sort the transfers together, then revisit the combined-boundary skill on an unseen record."
+      }
+    }
+  }
+}

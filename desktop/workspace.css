@@ -1,0 +1,55 @@
+/* Robotutor's three palette roles are shared with the native graph and course webview. */
+@define-color tutor_primary #17334c;
+@define-color tutor_secondary #e7f2f6;
+@define-color tutor_highlight #e69f00;
+@define-color tutor_panel mix(@tutor_secondary, @tutor_primary, 0.07);
+@define-color tutor_edge mix(@tutor_secondary, @tutor_primary, 0.53);
+@define-color tutor_muted mix(@tutor_primary, @tutor_secondary, 0.20);
+
+window.robotutor { background: @tutor_secondary; color: @tutor_primary; font-family: "Nunito", sans-serif; }
+.robotutor button, .robotutor entry, .robotutor dropdown, .robotutor textview, .robotutor textview text, .robotutor popover contents {
+  color: @tutor_primary; background: @tutor_secondary;
+}
+.robotutor button, .robotutor entry { border: 1px solid @tutor_edge; box-shadow: none; }
+.robotutor button:hover { background: @tutor_panel; }
+.robotutor button:checked, .robotutor selection { background: @tutor_primary; color: @tutor_secondary; }
+.robotutor button:focus-visible, .robotutor entry:focus-within, .robotutor textview:focus-visible { outline: 2px solid @tutor_primary; outline-offset: -2px; }
+.robotutor button:disabled { color: @tutor_muted; background: @tutor_panel; border-color: @tutor_panel; }
+.mast { background: @tutor_primary; color: @tutor_secondary; padding: 8px 12px; }
+.brand { font-family: "Nunito", sans-serif; font-size: 23px; font-weight: bold; color: @tutor_secondary; }
+.robotutor headerbar { background: @tutor_primary; color: @tutor_secondary; }
+.robotutor .mast image { color: @tutor_highlight; }
+.robotutor headerbar windowcontrols button, .robotutor headerbar windowcontrols image { background: transparent; color: @tutor_secondary; border-color: transparent; }
+.robotutor .mast button { background: transparent; color: @tutor_secondary; border: 1px solid transparent; border-radius: 8px; padding: 5px 12px; }
+.robotutor .mast windowcontrols button { padding: 2px; }
+.robotutor .mast button:hover, .robotutor .mast menubutton > button { border-color: @tutor_edge; }
+.robotutor .mast button:checked { background: @tutor_secondary; color: @tutor_primary; }
+.robotutor .mast button:focus-visible { outline-color: @tutor_highlight; }
+.robotutor .mast popover button { color: @tutor_primary; border-radius: 5px; }
+.robotutor .mast popover button:focus-visible { outline-color: @tutor_primary; }
+.robotutor .mast popover button:hover { background: @tutor_panel; }
+.workspace-body { padding: 14px 20px; }
+.page-title, .section-title { font-family: "Nunito", sans-serif; font-weight: bold; color: @tutor_primary; }
+.page-title { font-size: 27px; }
+.section-title { font-size: 19px; }
+.conversation { min-height: 5em; }
+.card { background: @tutor_secondary; border: 1px solid @tutor_edge; border-radius: 12px; padding: 12px; }
+.rail { background: @tutor_panel; border-radius: 12px; padding: 14px; }
+.reading, .reading text { color: @tutor_primary; font-size: 16px; }
+.current { background: @tutor_primary; border-left: 4px solid @tutor_highlight; border-radius: 9px; padding: 7px 10px; color: @tutor_secondary; }
+.robotutor .current textview, .robotutor .current text { background: @tutor_primary; color: @tutor_secondary; font-size: 16px; }
+.composer { background: @tutor_secondary; border: 1px solid @tutor_edge; border-radius: 10px; padding: 4px; }
+.composer:focus-within { border-color: @tutor_primary; }
+.composer textview, .composer text { font-size: 15px; }
+.robotutor button.suggested-action { background: @tutor_highlight; color: @tutor_primary; border: 1px solid @tutor_primary; border-radius: 7px; padding-left: 18px; padding-right: 18px; font-weight: bold; }
+.robotutor button.suggested-action:hover { box-shadow: inset 0 0 0 1px @tutor_primary; }
+.robotutor button.suggested-action:disabled { background: @tutor_panel; color: @tutor_muted; border-color: @tutor_panel; }
+.robotutor .muted, .robotutor .dim-label { color: @tutor_muted; opacity: 1; }
+.robotutor .muted { font-size: 13px; }
+.robotutor .rail expander title { padding: 5px 0; }
+.robotutor .note-heading { color: @tutor_primary; font-size: 14px; font-weight: bold; }
+.robotutor .review-quote { background: @tutor_panel; color: @tutor_primary; padding: 10px; border-radius: 6px; }
+.robotutor button.trace-link { border-radius: 7px; }
+.stage-time trough { background: @tutor_panel; min-height: 6px; }
+.stage-time progress { background: @tutor_primary; min-height: 6px; }
+.explorer.compact { padding: 5px 8px; }

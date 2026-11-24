@@ -1,0 +1,345 @@
+diff --git a/lab/examples/bounded_probes/long_visit.rs b/lab/examples/bounded_probes/long_visit.rs
+index aff5052a2a806b376af921b39657465500185ec3..23e29fe4848ac655555479647f379f24b3e2e7c8 100644
+--- a/lab/examples/bounded_probes/long_visit.rs
++++ b/lab/examples/bounded_probes/long_visit.rs
+@@ -450,6 +450,7 @@ impl Learner {
+                         | "contribution_followup"
+                         | "contribution_clarification"
+                         | "reattempt_review_source"
++                        | "flow_return_offer"
+                         | "component_return_offer"
+                         | "component_return_review"
+                         | "component_return_clarification"
+@@ -1324,6 +1325,25 @@ impl Visit<'_> {
+                         None
+                     };
+                 }
++                let plain_return =
++                    exact == Some(transfer_goal) || crate::visit_flow_request::ordinary_return(say);
++                if flow_request.is_none()
++                    && selected_goal == Some(transfer_goal)
++                    && plain_return
++                    && reply["action"] != "skip"
++                    && reply["opening_preference"].is_null()
++                    && spoken.as_ref().is_none_or(|d| {
++                        d["connection"].is_null()
++                            && d.get("prior_work").is_none()
++                            && d.get("diagnostic_evidence").is_none()
++                            && d.get("unresolved_enrollment").is_none()
++                            && d["selection_relation"]
++                                .as_str()
++                                .is_none_or(|r| r == "compatible")
++                    })
++                {
++                    flow_request = self.deferred_flow(transfer_goal);
++                }
+                 let purpose = spoken.as_ref().and_then(|d| d.get("prior_work"));
+                 if let Some(request) = purpose {
+                     reattempt_request = spoken
+diff --git a/lab/examples/bounded_probes/visit_concept_return.rs b/lab/examples/bounded_probes/visit_concept_return.rs
+index 25729ecad1b14467d78c9f1e9157a939bc1f6bab..b0edf716ad8483001c09504ad9f1804637f3dc34 100644
+--- a/lab/examples/bounded_probes/visit_concept_return.rs
++++ b/lab/examples/bounded_probes/visit_concept_return.rs
+@@ -967,6 +967,12 @@ impl Visit<'_> {
+         )
+         .then_some(qi)
+     }
++    pub(super) fn deferred_flow(&self, goal: &str) -> Option<(usize, FlowRequest)> {
++        let qi = self.flow_source(goal)?;
++        let request = flow::pending(&self.progress.introduction_questions[qi], self.number)?;
++        Some((qi, request))
++    }
++
+     pub(super) fn flow_return(
+         &mut self,
+         qi: usize,
+diff --git a/lab/examples/bounded_probes/visit_flow_request.rs b/lab/examples/bounded_probes/visit_flow_request.rs
+index 527d94230dbf17708ea513a03fae2f83194988ba..aa3413610e14b62c6e7f24379ae8e163a5904803 100644
+--- a/lab/examples/bounded_probes/visit_flow_request.rs
++++ b/lab/examples/bounded_probes/visit_flow_request.rs
+@@ -27,10 +27,18 @@ impl Condition {
+     }
+ }
+
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub(crate) enum Timing {
++    Current,
++    NextVisit,
++    Reopened(u32),
++}
++
+ #[derive(Clone, Debug, PartialEq, Eq)]
+ pub(crate) struct Request {
+     pub condition: Condition,
+     pub practice: bool,
++    pub timing: Timing,
+     pub conditions: PracticeConditions,
+ }
+
+@@ -459,6 +467,30 @@ fn extra_conditions(s: &str, condition: Condition) -> Value {
+     }
+ }
+
++pub(crate) fn ordinary_return(say: &str) -> bool {
++    let normalized = words(say);
++    let text = normalized.trim().trim_end_matches(['.', '!']).trim_end();
++    if matches!(text, "" | "i'm back" | "i am back") {
++        return true;
++    }
++    let action = ["i'm back to ", "i am back to ", "please ", "let's "]
++        .iter()
++        .find_map(|intro| text.strip_prefix(intro))
++        .unwrap_or(text);
++    ["continue", "resume", "pick up"].iter().any(|verb| {
++        action.strip_prefix(verb).is_some_and(|rest| {
++            matches!(
++                rest.trim(),
++                "" | "where we left off"
++                    | "my course"
++                    | "the course"
++                    | "my lessons"
++                    | "chemical engineering"
++            )
++        })
++    })
++}
++
+ fn deferred(s: &str) -> bool {
+     mentions(
+         s,
+@@ -637,9 +669,36 @@ fn validate(say: &str, d: &Value) -> Result<Option<Request>, String> {
+     {
+         return Err("transfer constraints are not grounded in the learner request".into());
+     }
++    let phrase = words(target);
++    let next_visit = !practice
++        && practice_request(&phrase)
++        && mentions(
++            &phrase,
++            &[
++                "next visit",
++                "next session",
++                "when i return",
++                "when i come back",
++            ],
++        )
++        && !mentions(
++            &words(say),
++            &[
++                "next week",
++                "tomorrow",
++                "not now or later",
++                "never mind",
++                "forget that request",
++            ],
++        );
+     Ok(Some(Request {
+         condition,
+         practice,
++        timing: if next_visit {
++            Timing::NextVisit
++        } else {
++            Timing::Current
++        },
+         conditions,
+     }))
+ }
+@@ -711,7 +770,8 @@ mod tests {
+             Some(Request {
+                 condition: Condition::Loss,
+                 conditions: PracticeConditions::default(),
+-                practice: true
++                practice: true,
++                timing: Timing::Current,
+             })
+         );
+         let learner = "I understand the two tanks with equal flows stayed the same. Does that mean I can use this method for a tank losing water? I'd like to try one myself before seeing a solution.";
+@@ -720,7 +780,8 @@ mod tests {
+             Some(Request {
+                 condition: Condition::Loss,
+                 conditions: PracticeConditions::default(),
+-                practice: true
++                practice: true,
++                timing: Timing::Current,
+             })
+         );
+         let only = "After those balanced tanks, what does my result establish for a tank that drains overall?";
+@@ -730,7 +791,8 @@ mod tests {
+             Some(Request {
+                 condition: Condition::Loss,
+                 conditions: PracticeConditions::default(),
+-                practice: false
++                practice: false,
++                timing: Timing::Current,
+             })
+         );
+         let mut invalid = d.clone();
+diff --git a/lab/examples/bounded_probes/visit_flow_return.rs b/lab/examples/bounded_probes/visit_flow_return.rs
+index 77cb08a1142da588eae22cab155153982483b208..98163f5589c126450922867a892df7ddda159b37 100644
+--- a/lab/examples/bounded_probes/visit_flow_return.rs
++++ b/lab/examples/bounded_probes/visit_flow_return.rs
+@@ -1,7 +1,7 @@
+ //! An explicit request to test a different physical condition starts from two
+ //! attributable checked tanks. Selecting a card cannot supply a third result.
+ use super::*;
+-use crate::visit_flow_request::{Condition, Request};
++use crate::visit_flow_request::{Condition, Request, Timing};
+
+ impl Condition {
+     fn id(self) -> &'static str {
+@@ -89,6 +89,11 @@ pub(super) fn decode(marker: &Value) -> Option<Request> {
+     Some(Request {
+         condition: Condition::from_id(marker["condition"].as_str()?)?,
+         practice: marker["practice"].as_bool()?,
++        timing: match marker.get("reopen") {
++            None => Timing::Current,
++            Some(value) if value.as_str() == Some("next_visit") => Timing::NextVisit,
++            Some(value) => Timing::Reopened(u32::try_from(value.as_u64()?).ok()?),
++        },
+         conditions: match marker.get("conditions") {
+             Some(value) => inventory::PracticeConditions::from_value(value).ok()?,
+             None => inventory::PracticeConditions::default(),
+@@ -96,6 +101,33 @@ pub(super) fn decode(marker: &Value) -> Option<Request> {
+     })
+ }
+
++/// Read only earlier receipts for this introduction. A confirmed offer consumes the
++/// reminder, even when the learner leaves without taking the assessment.
++pub(super) fn pending(source: &intro_question::Receipt, visit: u32) -> Option<Request> {
++    for record in source.returns.iter().rev().filter(|r| r.visit < visit) {
++        let Some(pos) = record
++            .effects
++            .iter()
++            .rposition(|e| e["status"] == "flow_requested")
++        else {
++            continue;
++        };
++        let mut request = decode(&record.effects[pos]["decision"])?;
++        let after = &record.effects[pos + 1..];
++        match request.timing {
++            Timing::Reopened(_) if !after.iter().any(|e| e["status"] == "flow_offer_delivered") => {
++                continue
++            }
++            Timing::NextVisit if !after.iter().any(|e| e["status"] == "check_requested") => {
++                request.timing = Timing::Reopened(record.visit);
++                return Some(request);
++            }
++            _ => return None,
++        }
++    }
++    None
++}
++
+ pub(super) fn decision(
+     p: &Progress,
+     source: &intro_question::Receipt,
+@@ -103,6 +135,14 @@ pub(super) fn decision(
+     visit: u32,
+     request: Request,
+ ) -> Option<Decision> {
++    if matches!(request.timing, Timing::Reopened(_))
++        && pending(source, visit).as_ref() != Some(&request)
++    {
++        return None;
++    }
++    if request.practice && request.timing != Timing::Current {
++        return None;
++    }
+     let intro = p.introductions.get(source.source_introduction)?;
+     let (first, retry) = balanced_pair(source, p, visit)?;
+     let (_, _, obs, _) = source.last_feedback()?;
+@@ -201,6 +241,17 @@ pub(super) fn decision(
+     };
+     let mut marker = json!({"review_event":review.event,"condition":request.condition.id(),"practice":request.practice,"original_event":first.event,"retry_event":retry.event,
+         "prior_condition_event":prior.map(|c| c.event),"candidate_step":candidate});
++    match request.timing {
++        Timing::Current => {}
++        Timing::NextVisit => {
++            marker["reopen"] = json!("next_visit");
++            text.push_str(" I’ll bring this choice back when you return to the course.");
++        }
++        Timing::Reopened(original) => {
++            marker["reopen"] = json!(original);
++            text = format!("On visit {original} you asked to try this condition next time. {text}");
++        }
++    }
+     if request.conditions.specific() {
+         marker["conditions"] = request.conditions.record();
+     }
+diff --git a/lab/examples/bounded_probes/visit_store.rs b/lab/examples/bounded_probes/visit_store.rs
+index bcddedabafd2f79b1fb5f108b54145476816e512..7cee837a86e443a89ee8b2a5f81bcc80426fd430 100644
+--- a/lab/examples/bounded_probes/visit_store.rs
++++ b/lab/examples/bounded_probes/visit_store.rs
+@@ -2849,11 +2849,15 @@ mod tests {
+         old.as_object_mut().unwrap().remove("introductions");
+         old["catalog"] = json!(c.fingerprint());
+         let envelope = json!({"checksum":checksum(&old).unwrap(),"data":old});
+-        fs::write(
+-            dir.join("visit.json"),
+-            serde_json::to_vec(&envelope).unwrap(),
+-        )
+-        .unwrap();
++        let mut file = OpenOptions::new()
++            .write(true)
++            .create_new(true)
++            .mode(0o600)
++            .open(dir.join("visit.json"))
++            .unwrap();
++        file.write_all(&serde_json::to_vec(&envelope).unwrap())
++            .unwrap();
++        drop(file);
+         let packs: Vec<_> = (0..500).map(|i| json!({"id":format!("extra-{i}"),"skill":"practice",
+             "source":"local:example","limit":"ungraded","items":[{"task":format!("task {i}"),"material":"reference"}]})).collect();
+         let expanded = Catalog::from_json(&json!({"goals":packs}).to_string()).unwrap();
+diff --git a/lab/tests/flow_transfer_history.py b/lab/tests/flow_transfer_history.py
+index 88677fb0bc4a5c38284e66f5f3c069eb86f6b97d..e77799ef727236271d59fc99ac8278709d5d6fee 100644
+--- a/lab/tests/flow_transfer_history.py
++++ b/lab/tests/flow_transfer_history.py
+@@ -209,6 +209,39 @@ def exhaust_loss_stock(binary, directory):
+     return [task for task, _ in observed]
+
+
++def deferred_return(binary, root, prior):
++    for name, words, expected in [
++        ("return", "Can I try a net-loss tank on my next visit?", True),
++        ("calendar", "Can I try a net-loss tank next week?", False),
++        ("evidence", EVIDENCE, False),
++    ]:
++        directory = root / ("ordinary-" + name)
++        shutil.copytree(prior, directory)
++        _, previous = evidence_only(binary, directory, words)
++        other = {"action": "continue", "say": "Writing", "choice": "writer"}
++        _, unrelated, _ = run_visit(binary, directory, 61, lambda v: other if v["stage"] == "intake" else END)
++        assert all(v["stage"] != "flow_return_offer" for v in unrelated)
++
++        def returning(screen):
++            if screen["stage"] == "intake":
++                return enter("I'm back to continue my course.")
++            if expected and screen["stage"] == "flow_return_offer":
++                return selected(screen, "check")
++            return END
++
++        _, screens, _ = run_visit(binary, directory, 62, returning)
++        offers = [v for v in screens if v["stage"] == "flow_return_offer"]
++        assert bool(offers) == expected, (name, [v["stage"] for v in screens])
++        if expected:
++            offer, = offers
++            assert isinstance(offer["flow_comparison"]["reopen"], int)
++            task, = [v for v in screens if v["stage"] == "question"]
++            assert physical_result(task)["change"] < 0, (task["screen"], offer["screen"], [(v["stage"],v.get("phase")) for v in screens])
++            _, later, after = run_visit(binary, directory, 63, lambda v: enter("Continue my course") if v["stage"] == "intake" else END)
++            assert all(v["stage"] != "flow_return_offer" for v in later)
++            assert after["events"][:len(previous["events"])] == previous["events"]
++
++
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("binary", type=Path)
+@@ -222,6 +255,7 @@ def main():
+         _, _, _, seeded = retry_history((args.history_binary or args.binary).resolve(), prior,
+                                         {"part": "final_inventory", "retry": "++"})
+         constrained_returns(binary, root, prior)
++        deferred_return(binary, root, prior)
+         screens = []
+         for marks in ("++", "+-", "+?", "skip"):
+             directory = root / ("case" + str(len(screens)))

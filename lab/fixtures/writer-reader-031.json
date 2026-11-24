@@ -1,0 +1,30 @@
+{
+  "model_requested": "gpt-6.2-sol",
+  "request_sha256": "9548e40e16540aa18b703b00a4f35a9b367aecd3bd453f46c4131b332d8a25d8",
+  "packet": {
+    "notice": "Keep your own folder. If you borrowed a folder, hand it back to the conductor.",
+    "situations": {
+      "owned": "You brought your own folder.",
+      "borrowed": "You borrowed a folder."
+    },
+    "action_options": [
+      "ask for clarification",
+      "carry it away",
+      "give it to the conductor",
+      "leave it in the room",
+      "other"
+    ]
+  },
+  "response": {
+    "borrowed": "give it to the conductor",
+    "owned": "carry it away"
+  },
+  "seconds": 13.197,
+  "usage": {
+    "input_tokens": 16689,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 26,
+    "reasoning_output_tokens": 0
+  }
+}

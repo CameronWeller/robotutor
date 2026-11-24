@@ -1,0 +1,124 @@
+{
+  "source_stage_sha256": {
+    "case": "e3e097eb2e911e201e6058cdc280029ae5c7023a56650d04ad475c7ffa9d582f",
+    "condition": "dd7bccf23f63367062bf0c693622e9b6725eb46a9a8c5ec7c1e3f3eeda121337",
+    "A-return": "99a1a61aabe1a3b98343907dc56c8a297d30b9be142d3ca5611ff86bc99c5e06",
+    "B-return": "1d86006f52f651280a17f82e009631739361eb6e379afbb8c71d900e05c52c73"
+  },
+  "request": "I see the holding-tank review is due. I'd like to skip it today and try the two-basins question instead.",
+  "baseline_displays": [
+    "We can skip the holding-tank review today. Please share the two-basins question so we can work through it together.",
+    "Let’s skip the holding-tank review today and work on the two-basins question. Could you share the question as it’s written?"
+  ],
+  "outcomes": {
+    "chosen": {
+      "now": {
+        "result": "practice",
+        "unit": 201,
+        "display": "A 5 kg transfer leaves the left basin and enters the right, with both covered and no other transfers. Draw separate boundaries and then one combined boundary. Which of the three inventories changed?",
+        "due": 101
+      },
+      "contacts_now": 1,
+      "next": {
+        "result": "check",
+        "unit": 101,
+        "display": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+        "due": 101
+      },
+      "contacts_next": 2,
+      "submissions": 0
+    },
+    "due_chosen": {
+      "now": {
+        "result": "check",
+        "unit": 101,
+        "display": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+        "due": 101
+      },
+      "contacts_now": 1,
+      "next": {
+        "result": "check",
+        "unit": 101,
+        "display": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+        "due": 101
+      },
+      "contacts_next": 2,
+      "submissions": 0
+    },
+    "wrong_unit_grant": {
+      "now": {
+        "result": "unavailable",
+        "display": "That exercise is unavailable. The holding-tank review is still due."
+      },
+      "contacts_now": 0,
+      "next": {
+        "result": "check",
+        "unit": 101,
+        "display": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+        "due": 101
+      },
+      "contacts_next": 1,
+      "submissions": 0
+    },
+    "second_source_withdrawn": {
+      "now": {
+        "result": "unavailable",
+        "display": "That exercise is unavailable. The holding-tank review is still due."
+      },
+      "contacts_now": 0,
+      "next": {
+        "result": "check",
+        "unit": 101,
+        "display": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+        "due": 101
+      },
+      "contacts_next": 1,
+      "submissions": 0
+    },
+    "stale_edition": {
+      "now": {
+        "result": "selection_changed",
+        "display": "The exercise selection has changed. Please choose a current exercise."
+      },
+      "contacts_now": 0,
+      "next": {
+        "result": "check",
+        "unit": 101,
+        "display": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+        "due": 101
+      },
+      "contacts_next": 1,
+      "submissions": 0
+    },
+    "wrong_selection": {
+      "now": {
+        "result": "selection_changed",
+        "display": "The exercise selection has changed. Please choose a current exercise."
+      },
+      "contacts_now": 0,
+      "next": {
+        "result": "check",
+        "unit": 101,
+        "display": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+        "due": 101
+      },
+      "contacts_next": 1,
+      "submissions": 0
+    },
+    "undecided": {
+      "now": {
+        "result": "no_choice",
+        "display": "The review is still due. You can choose another activity."
+      },
+      "contacts_now": 0,
+      "next": {
+        "result": "check",
+        "unit": 101,
+        "display": "A covered tank starts with 30 kg of water. Its only inlet delivers 4 kg/min and its only outlet withdraws 2 kg/min, both constant for 5 minutes. What is the signed change in the water inventory during this interval? Enter a signed whole number followed by kg.",
+        "due": 101
+      },
+      "contacts_next": 1,
+      "submissions": 0
+    }
+  }
+}

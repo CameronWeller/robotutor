@@ -1,0 +1,49 @@
+[
+  [
+    {
+      "words": "I repair bicycles. I usually start by lining up the gears and counting teeth.",
+      "action": "reflect",
+      "reply": "You use a real mechanism and count what moves before writing down a rule.",
+      "reason": "Check that account with you before choosing an algebra problem.",
+      "findings": [
+        {"kind":"reported","area":"","quote":"I repair bicycles.","reading":"Familiar with bicycle drivetrains.","replaces":[]},
+        {"kind":"reported","area":"","quote":"I usually start by lining up the gears and counting teeth.","reading":"Often starts by counting a physical example.","replaces":[]}
+      ]
+    }
+  ],
+  [
+    {
+      "words": "looks right",
+      "action": "diagnostic",
+      "area": "Rates",
+      "reply": "On the test stand the wheel turns 12 times in 4 pedal turns. What rate would you record?",
+      "reason": "See whether you can move from a pair of counts to a rate independently."
+    },
+    {
+      "words": "Three wheel turns per pedal turn, because 12 divided by 4 is 3. I have not put that on a graph yet.",
+      "action": "explore",
+      "reply": "You found the unit rate independently. How would you like to work on the graph?",
+      "reason": "Use the demonstrated rate as a starting point and ask about the unfamiliar representation.",
+      "findings": [
+        {"kind":"demonstrated","area":"Rates","quote":"Three wheel turns per pedal turn, because 12 divided by 4 is 3.","reading":"Independently divides wheel turns by pedal turns and gives the units.","replaces":[]},
+        {"kind":"unfamiliar","area":"Graphs","quote":"I have not put that on a graph yet.","reading":"Reports limited experience graphing the relationship.","replaces":[]}
+      ]
+    },
+    {
+      "words": "For a gear I haven't seen, I start with a table now, then plot the counts.",
+      "action": "propose",
+      "reply": "You already calculated the rate. Let's use the table you prefer to choose axes and predict another point.",
+      "reason": "Connect an independent rate calculation to graphing, using the corrected preference.",
+      "findings": [
+        {"kind":"correction","area":"","quote":"I start with a table now, then plot the counts.","reading":"Prefers a table first for an unfamiliar gear.","replaces":["first-visit#2.2"]}
+      ],
+      "start": {
+        "objective": "Translate a gear-rate table into a graph",
+        "exercise": "Your test stand records 2 pedal turns for 6 wheel turns and 4 for 12. Which quantity goes on each axis, and what new point would you predict for 5 pedal turns?",
+        "criterion": "Use pedal turns as the independent quantity, label wheel turns on the vertical axis, and justify the point (5,15).",
+        "why": "You independently found the unit rate and said you now prefer to start a new gear with a table.",
+        "sources":["workshop#3.1","current"]
+      }
+    }
+  ]
+]

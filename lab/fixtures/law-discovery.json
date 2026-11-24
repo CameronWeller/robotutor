@@ -1,0 +1,114 @@
+{
+  "goal": "I want to learn the law",
+  "scope": {
+    "purpose": "An adult beginner wants a broad civic and intellectual education and wants to read and challenge a legal argument.",
+    "jurisdiction": "United States survey. Use federal material for federal questions. Identify the relevant state, Tribal Nation or comparison jurisdiction before sourcing its rules.",
+    "horizon": "36 weeks, three 40-minute sessions per week"
+  },
+  "material": {
+    "sources": [
+      {
+        "publisher": "Harvard University",
+        "url": "https://hls.harvard.edu/academics/degree-programs/jd-program/",
+        "held": false,
+        "labels": [
+          {"key": "hls-method", "text": "legal research and writing", "facets": [1, 18]},
+          {"key": "hls-constitution", "text": "constitutional law", "facets": [3]},
+          {"key": "hls-regulation", "text": "legislation and regulation", "facets": [4]},
+          {"key": "hls-tort", "text": "torts", "facets": [5]},
+          {"key": "hls-contract", "text": "contracts", "facets": [6]},
+          {"key": "hls-property", "text": "property", "facets": [7]},
+          {"key": "hls-crime", "text": "criminal law", "facets": [8]},
+          {"key": "hls-civil", "text": "civil procedure", "facets": [10]},
+          {"key": "hls-business", "text": "Law and Business", "facets": [12]}
+        ]
+      },
+      {
+        "publisher": "Georgetown University",
+        "url": "https://www.law.georgetown.edu/academics/jd-program/full-time-program/",
+        "held": false,
+        "labels": [
+          {"key": "gt-exchange", "text": "Bargain, Exchange, and Liability", "facets": [5, 6]},
+          {"key": "gt-procedure", "text": "Constitutional Criminal Procedure", "facets": [9]},
+          {"key": "gt-world", "text": "international/comparative/transnational law", "facets": [16]},
+          {"key": "gt-writing", "text": "Legal Practice: Writing and Analysis", "facets": [18]}
+        ]
+      },
+      {
+        "publisher": "Administrative Office of the U.S. Courts",
+        "url": "https://www.uscourts.gov/forms-rules/current-rules-practice-procedure/federal-rules-evidence",
+        "held": false,
+        "labels": [{"key": "usc-evidence", "text": "Federal Rules of Evidence", "facets": [11]}]
+      },
+      {
+        "publisher": "Stanford Encyclopedia of Philosophy",
+        "url": "https://plato.stanford.edu/entries/legal-positivism/",
+        "held": true,
+        "labels": [
+          {"key": "sep-valid", "text": "Legal Positivism", "facets": [2]},
+          {"key": "sep-moral", "text": "Moral Principles and the Boundaries of Law", "facets": [2]}
+        ]
+      },
+      {
+        "publisher": "Cherokee Nation",
+        "url": "https://www.cherokee.org/media/lsufapj1/constitution-of-the-cherokee-nation-1999-online.pdf",
+        "held": true,
+        "labels": [
+          {"key": "cherokee-federal", "text": "Article I. Federal Relationship", "facets": [15]},
+          {"key": "cherokee-territory", "text": "Article II. Territorial Jurisdiction", "facets": [15]}
+        ]
+      }
+    ],
+    "owner_aims": [
+      {
+        "key": "life-course",
+        "facet": 13,
+        "reason": "The editor adds a household transfer and succession problem to ground private law in ordinary life. Confirm its place with the learner."
+      },
+      {
+        "key": "work-benefits",
+        "facet": 14,
+        "reason": "The editor adds an employment and benefits problem so the civic survey reaches administrative decisions people encounter at work."
+      },
+      {
+        "key": "justice-access",
+        "facet": 17,
+        "reason": "The editor adds professional duties and access to representation so the learner can evaluate how a person gets help with a dispute."
+      }
+    ],
+    "challenges": [
+      {
+        "facet": 2,
+        "evidence": "sep-moral",
+        "question": "Where does the learner compare the authority of a duly enacted rule with the moral case for obeying it?"
+      },
+      {
+        "facet": 15,
+        "evidence": "cherokee-federal",
+        "question": "Where does the learner consult a Tribal Nation's own legal text and distinguish its account of sovereignty from the federal account?"
+      }
+    ]
+  },
+  "first_map": [
+    {"facet": 1, "name": "Legal sources and research", "evidence": ["hls-method"]},
+    {"facet": 3, "name": "Constitutional law", "evidence": ["hls-constitution"]},
+    {"facet": 4, "name": "Legislation and administrative law", "evidence": ["hls-regulation"]},
+    {"facet": 5, "name": "Torts", "evidence": ["hls-tort", "gt-exchange"]},
+    {"facet": 6, "name": "Contracts", "evidence": ["hls-contract", "gt-exchange"]},
+    {"facet": 7, "name": "Property and land use", "evidence": ["hls-property"]},
+    {"facet": 8, "name": "Criminal law", "evidence": ["hls-crime"]},
+    {"facet": 10, "name": "Civil procedure and remedies", "evidence": ["hls-civil"]},
+    {"facet": 18, "name": "Legal writing, argument and dispute resolution", "evidence": ["hls-method", "gt-writing"]}
+  ],
+  "additions": [
+    {"facet": 2, "name": "Philosophy of law", "evidence": ["sep-valid", "sep-moral"]},
+    {"facet": 9, "name": "Criminal procedure", "evidence": ["gt-procedure"]},
+    {"facet": 11, "name": "Evidence and proof", "evidence": ["usc-evidence"]},
+    {"facet": 12, "name": "Organizations and commercial regulation", "evidence": ["hls-business"]},
+    {"facet": 13, "name": "Family and succession", "owner_aim": "life-course"},
+    {"facet": 14, "name": "Work, equality and public benefits", "owner_aim": "work-benefits"},
+    {"facet": 15, "name": "Tribal legal orders and overlapping jurisdiction", "evidence": ["cherokee-federal", "cherokee-territory"]},
+    {"facet": 16, "name": "Comparative and public international law", "evidence": ["gt-world"]},
+    {"facet": 17, "name": "Professional ethics and access to justice", "owner_aim": "justice-access"}
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "revision": 1,
+  "scope": {
+    "goal": "I want to learn how to worship god better",
+    "purpose": "Learn to pray with psalms at home and follow the prayers at a Church of England parish. The learner chooses which practices to try and what to share.",
+    "setting": "An adult explicitly chooses an Anglican Christian setting in England and an English-language Bible for these sessions. Examples from this setting apply to this course.",
+    "horizon": "Four weeks with two 20-minute meetings a week. Protect two meetings for a return, pauses or changes chosen by the learner."
+  },
+  "intake_question": "What would you like to be able to do? You can name a tradition, describe a practice in your own terms, or explore a few options before choosing. What would you like to keep private?",
+  "scope_reply": "I attend a Church of England parish. I'd like to try a quiet two-minute prayer with a psalm after breakfast and understand when people join in at church. Use English and show me examples. I can meet twice a week for twenty minutes for four weeks. I'll use fictional situations here and keep my own prayers private.",
+  "criterion_claim": "In an optional written exercise, compose a line for a fictional person and explain how a specific feature echoes the supplied psalm.",
+  "limit": "An offered line and its explanation can show how the learner used this passage. Their faith, sincerity, spiritual growth, private conduct and closeness to God remain theirs to describe.",
+  "evidence_mode": "written_artifact",
+  "calendar_minutes": 160,
+  "reserve_minutes": 40,
+  "session_minutes": 20,
+  "facets": [
+    {"id": 1, "name": "Reading and adapting a psalm", "performance": "Identify what a particular line of a psalm does and try that form in an original example.", "min_minutes": 40, "source_url": "https://ebible.org/engwebp/PSA100.htm"},
+    {"id": 2, "name": "Voice, song and silence", "performance": "Identify where a psalm evokes singing and choose how a fictional participant might engage.", "min_minutes": 20, "source_url": "https://ebible.org/engwebp/PSA100.htm"},
+    {"id": 3, "name": "Joining a congregation in prayer", "performance": "Read a parish service extract, distinguish a leader's invitation from a congregational response and explain whose concern an intercession names.", "min_minutes": 40, "source_url": "https://www.churchofengland.org/resources/parishes/putting-together-services/leading-prayer-through-intercessions"},
+    {"id": 4, "name": "Choosing a private practice", "performance": "Build a small, adjustable routine for an imagined week and leave the choice of personal use open.", "min_minutes": 20}
+  ],
+  "discovery": {
+    "material": {
+      "sources": [
+        {
+          "publisher": "eBible.org",
+          "url": "https://ebible.org/engwebp/PSA100.htm",
+          "held": false,
+          "labels": [
+            {"key": "ps100-thanks", "text": "Psalm 100 includes an invitation to give thanks", "facets": [1]},
+            {"key": "ps100-sing", "text": "Psalm 100 evokes coming into God's presence with singing", "facets": [2]}
+          ]
+        },
+        {
+          "publisher": "eBible.org",
+          "url": "https://ebible.org/engwebp/PSA013.htm",
+          "held": false,
+          "labels": [{"key": "ps13-address", "text": "Psalm 13 opens with a question addressed to the LORD", "facets": [1]}]
+        },
+        {
+          "publisher": "The Church of England",
+          "url": "https://www.churchofengland.org/resources/parishes/putting-together-services/leading-prayer-through-intercessions",
+          "held": true,
+          "labels": [{"key": "parish-response", "text": "In gathered intercession a leader may invite a response to prayer for others", "facets": [3]}]
+        }
+      ],
+      "owner_aims": [
+        {"key": "breakfast-choice", "facet": 4, "reason": "The learner explicitly chose a two-minute private breakfast practice and wants freedom to adapt or skip it."}
+      ],
+      "challenges": [
+        {"facet": 3, "evidence": "parish-response", "question": "Where does someone unfamiliar with the service learn whose turn it is to speak and what a gathered intercession is doing?"}
+      ]
+    },
+    "first_map": [
+      {"facet": 1, "name": "Reading and adapting a psalm", "evidence": ["ps100-thanks", "ps13-address"]},
+      {"facet": 2, "name": "Voice, song and silence", "evidence": ["ps100-sing"]},
+      {"facet": 4, "name": "Choosing a private practice", "owner_aim": "breakfast-choice"}
+    ],
+    "additions": [
+      {"facet": 3, "name": "Joining a congregation in prayer", "evidence": ["parish-response"]}
+    ]
+  },
+  "proposal": {
+    "units": [
+      {"id": 101, "facet": 1, "title": "Make room for a word of thanks", "performance": "Write a fictional line of thanksgiving and point to the invitation in Psalm 100 that shaped it.", "minutes": 20, "requires": []},
+      {"id": 102, "facet": 2, "title": "Hear the sung invitation", "performance": "Find the reference to singing in Psalm 100 and describe an option for a fictional visitor who prefers to listen.", "minutes": 20, "requires": []},
+      {"id": 103, "facet": 3, "title": "Whose turn is it?", "performance": "Mark a leader's invitation and a shared response on a sample Anglican service sheet, and locate a place to listen.", "minutes": 20, "requires": []},
+      {"id": 104, "facet": 3, "title": "Name a concern beyond oneself", "performance": "Shape a fictional local concern into one optional intercession for a group without disclosing a person's private circumstances.", "minutes": 20, "requires": [103]},
+      {"id": 105, "facet": 4, "title": "Plan a two-minute pause", "performance": "Compare two possible breakfast routines and adapt one for a fictional traveler whose day has changed.", "minutes": 20, "requires": []},
+      {"id": 106, "facet": 1, "title": "When the psalm asks a question", "performance": "Compose a question of lament for a fictional community and connect its address or form to the opening of Psalm 13.", "minutes": 20, "requires": [101]}
+    ]
+  },
+  "first_pack": {
+    "unit": 101,
+    "source_url": "https://ebible.org/engwebp/PSA100.htm",
+    "locator": "Psalm 100:4, final sentence. World English Bible, updated 66-book edition, 2020 stable text, eBible.org (public domain).",
+    "excerpt": "Give thanks to him, and bless his name.",
+    "lesson": "Notice the first two words. The psalm invites thanksgiving. In the quiet breakfast practice you chose, you could pause and name one thing you welcome. You can keep the words entirely to yourself. For today's optional writing, we can invent a person's situation.",
+    "worked": "Imagine Jo finds a chair waiting at the community table. Jo might say, ‘God, thank you for a place beside my neighbors.’ The psalm supplies an invitation to thank. The chair and the neighbors are details from the imagined scene.",
+    "practice": "A fictional gardener sees the first shoot come up. Try a short line that voices thanks for something in the scene, or say which words in the psalm might prompt that line. You can also pass.",
+    "practice_response": "I'll try the fictional gardener. Using the example as a guide, I'd write, ‘God, thank you for this first green shoot.’",
+    "practice_feedback": "‘This first green shoot’ gives the gardener something particular to be thankful for. Your line puts the psalm's invitation to give thanks into the gardener's own words.",
+    "check": "A fictional night worker finds someone has left a lamp on for the walk home. If you would like to write, give the worker one original line to address to God. Then identify what the line borrows from the psalm. You may keep this exercise private.",
+    "criterion": "The supplied fictional line gives thanks for an identifiable detail, and the writer connects that choice to the psalm's invitation.",
+    "rubric": "Look for an intelligible expression of thanks directed to God and a link to the passage. Ordinary words or another phrasing can do the same work. Preserve any supported part when the writer offers only a description, a petition or a line without an explanation. An opt-out records no observation.",
+    "attempts": {
+      "demonstrated": {"response": "God, thank you for the light someone left on the path. I used the invitation ‘Give thanks’ and made the gift specific to the worker.", "feedback": "You turned the lamp into a particular reason for thanks and identified the words that prompted it. That shows how you used this verse in the fictional scene."},
+      "revisit": {"response": "God, please keep this lamp burning. The lamp helps the worker get home.", "feedback": "You addressed God and grounded the request in the scene. Your line asks for help. If you want to explore the verse's opening invitation, how might the worker acknowledge the light already there?"},
+      "unobserved": {"response": "I'd like to keep my words private today.", "feedback": "Of course. You can leave this here or look at another psalm whenever you choose."}
+    }
+  },
+  "return_pack": {
+    "show_source_during_check": true,
+    "unit": 106,
+    "source_url": "https://ebible.org/engwebp/PSA013.htm",
+    "locator": "Psalm 13:1, opening question. World English Bible, updated 66-book edition, 2020 stable text, eBible.org (public domain).",
+    "excerpt": "How long, LORD?",
+    "lesson": "Here the speaker opens with a question and addresses the LORD. A person can borrow that way of speaking when something painful remains unresolved. You can work entirely with an invented situation or leave this reading with the printed words.",
+    "worked": "Imagine residents waiting for a closed footbridge to reopen. ‘God, how many more mornings will our neighbors take the long way round?’ The invented speaker brings the waiting directly to God and leaves the question open.",
+    "practice": "A fictional group waits for its meeting room to reopen. Try turning the description of waiting into a question addressed to God, or simply notice how the example did it.",
+    "check": "In an imagined town the music hall has stood empty for months. Write an optional line of lament for a player who misses making music with others. Explain how the line takes its form from this passage. Keeping the exercise private is also a choice.",
+    "criterion": "The fictional speaker voices an unresolved concern through a question addressed to God, and the writer connects a feature of that line to Psalm 13:1.",
+    "rubric": "Accept a fresh question in ordinary language if the response makes the addressee and unresolved concern intelligible. The line need not repeat ‘how long’. Look for a stated connection to the passage. A question to the hall manager may be a practical request and needs a different addressee for this exercise. Receive a private choice without assessment.",
+    "attempts": {
+      "demonstrated": {"response": "God, when will this room fill with our music again? Like the opening of Psalm 13, the player brings the waiting straight to God as a question.", "feedback": "Your player voices a longing and leaves the question open. You explained how addressing God echoes the psalm. That connection is visible in the line you shared."},
+      "revisit": {"response": "Hall manager, when is the rehearsal room opening? I used a question like the verse.", "feedback": "You noticed the question form and used it in the player's situation. Now look at whom the psalmist addresses. How might the line sound if the player brought that same waiting to God?"},
+      "unobserved": {"response": "I'd rather skip the writing. I don't want to discuss prayer today.", "feedback": "We can stop here. You choose whether and when to return."}
+    }
+  }
+}

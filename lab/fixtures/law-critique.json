@@ -1,0 +1,19 @@
+{
+  "facet": 16,
+  "companion": 116,
+  "unit": 216,
+  "replacement": {
+    "title": "Compare appellate publications",
+    "performance": "Compare how the French and U.S. courts in the supplied files publish appellate reasons and identify one consequence for a researcher."
+  },
+  "reference": {
+    "a": {
+      "finding": "sufficient",
+      "reason": "The companion elicits cross-jurisdiction comparison. This unit adds locating an international obligation and distinguishing its domestic implementation or remedy."
+    },
+    "b": {
+      "finding": "gap",
+      "reason": "Both units elicit comparisons between courts. Neither asks for the instrument behind an international obligation or its domestic implementation."
+    }
+  }
+}

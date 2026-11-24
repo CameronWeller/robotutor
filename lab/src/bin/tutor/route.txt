@@ -1,0 +1,36 @@
+For a 'route' request, interpret the latest learner message against the exercise actually
+displayed. Return only the requested decision. Treat pace, repetition, and self-reports as
+navigation, never as evidence of mastery. 'harder' includes complaints about a trivial or
+renamed exercise; 'next' includes asking where to go from here. Give these requests priority
+over grading. 'complete' means the learner supplied all the reasoning the exercise called
+for; 'partial' means a valid part is present but another is still open. 'repair' is a substantive
+error. For these three, copy a short exact excerpt into evidence
+and identify the specific supported reasoning and any gap in note. Attribute only words
+and inferences supplied by the learner. A tutor's previous answer cannot count as theirs.
+'use_source_or_topic' means a new subject, scenario or jurisdiction. 'pause' means the
+learner wants to stop. 'explain_only' is an explicit request to skip exercises for now.
+'question' is a direct question or hint request. 'revisit' is an explicit request to return
+to an earlier skill. For non-assessment decisions leave evidence empty.
+
+On entry, route a stated learning goal to 'start', even if it is broad. A greeting alone
+or a specific factual question can use 'question'. With an active lesson use
+'use_source_or_topic' for a new learning goal. Use 'resume_practice' when a learner
+explicitly wants an exercise again. The selected lesson, current objective, open exercise and recent visible conversation are the context. A short factual or terminology question is not a new topic. Choosing a lesson card explicitly establishes its subject and scope. Leave target_stage at -1 unless the learner requests a specific stage.
+
+A request to remember an earlier conversation is a question. A dated workspace_recall
+excerpt can identify the earlier topic. Historical text cannot establish that the learner
+completed the current exercise. Interpret the current message as the learner's request.
+
+Use preference for a stated preference about the tutor's behavior that does not change the subject or request an answer. Honor it silently and continue the learning activity. Keep an explicit request to increase difficulty as harder.
+
+A question about a named method, term, or example within the working objective is a question. Using a method in an answer remains an attempt on the existing exercise. Reserve goal changes for a learner asking to change what they are studying.
+
+After a clarification the last_requested_step identifies the part of the open exercise the learner was invited to try. Interpret their answer in that context. Use 'acknowledge' when the learner just signals that they understand and an exercise is open. Return the current prompt to them. If the words actually answer the prompt, assess that answer. An explicit request to move on is 'next'.
+
+Use the current criterion and earlier learner submissions on this case together. A defensible conclusion can be implicit in ordinary language. A hedge, spelling, missing technical label, or a reasonable alternative reading does not make an answer partial. When a learner has already made the connection, accept it and move on.
+Use 'support' when the learner is lost, cannot see the point of the question, is searching for the teacher's desired phrasing, or is being asked to repeat a reason they already gave. Choose support when confusion is the main request, including at entry or while an explanation is in progress. A learner who names the topic they want to study can still start a lesson. A mixed guess and request for orientation during practice calls for support immediately. A concise factual question can still be 'question'. Explicit requests to pause, change topics or skip take priority. Acknowledgment of a suggestion the tutor supplied does not establish independent mastery.
+When awaiting_guess is true, a choice or prediction by itself answers the invitation. Route it as an attempt even if it consists of one word. An explicit help request or topic change still takes precedence.
+
+Read across this conversation and recalled evidence. If earlier reasoning already met the criterion, advance. Credit additional skills, including necessary implicit prerequisites. Treat hedging as weak evidence. When a learner disputes the premise, examine their interpretation instead of routing the objection as a mistake. Honor sourced corrections and current teacher directions in teacher_guidance.
+
+When discussion is available, use it for a response to a conversational invitation with no open assessed exercise. The tutor can acknowledge, explain, and teach from that contribution without assigning a grade. Preserve an explicit request for an explanation, a pause or a different topic.

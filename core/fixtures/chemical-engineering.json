@@ -1,0 +1,39 @@
+{
+  "name": "chemical-engineering",
+  "statement": "I want to learn chemical engineering",
+  "regime": "Assessable",
+  "targets": [7],
+  "nodes": [
+    {"id": 1, "name": "Units and dimensional consistency", "misconceptions": ["adds quantities with different units", "treats mol and kg as interchangeable"], "sources": ["felder-rousseau-ch2"]},
+    {"id": 2, "name": "Mass and molar flow, molecular weight conversion", "prereqs": [1], "misconceptions": ["confuses mass fraction with mole fraction"], "sources": ["felder-rousseau-ch3"]},
+    {"id": 3, "name": "Process flowsheets and degrees of freedom", "prereqs": [2], "misconceptions": ["counts specified compositions as unknowns"], "sources": ["felder-rousseau-ch4.3"]},
+    {"id": 4, "name": "Steady-state mass balance on a single unit", "prereqs": [3], "misconceptions": ["includes accumulation term at steady state", "balances volume instead of mass"], "sources": ["felder-rousseau-ch4.2"]},
+    {"id": 5, "name": "Multi-unit balances with recycle", "prereqs": [4], "misconceptions": ["balances recycle loop as if it were the overall system"], "sources": ["felder-rousseau-ch4.5"]},
+    {"id": 6, "name": "Stoichiometry, extent of reaction, limiting reactant", "prereqs": [2], "misconceptions": ["picks limiting reactant by smallest mass", "ignores stoichiometric coefficients in conversion"], "sources": ["felder-rousseau-ch4.6"]},
+    {"id": 7, "name": "Reactive systems balances with recycle and purge", "prereqs": [5, 6], "misconceptions": ["omits purge from overall balance"], "sources": ["felder-rousseau-ch4.7"]}
+  ],
+  "families": [
+    {"id": 101, "node": 1, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": -1.5, "variants": 12, "stem": "Convert {q} lbm/h to kg/s.", "key": "q*0.000126"},
+    {"id": 102, "node": 1, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": -0.5, "probes_misconception": 0, "stem": "A classmate writes 3 kg + 2 mol = 5. Explain what went wrong and what would be needed to combine them.", "key": "units differ; need molecular weight to convert"},
+    {"id": 103, "node": 1, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": -1.0, "variants": 8, "novel_context": true, "stem": "A recipe needs {q} cups of water per batch; the plant meters water in L/min at {r} batches per hour. What flow is that?", "key": "q*0.2366*r/60"},
+    {"id": 201, "node": 2, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": -0.8, "variants": 12, "stem": "A stream carries {m} kg/h of methanol (MW 32.04). What is the molar flow in kmol/h?", "key": "m/32.04"},
+    {"id": 202, "node": 2, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 0.0, "variants": 10, "probes_misconception": 0, "stem": "A gas is 30 mol% CO2 (MW 44) and 70 mol% N2 (MW 28). What is the CO2 mass fraction?", "key": "0.402"},
+    {"id": 203, "node": 2, "facet": "Recall", "checker": "Exact", "cue": "Partial", "difficulty": -1.2, "variants": 6, "stem": "Fill in: moles = mass / ____.", "key": "molecular weight"},
+    {"id": 301, "node": 3, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 0.2, "variants": 8, "stem": "A mixer has two feeds and one product, three components, all feed flows and compositions known. How many degrees of freedom remain for the product?", "key": "0"},
+    {"id": 302, "node": 3, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 0.4, "probes_misconception": 0, "stem": "Why is a mass fraction you were given not an unknown in a degree-of-freedom count, while one you were not given is?", "key": "specified values are known; unknowns are unspecified variables"},
+    {"id": 401, "node": 4, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 0.0, "variants": 15, "stem": "{f} kg/h of 40% ethanol is distilled. The top is 90% ethanol and the bottom 5%. Find the top flow at steady state.", "key": "f*(0.40-0.05)/(0.90-0.05)"},
+    {"id": 402, "node": 4, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 0.3, "probes_misconception": 0, "stem": "A student writes in - out = accumulation for a continuous column running for months, and leaves accumulation unknown. What would you tell them?", "key": "steady state means accumulation is zero"},
+    {"id": 403, "node": 4, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 0.5, "variants": 10, "probes_misconception": 1, "stem": "Water (1.00 kg/L) and oil (0.85 kg/L) are mixed at {a} L/min and {b} L/min. What is the product mass flow?", "key": "a*1.00+b*0.85"},
+    {"id": 404, "node": 4, "facet": "Apply", "checker": "Exact", "cue": "Partial", "difficulty": -0.3, "variants": 10, "stem": "Hint: total in = total out. A splitter takes {f} kg/h and sends 30% to stream B. What is stream A?", "key": "0.7*f"},
+    {"id": 405, "node": 4, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 0.6, "variants": 10, "novel_context": true, "stem": "A coffee shop blends {x} kg/day of beans at 12% moisture with dry beans to reach 8%. How much dry bean is needed?", "key": "x*(0.12-0.08)/0.08"},
+    {"id": 501, "node": 5, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 0.8, "variants": 12, "stem": "A dryer with recycle: fresh feed {f} kg/h at 20% water joins a recycle stream; the dryer product is 2% water. Find the overall product flow.", "key": "f*0.80/0.98"},
+    {"id": 502, "node": 5, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 1.0, "probes_misconception": 0, "stem": "Your partner starts the recycle problem by balancing around the mixing point and gets stuck with too many unknowns. Where should they draw the first boundary and why?", "key": "overall system boundary first; recycle cancels"},
+    {"id": 503, "node": 5, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 1.1, "variants": 8, "novel_context": true, "stem": "A city water loop: {f} m3/h of fresh water, 60% of the treated water is recirculated. Find the discharge at steady state.", "key": "f"},
+    {"id": 601, "node": 6, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 0.4, "variants": 12, "probes_misconception": 0, "stem": "N2 + 3H2 -> 2NH3. Feed is {a} g N2 and {b} g H2. Which reactant limits?", "key": "compare a/28 with (b/2.016)/3"},
+    {"id": 602, "node": 6, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 0.6, "variants": 12, "probes_misconception": 1, "stem": "C3H8 + 5O2 -> 3CO2 + 4H2O. With {n} mol propane at 80% conversion, how many mol O2 are consumed?", "key": "n*0.8*5"},
+    {"id": 603, "node": 6, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 0.5, "stem": "Explain what extent of reaction measures and why it is the same no matter which species you compute it from.", "key": "moles reacted per unit coefficient"},
+    {"id": 701, "node": 7, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 1.5, "variants": 10, "stem": "Ammonia synthesis with recycle and a purge of {p}% of the recycle gas; inert argon enters at 0.2% of fresh feed. Find the purge rate that keeps argon at 5% in the recycle.", "key": "argon in = argon purged"},
+    {"id": 702, "node": 7, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 1.3, "probes_misconception": 0, "stem": "Why does a recycle loop with an inert in the feed need a purge, and what happens without one?", "key": "inert accumulates without an exit; steady state impossible"},
+    {"id": 703, "node": 7, "facet": "Apply", "checker": "Exact", "cue": "None", "difficulty": 1.6, "variants": 6, "novel_context": true, "stem": "A brewery recycles CO2 scrubbing water; dissolved salts enter at {s} ppm. With a {p}% blowdown, find the steady salt level.", "key": "s/(p/100)"}
+  ]
+}

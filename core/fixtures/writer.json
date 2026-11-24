@@ -1,0 +1,21 @@
+{
+  "name": "writer",
+  "statement": "I want to learn how to be a better writer",
+  "regime": "Performance",
+  "targets": [4],
+  "nodes": [
+    {"id": 1, "name": "Say what you mean: preserve conditions and scope when revising", "misconceptions": ["drops a qualifying condition while shortening", "treats a stronger claim as clearer"], "sources": ["williams-style-lesson7"]},
+    {"id": 2, "name": "Characters as subjects, actions as verbs", "prereqs": [1], "misconceptions": ["equates nominalisation with formality"], "sources": ["williams-style-lesson3"]},
+    {"id": 3, "name": "Old information before new (cohesion)", "prereqs": [1], "misconceptions": ["starts each sentence with new information"], "sources": ["williams-style-lesson5"]},
+    {"id": 4, "name": "Revise a paragraph for a named reader", "prereqs": [2, 3], "misconceptions": ["revises for self rather than reader"], "sources": ["williams-style-lesson10"]}
+  ],
+  "families": [
+    {"id": 101, "node": 1, "facet": "Apply", "checker": "Rubric", "cue": "None", "difficulty": -0.5, "variants": 20, "probes_misconception": 0, "stem": "Shorten without changing what it permits: '{sentence}'", "key": "every condition in the original survives"},
+    {"id": 102, "node": 1, "facet": "Explain", "checker": "Rubric", "cue": "None", "difficulty": 0.0, "probes_misconception": 1, "stem": "Two revisions of the same notice: A '{a}' and B '{b}'. Which one changes what the reader may do, and how?", "key": "names the changed permission"},
+    {"id": 201, "node": 2, "facet": "Apply", "checker": "Rubric", "cue": "None", "difficulty": 0.2, "variants": 20, "probes_misconception": 0, "stem": "Rewrite so the doer is the subject: '{sentence}'", "key": "agent as subject, action as verb, meaning preserved"},
+    {"id": 202, "node": 2, "facet": "Recall", "checker": "Rubric", "cue": "Partial", "difficulty": -1.0, "variants": 10, "stem": "Underline the hidden action in: '{sentence}'", "key": "identifies the nominalisation"},
+    {"id": 301, "node": 3, "facet": "Apply", "checker": "Rubric", "cue": "None", "difficulty": 0.3, "variants": 20, "probes_misconception": 0, "stem": "Reorder these two sentences so the second begins with what the first ended on: '{pair}'", "key": "topic continuity"},
+    {"id": 401, "node": 4, "facet": "Apply", "checker": "Rubric", "cue": "None", "difficulty": 0.8, "variants": 30, "novel_context": true, "stem": "Here is a paragraph written for engineers: '{para}'. Revise it for {reader}.", "key": "reader-appropriate terms, conditions preserved, cohesion"},
+    {"id": 402, "node": 4, "facet": "Apply", "checker": "Rubric", "cue": "None", "difficulty": 0.6, "variants": 30, "stem": "Bring a paragraph of your own and name its reader. We will revise it together.", "key": "learner artifact: rubric on preserved meaning and reader fit"}
+  ]
+}

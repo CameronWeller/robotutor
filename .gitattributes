@@ -1,0 +1,11 @@
+tools/launch-pilot text eol=lf
+Robotutor.cmd text eol=crlf
+handoffs/**/HANDOFF.md text eol=lf
+Robotutor.command text eol=lf
+
+# Curriculum edition IDs are hashes of the reviewed bytes.
+lab/fixtures/goals/*.json text eol=lf
+lab/tests/fixtures/*.json text eol=lf
+
+tools/windows/*.sh text eol=lf
+lab/fixtures/prompt-pilot/* text eol=lf

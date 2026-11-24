@@ -1,0 +1,115 @@
+{
+  "revision": 1,
+  "scope": {
+    "goal": "I want to learn how to be a better writer",
+    "purpose": "Write short nonfiction for people who are new to a community group. Give readers the details they need, keep a recognizable voice and learn to revise a draft after a reader gets stuck.",
+    "setting": "An adult writing in English for a community newsletter. Use invented briefs and original passages. The learner may type or dictate their own words, choose a register, and decide whether to share a draft.",
+    "horizon": "Eight weeks, three 25-minute sessions a week. Reserve six sessions for rereading, feedback, missed visits and a change of direction."
+  },
+  "intake_question": "What would you most like to write, who would you like to reach, and what would you like help with? A scene, a poem, an essay and a notice ask different things of a writer. We can use an invented draft if you prefer.",
+  "scope_reply": "I help with a community newsletter. Our notices make sense to regulars, but new people have to ask me what they mean. I also want to write short profiles that sound like me. Let's use made-up material for eight weeks. I can do three short sessions a week. I'll decide whether to show anyone my own drafts.",
+  "evidence_mode": "written_artifact",
+  "criterion_claim": "Revise a supplied nonfiction passage so a named unfamiliar reader can act on the material facts without guessing. Explain one edit by identifying that reader's need.",
+  "limit": "Review covers the submitted passage and its editing rationale. Several voices and arrangements can serve the same reader. Whether real readers understood it needs a reader observation. Fiction, poetry, the learner's overall talent and any private writing remain outside this finding.",
+  "calendar_minutes": 600,
+  "reserve_minutes": 150,
+  "session_minutes": 25,
+  "facets": [
+    {"id": 1, "name": "Writing for a particular reader", "performance": "Revise a passage and explain which detail lets a reader unfamiliar with the setting act on it.", "min_minutes": 50, "source_url": "https://owl.purdue.edu/owl/subject_specific_writing/professional_technical_writing/revision_in_business_writing/index.html"},
+    {"id": 2, "name": "Selecting and checking details", "performance": "Use a fact sheet to distinguish a helpful detail, an inference and a claim that still needs confirmation.", "min_minutes": 50, "source_url": "https://owl.purdue.edu/owl/subject_specific_writing/professional_technical_writing/revision_in_business_writing/index.html"},
+    {"id": 3, "name": "Giving paragraphs a purpose", "performance": "Describe each paragraph's job and reorder or cut one so an unfamiliar reader can follow the piece.", "min_minutes": 50, "source_url": "https://writing.wisc.edu/handbook/processandstructure/reverseoutlines/"},
+    {"id": 4, "name": "Building a scene from observation", "performance": "Open a short nonfiction profile with a concrete action and mark the boundary between observation and inference.", "min_minutes": 50},
+    {"id": 5, "name": "Voice and sentence rhythm", "performance": "Read two versions of a passage aloud or silently and choose the pace and register that suit the writer and their reader.", "min_minutes": 50},
+    {"id": 6, "name": "Working with a reader's feedback", "performance": "Invite a reader to identify a passage that lost them and decide how to address the difficulty while keeping authorship.", "min_minutes": 50, "source_url": "https://writing.wisc.edu/handbook/processandstructure/peerreview/"},
+    {"id": 7, "name": "Editing a stable draft", "performance": "After the structure is settled, check references, punctuation and wording for a specific ambiguity.", "min_minutes": 25, "source_url": "https://owl.purdue.edu/owl/general_writing/the_writing_process/feedback/editor-reviewer_feedback.html"},
+    {"id": 8, "name": "Choosing what to revise", "performance": "Compare draft versions, prioritize a change and explain which editorial suggestion to keep, adapt or decline.", "min_minutes": 50, "source_url": "https://owl.purdue.edu/owl/general_writing/the_writing_process/feedback/editor-reviewer_feedback.html"}
+  ],
+  "discovery": {
+    "material": {
+      "sources": [
+        {"publisher": "Purdue Online Writing Lab", "url": "https://owl.purdue.edu/owl/subject_specific_writing/professional_technical_writing/revision_in_business_writing/index.html", "held": false, "labels": [{"key": "reader-detail", "text": "Choose details according to what the reader needs to decide or do.", "facets": [1, 2]}]},
+        {"publisher": "Purdue Online Writing Lab", "url": "https://owl.purdue.edu/owl/general_writing/the_writing_process/feedback/editor-reviewer_feedback.html", "held": false, "labels": [{"key": "editor-decisions", "text": "Set revision priorities and weigh conflicting comments against the writer's purpose.", "facets": [7, 8]}]},
+        {"publisher": "University of Wisconsin–Madison Writing Center", "url": "https://writing.wisc.edu/handbook/processandstructure/peerreview/", "held": true, "labels": [{"key": "reader-critique", "text": "Ask what feedback the writer wants and locate a passage where a reader needs more help.", "facets": [6]}]},
+        {"publisher": "University of Wisconsin–Madison Writing Center", "url": "https://writing.wisc.edu/handbook/processandstructure/reverseoutlines/", "held": true, "labels": [{"key": "paragraph-jobs", "text": "Describe each paragraph's job to inspect the order of a longer draft.", "facets": [3]}]}
+      ],
+      "owner_aims": [
+        {"key": "profile-scene", "facet": 4, "reason": "The learner wants to write profiles as well as notices. Use fictional reporter's notes so no interviewee has to disclose anything."},
+        {"key": "own-voice", "facet": 5, "reason": "The learner wants the newsletter to sound like them. Let them compare voices and explain which one they would keep."}
+      ],
+      "challenges": [
+        {"facet": 6, "evidence": "reader-critique", "question": "Where does the writer hear what a reader actually took from a passage and choose whether to act on it?"},
+        {"facet": 3, "evidence": "paragraph-jobs", "question": "Can the writer repair a confusing sequence across paragraphs when every sentence is understandable on its own?"}
+      ]
+    },
+    "first_map": [
+      {"facet": 1, "name": "Writing for a particular reader", "evidence": ["reader-detail"]},
+      {"facet": 2, "name": "Selecting and checking details", "evidence": ["reader-detail"]},
+      {"facet": 5, "name": "Voice and sentence rhythm", "owner_aim": "own-voice"},
+      {"facet": 7, "name": "Editing a stable draft", "evidence": ["editor-decisions"]}
+    ],
+    "additions": [
+      {"facet": 3, "name": "Giving paragraphs a purpose", "evidence": ["paragraph-jobs"]},
+      {"facet": 4, "name": "Building a scene from observation", "owner_aim": "profile-scene"},
+      {"facet": 6, "name": "Working with a reader's feedback", "evidence": ["reader-critique"]},
+      {"facet": 8, "name": "Choosing what to revise", "evidence": ["editor-decisions"]}
+    ]
+  },
+  "proposal": {
+    "units": [
+      {"id": 101, "facet": 1, "title": "Write for the person arriving for the first time", "performance": "Revise a short public notice using a supplied brief, then explain one edit in terms of the newcomer's task.", "minutes": 25, "requires": []},
+      {"id": 102, "facet": 2, "title": "Which details earn their place?", "performance": "Use fictional interview notes to choose two details for a short profile and flag one inference that would need checking.", "minutes": 50, "requires": []},
+      {"id": 103, "facet": 3, "title": "Find the story between paragraphs", "performance": "Give each paragraph in a four-paragraph draft a job, try a different order and explain where the reader now learns a necessary fact.", "minutes": 50, "requires": []},
+      {"id": 104, "facet": 4, "title": "Let a small action introduce someone", "performance": "Write two leads from the same reporter's notes about a clock mender. Make a person visible through action while leaving their unreported thoughts open.", "minutes": 50, "requires": [102]},
+      {"id": 105, "facet": 5, "title": "Hear the difference a sentence makes", "performance": "Try a spare lead and a more expansive one. Read them for cadence, keep a version and identify one sentence choice that sounds like you.", "minutes": 50, "requires": []},
+      {"id": 106, "facet": 6, "title": "Ask a reader where the thread slipped", "performance": "Request one kind of feedback, compare a fictional reader's paraphrase with the draft, and try a revision at the point where their readings diverge.", "minutes": 50, "requires": [101]},
+      {"id": 107, "facet": 7, "title": "Read the copy once for ambiguity", "performance": "Trace names, pronouns and punctuation in a settled paragraph and repair one ambiguity while preserving its chosen voice.", "minutes": 25, "requires": [103]},
+      {"id": 108, "facet": 8, "title": "Two editors want different drafts", "performance": "Compare two conflicting suggestions on a profile and explain which to try, adapt or decline in light of the writer's purpose.", "minutes": 50, "requires": [104, 106]},
+      {"id": 201, "facet": 1, "title": "Help a new volunteer make a choice", "performance": "Revise a fresh onboarding passage so a new volunteer can choose the right action from the supplied facts, then explain one edit.", "minutes": 25, "requires": [101]},
+      {"id": 208, "facet": 8, "title": "Take a profile from notes to a second draft", "performance": "Write a short newsletter profile from new fictional notes, revise it against a reader's question, and keep a brief record of one accepted and one declined edit.", "minutes": 75, "requires": [105, 107, 108]}
+    ]
+  },
+  "authoring_sources": {
+    "102": {
+      "source_url": "local:writer/editorial-cards/reporters-notes",
+      "locator": "Original teaching card for unit 102, The clock mender's bench",
+      "excerpt": "A reporter saw the clock mender set three loose screws in a saucer and heard the clock chime twice. She did not ask what the chime meant to him. A profile can use the saucer and the sound as observed details. If it describes his feelings, it needs his words or another stated basis."
+    }
+  },
+  "first_pack": {
+    "unit": 101,
+    "source_url": "local:writer/editorial-cards/first-time-reader",
+    "locator": "Original editorial card, A reader arriving for the first time",
+    "excerpt": "A regular knows what 'the usual place' means. A newcomer needs a place they can identify. Ask what that reader has to do next. Choose the facts that make it possible and keep the voice your own.",
+    "lesson": "Before you polish a draft, imagine handing it to one person. What are they trying to do? Underline a phrase that makes them borrow knowledge from a regular. Replace it with a fact the brief actually gives you. Read the new line in your own voice.",
+    "worked": "A film-club draft says, 'Pick up one at the table.' The brief says that first-time guests collect a program at the table beside the lift. One revision is 'Want a program? Pick one up beside the lift.' Naming the program and landmark helps a guest who has never seen that table. A quieter sentence could do the same job.",
+    "practice": "The draft for a free reading says, 'Use it to save your place.' The brief says seats can be reserved by emailing the library desk. Write a line for someone attending for the first time. Which part of the original would have made them stop?",
+    "practice_response": "You can reserve a seat by emailing the library desk. I replaced 'it' because someone new wouldn't know how to reserve.",
+    "practice_feedback": "“Emailing the library desk” gives the reader an action and a recipient. You kept “can,” which preserves the choice in the brief. The desk's email address would help in a real notice. We would have to get it from the library before adding it.",
+    "check": "A repair café needs a notice for a first-time visitor bringing a lamp. Visitors bringing a lamp use the side door by 6 p.m. Friday. Volunteers use the main entrance. The draft reads, 'Please come to the usual entrance by the deadline.' Write your version for that visitor, then explain one edit in terms of what the reader needs. Choose your own voice.",
+    "criterion": "The revised notice gives the lamp visitor the side door and the Friday 6 p.m. cutoff accurately. The explanation links a specific edit to information the first-time reader would otherwise lack.",
+    "rubric": "Review the writer's notice and reason together. Check that the material details apply to the visitor and the cutoff can be understood as a latest arrival. Mentioning volunteers is optional. If mentioned, distinguish their entrance. A direct instruction, a welcoming invitation or another phrasing can each meet the criterion. An explanation about elegance alone leaves the reader's need open. Ask before suggesting a different voice.",
+    "attempts": {
+      "demonstrated": {"response": "Bringing a lamp? Come to the side door by 6 p.m. Friday. I named the side door because 'the usual entrance' tells a first-time visitor nothing about which way to go.", "feedback": "“Bringing a lamp?” lets your reader recognize the notice is for them. “Side door by 6 p.m. Friday” gives them both the place and the cutoff. Your explanation tells me why you changed the entrance wording. The welcoming question works with those facts."},
+      "revisit": {"response": "Got a lamp? We'd love to see you at the usual entrance by 6 p.m. Friday. I kept it friendly so visitors would feel welcome.", "feedback": "Your opening sounds welcoming, and the visitor now has a clear cutoff. At “the usual entrance” someone on their first visit still has to guess. Which words from the brief could answer that question while keeping your opening? Explain why you chose them."},
+      "unobserved": {"response": "I write notices every week. I'd like to keep this draft to myself.", "feedback": "You can keep it. If you want feedback later, you can offer a line about an invented event and say what you want the reader to take away."}
+    }
+  },
+  "return_pack": {
+    "show_source_during_check": false,
+    "unit": 201,
+    "source_url": "local:writer/editorial-cards/two-possible-actions",
+    "locator": "Original editorial card, When a reader has two possible actions",
+    "excerpt": "A new reader may see two possible actions. Look for the detail that tells them which applies. Trace each path through the draft before deciding whether the wording will do.",
+    "lesson": "For a passage with two possible actions, imagine the reader encountering each situation separately. Read only what you have put on the page. See whether either reader has to supply a missing rule.",
+    "worked": "A garden note says, 'Put it in the right pile.' The brief sends dry leaves to the compost heap and fallen branches to the shed. 'Compost the dry leaves. Stack fallen branches at the shed.' The concrete nouns tell a gardener which line applies. A single flowing sentence could carry the same distinction.",
+    "practice": "A fictional choir's note says, 'Return folders to their places.' Borrowed folders go to the conductor. Singers keep their own folders. Revise the note, then identify the edit that helps a new singer decide what to do.",
+    "check": "Write a short onboarding note for a new library volunteer shelving returns. Items with a blue dot stay on the cart for staff to check. Unmarked items go on the shelves. The draft says, 'Put the returns where they belong.' Revise it in your own voice and explain one edit that helps the new volunteer decide what to do.",
+    "criterion": "The note tells the new volunteer to leave blue-dot returns on the cart for staff review and shelve the unmarked items. The writer explains how an edit helps a new volunteer choose between them.",
+    "rubric": "Read the note once holding each kind of item. Can the volunteer identify it and take the right action in both cases? A correct contrast may be conveyed by sentences, a short list or a conditional instruction. Accept any wording that preserves the staff check. Look for a reason tied to the volunteer's decision. Unsupported claims about real readers or the writer's overall ability add no evidence.",
+    "attempts": {
+      "demonstrated": {"response": "Blue dot? Leave that one on the cart for staff to check. No mark? Pop it on the shelf. I put the markings first so a new volunteer can look at the item in hand and find the instruction that fits.", "feedback": "The two questions start where the volunteer starts, looking at the item. Your two instructions keep the staff check in place and tell the volunteer which returns to shelve. You explained how that order serves a newcomer."},
+      "revisit": {"response": "Shelve the unmarked items. Staff will take care of the blue dots. I named the markings so a volunteer can tell the two groups apart.", "feedback": "The first sentence gives the volunteer a complete action, and your explanation identifies a useful edit. For a blue-dot item, “staff will take care of” leaves the volunteer holding the item. Where should they leave it for staff?"},
+      "unobserved": {"response": "A volunteer told me my notices have got clearer. I'll skip the exercise today.", "feedback": "That reader's comment can help you pick a future draft. This return task stays open. You're welcome to bring a different passage another time."}
+    }
+  }
+}

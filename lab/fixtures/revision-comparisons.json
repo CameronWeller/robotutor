@@ -1,0 +1,27 @@
+{
+  "chemical-engineering": {
+    "operation": "Report a signed change and identify which water movement crosses the combined boundary.",
+    "display": "A rainwater store has two connected chambers. During one inspection 9 kg arrives from outside, 4 kg drains away, and 13 kg moves from one chamber to the other. These are all movements. What is the change for the two chambers together? Say which entries you used and why.",
+    "criterion": "The external entries give +5 kg. The 13 kg stays inside the combined boundary. Score the quantity and the boundary explanation separately."
+  },
+  "writer": {
+    "operation": "Repair a short notice so that two groups can independently choose the correct action.",
+    "display": "A notice says 'Collect the tokens here and return them upstairs.' The organizer says visitors keep green tokens as souvenirs and return only brass tokens to the desk beside the stairs. Write the two-line notice you would hang, then say what a visitor with each token would do.",
+    "criterion": "Green holders keep their tokens, brass holders return theirs at the desk beside the stairs, and the notice and predictions agree without inventing another rule."
+  },
+  "violin": {
+    "operation": "Communicate the placement of an entrance after silent beats using a playable rehearsal plan.",
+    "display": "Imagine a three-beat bar with beat one silent, one open-D bow on beat two and silence on beat three. You only have text here. Write a count-and-bow cue another player could follow twice, and say what a listener would have to hear to check your entrance.",
+    "criterion": "The plan preserves both rests and the beat-two entrance on each repetition. A test of actual timing needs a performance and an audible or otherwise appropriate reference. The response can establish a written plan only."
+  },
+  "better-person": {
+    "operation": "Offer a choice in a specific social repair and leave the other person a usable way to decline.",
+    "display": "In a fictional reading circle you interrupted Jo before they finished a thought. Jo says 'Maybe later.' Write one sentence you could say and one concrete action you could take for the rest of this meeting.",
+    "criterion": "The words and the action leave Jo room to decline or return later. The writer controls only their own behavior. A fictional rehearsal supplies no verdict about character."
+  },
+  "worship": {
+    "operation": "Connect a chosen response to an identified detail in a supplied service text.",
+    "display": "A fictional service sheet reads 'We wait beside the closed gate.' The next line invites each person to speak a question or keep silence. For a volunteer illustrating the invitation, suggest one response and identify the wording that leaves the choice to the person.",
+    "criterion": "The example responds to the supplied invitation and recognizes silence as an available choice. A textual exercise can assess interpretation of this sheet only."
+  }
+}

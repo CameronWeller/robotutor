@@ -1,0 +1,247 @@
+{
+  "stage_sha256": {
+    "case": "f201f31cb7555f1f619b623f6550b7711a9f232f379a825df135ee1a304a12ea",
+    "condition": "9ab875cb0753950305566a10c103b8fafe8fc9ed864ec659d5c2165de6cf61ff",
+    "design": "45f3d56fb4558b3c1f912aff06fa273d7b641ff4c4c76224f0d057929a42953b",
+    "A-booking": "1dbacc28c3e906f52e2ab380b3de1a6f864e6d7b2c4a076059bfea48692d23ec",
+    "B-booking": "1dbacc28c3e906f52e2ab380b3de1a6f864e6d7b2c4a076059bfea48692d23ec",
+    "B-return-memory": "537c23b366a2cee882d78bd028511048aa9594f6b80c64aa6206501bc92bbc81",
+    "B-return": "181b8cb278ecbb2042dd8a4183bfe2083d869dcd9d593c1366e7a2a4e814803e",
+    "B-resume-memory": "293febd7ce48f170d9b5851797653bc09a5895c7fe72b43fe56fd31e508b02e8",
+    "B-resume": "4713b2ff2d987c5994d491b3a3313db9696e2fb3807d9b98be39f3ecb507ad66",
+    "review-grounded": "85e121067195ca491165874c7ac3fc6669d38bc8e0c627bd2ab026d1cce50cc2"
+  },
+  "held": {
+    "local_display": "The source for this exercise is on hold. We can leave the review open.",
+    "return_confirmation": "No lesson topic is booked now.",
+    "learner_request": "I'd like to stop here today. Please cancel the topic I booked. You can still keep the goal and exercise type I picked."
+  },
+  "reopened": {
+    "day": 760,
+    "request": "I'd like to get back to working on my violin playing. Can you give me feedback on this new try? You can use the violin goal and exercise type I said you could keep.",
+    "work_sha256": "eeb9c5c57fea49b3ab6e8bb479eae9d2031f4b6d69531d3c74b92a9b5afc7f38",
+    "shared_practice_sha256": "52cc5f30a71773de6b82f8f23cd51de2616d668d1389f70124470a021ba8e231",
+    "release_edition": "fe4cf9a71734f24c69fba0cedff0c98679af00621649c7847ad7b412d2430b81",
+    "actual_B_display": "Your written count puts the tap on the next 1. In the worked example, find the bar line after the half note. The note lasts through 2 and 3, and the new note starts on the very next beat, 1. The bar line takes no time. In your try, 3 is silent, but it still gets a full beat. Listen to your take around that silent 3. Does the tap land on 3 or on the next click, the new 1? You can keep your answer private."
+  },
+  "cases": {
+    "cancel": {
+      "held_visit": {
+        "format": "paired-return-memory/1",
+        "stored": {
+          "family": 101,
+          "focus": "observation",
+          "goal": "I want to become a better violinist"
+        },
+        "reason": "cancel_topic"
+      },
+      "resume": {
+        "origin": "eligible",
+        "material": {
+          "worked": "Play a quarter note on count one, hold a half note through counts two and three, then start a new note on the next one. The bar line itself takes no time.",
+          "lesson": "Use a comfortable three-beat pulse on open A. Continue counting through silence and let the count return to one at the bar line. If playing becomes uncomfortable, stop and trace the bars on paper.",
+          "excerpt": "On this card a bar holds three quarter-note beats. Keep a silent beat’s place even when it ends a bar. The next bar starts on the very next beat."
+        },
+        "source": "local:violin/open-string-cards/three",
+        "grant": "b4bd1df7b86f37b9b3cd91c72426b75df06b302067786fc5658577d839fc5ce8",
+        "dispatch": {
+          "receipt": {
+            "family": 101,
+            "focus": "observation",
+            "goal": "I want to become a better violinist"
+          },
+          "lesson_route": {
+            "mode": "booked",
+            "slot": "return",
+            "unit": 201,
+            "comparison_unit": null
+          },
+          "title": "Carry the pulse across a bar line"
+        }
+      }
+    },
+    "hold_only": {
+      "held_visit": {
+        "format": "paired-return-memory/1",
+        "stored": {
+          "family": 101,
+          "focus": "observation",
+          "goal": "I want to become a better violinist",
+          "topic": {
+            "domain": "violin",
+            "edition": "fe4cf9a71734f24c69fba0cedff0c98679af00621649c7847ad7b412d2430b81",
+            "unit": 101
+          }
+        },
+        "reason": "carry"
+      },
+      "resume": {
+        "origin": "eligible",
+        "material": {
+          "worked": "In a bar of four, an open D lasting two beats, a one-beat rest and a final quarter note fill the bar. The first note occupies counts one and two. Count three silently and begin the last note on four.",
+          "lesson": "Count one, two, three, four with a comfortable click. Bow a single open string on the marked sounds and leave the rests silent. Put the violin down if playing feels uncomfortable. You can continue by counting or marking beats on paper.",
+          "excerpt": "For this card a click is a quarter-note beat. Keep the count going during a rest. A two-beat note begins once and continues across the next click."
+        },
+        "source": "local:violin/open-string-cards/four",
+        "grant": "e6c525dbf0debd88a4000a513861f5c5d37238e8b541a15f57837e7d8d3627c2",
+        "dispatch": {
+          "receipt": {
+            "family": 101,
+            "focus": "observation",
+            "goal": "I want to become a better violinist",
+            "topic": {
+              "domain": "violin",
+              "edition": "fe4cf9a71734f24c69fba0cedff0c98679af00621649c7847ad7b412d2430b81",
+              "unit": 101
+            }
+          },
+          "lesson_route": {
+            "mode": "booked",
+            "slot": "first",
+            "unit": 101,
+            "comparison_unit": null
+          },
+          "title": "Make room for a silent beat"
+        }
+      }
+    },
+    "cancel_without_booking": {
+      "held_visit": {
+        "format": "paired-return-memory/1",
+        "stored": {
+          "family": 101,
+          "focus": "observation",
+          "goal": "I want to become a better violinist"
+        },
+        "reason": "cancel_topic"
+      },
+      "resume": {
+        "origin": "eligible",
+        "material": {
+          "worked": "Play a quarter note on count one, hold a half note through counts two and three, then start a new note on the next one. The bar line itself takes no time.",
+          "lesson": "Use a comfortable three-beat pulse on open A. Continue counting through silence and let the count return to one at the bar line. If playing becomes uncomfortable, stop and trace the bars on paper.",
+          "excerpt": "On this card a bar holds three quarter-note beats. Keep a silent beat’s place even when it ends a bar. The next bar starts on the very next beat."
+        },
+        "source": "local:violin/open-string-cards/three",
+        "grant": "b4bd1df7b86f37b9b3cd91c72426b75df06b302067786fc5658577d839fc5ce8",
+        "dispatch": {
+          "receipt": {
+            "family": 101,
+            "focus": "observation",
+            "goal": "I want to become a better violinist"
+          },
+          "lesson_route": {
+            "mode": "booked",
+            "slot": "return",
+            "unit": 201,
+            "comparison_unit": null
+          },
+          "title": "Carry the pulse across a bar line"
+        }
+      }
+    },
+    "clear_all": {
+      "held_visit": {
+        "format": "paired-return-memory/1",
+        "stored": {},
+        "reason": "forget_topic"
+      },
+      "resume": {
+        "origin": "eligible",
+        "material": {
+          "worked": "Play a quarter note on count one, hold a half note through counts two and three, then start a new note on the next one. The bar line itself takes no time.",
+          "lesson": "Use a comfortable three-beat pulse on open A. Continue counting through silence and let the count return to one at the bar line. If playing becomes uncomfortable, stop and trace the bars on paper.",
+          "excerpt": "On this card a bar holds three quarter-note beats. Keep a silent beat’s place even when it ends a bar. The next bar starts on the very next beat."
+        },
+        "source": "local:violin/open-string-cards/three",
+        "grant": "b4bd1df7b86f37b9b3cd91c72426b75df06b302067786fc5658577d839fc5ce8",
+        "dispatch": {
+          "receipt": {},
+          "lesson_route": {
+            "mode": "booked",
+            "slot": "return",
+            "unit": 201,
+            "comparison_unit": null
+          },
+          "title": "Carry the pulse across a bar line"
+        }
+      }
+    },
+    "hold_only_no_regrant": {
+      "held_visit": {
+        "format": "paired-return-memory/1",
+        "stored": {
+          "family": 101,
+          "focus": "observation",
+          "goal": "I want to become a better violinist",
+          "topic": {
+            "domain": "violin",
+            "edition": "fe4cf9a71734f24c69fba0cedff0c98679af00621649c7847ad7b412d2430b81",
+            "unit": 101
+          }
+        },
+        "reason": "carry"
+      },
+      "resume": {
+        "origin": "local",
+        "material": {},
+        "dispatch": null
+      }
+    },
+    "cancel_no_regrant": {
+      "held_visit": {
+        "format": "paired-return-memory/1",
+        "stored": {
+          "family": 101,
+          "focus": "observation",
+          "goal": "I want to become a better violinist"
+        },
+        "reason": "cancel_topic"
+      },
+      "resume": {
+        "origin": "local",
+        "material": {},
+        "dispatch": null
+      }
+    },
+    "keep_narrow_renewal": {
+      "held_visit": {
+        "format": "paired-return-memory/1",
+        "stored": {
+          "family": 101,
+          "focus": "observation",
+          "goal": "I want to become a better violinist",
+          "topic": {
+            "domain": "violin",
+            "edition": "fe4cf9a71734f24c69fba0cedff0c98679af00621649c7847ad7b412d2430b81",
+            "unit": 101
+          }
+        },
+        "reason": "carry"
+      },
+      "resume": {
+        "origin": "eligible",
+        "material": {
+          "worked": "Play a quarter note on count one, hold a half note through counts two and three, then start a new note on the next one. The bar line itself takes no time.",
+          "lesson": "Use a comfortable three-beat pulse on open A. Continue counting through silence and let the count return to one at the bar line. If playing becomes uncomfortable, stop and trace the bars on paper.",
+          "excerpt": "On this card a bar holds three quarter-note beats. Keep a silent beat’s place even when it ends a bar. The next bar starts on the very next beat."
+        },
+        "source": "local:violin/open-string-cards/three",
+        "grant": "b4bd1df7b86f37b9b3cd91c72426b75df06b302067786fc5658577d839fc5ce8",
+        "dispatch": {
+          "receipt": {
+            "family": 101,
+            "goal": "I want to become a better violinist"
+          },
+          "lesson_route": {
+            "mode": "booked",
+            "slot": "return",
+            "unit": 201,
+            "comparison_unit": null
+          },
+          "title": "Carry the pulse across a bar line"
+        }
+      }
+    }
+  }
+}

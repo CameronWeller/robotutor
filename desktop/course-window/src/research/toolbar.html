@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #e7f2f5;
+        color: #17334a;
+        font:
+          14px/1.35 "Segoe UI",
+          sans-serif;
+      }
+      header {
+        padding: 9px 14px;
+        background: #183349;
+        color: white;
+      }
+      form,
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      input,
+      button {
+        font: inherit;
+        border: 1px solid #9bb3bd;
+        border-radius: 5px;
+        padding: 6px 10px;
+      }
+      input {
+        min-width: 70px;
+        flex: 1;
+      }
+      button {
+        cursor: pointer;
+        color: #17334a;
+        background: white;
+      }
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #dc9d15;
+      }
+      button:disabled {
+        opacity: 0.6;
+      }
+      .row {
+        padding: 7px 14px 0;
+        flex-wrap: wrap;
+      }
+      #message {
+        margin: 4px 14px;
+        color: #344e5c;
+      }
+      #book {
+        padding: 0 18px 20px;
+        max-width: 80ch;
+      }
+      li {
+        margin: 12px 0;
+        overflow-wrap: anywhere;
+      }
+      li small {
+        display: block;
+        color: #425e6a;
+        font-size: 13px;
+        margin-top: 3px;
+      }
+      h2 {
+        margin: 16px 0 5px;
+      }
+      button[aria-pressed="true"] {
+        background: #d5eddf;
+      }
+      #confirm {
+        padding: 8px;
+        border: 1px solid #b57b32;
+      }
+      button[hidden],
+      section[hidden],
+      span[hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <form id="nav">
+        <button type="button" data-action="back" aria-label="Back">←</button
+        ><button type="button" data-action="forward" aria-label="Forward">
+          →</button
+        ><button type="button" data-action="reload" aria-label="Reload">
+          ↻</button
+        ><input
+          id="address"
+          aria-label="Search or enter a public HTTPS address"
+          placeholder="Search or enter a public HTTPS address"
+          autocomplete="off"
+        /><button>Go</button>
+      </form>
+    </header>
+    <div class="row">
+      <b id="status">Recording paused</b
+      ><button id="toggle" data-action="toggle">Start recording</button
+      ><button id="notebook" data-action="notebook">View notebook</button
+      ><button id="google" data-action="google">Google sign-in</button>
+    </div>
+    <p id="message" role="status"></p>
+    <section id="book" hidden>
+      <h2>Lesson research notebook</h2>
+      <p>
+        Saved in this lesson on this device. Entries show which resources were
+        available during research. Robotutor keeps up to 200 resources for 30
+        days, checked when the notebook opens or is used.
+      </p>
+      <button id="clear">Clear notebook</button>
+      <span id="confirm" hidden
+        >Erase these entries? <button data-action="clear">Erase</button>
+        <button id="cancel">Cancel</button></span
+      >
+      <ol id="rows"></ol>
+      <small id="engine"></small>
+    </section>
+    <script>
+      const el = (id) => document.getElementById(id);
+      function send(action, value) {
+        window.ipc.postMessage(JSON.stringify({ action, value }));
+      }
+      let lastHeight = 0;
+      const resize = new ResizeObserver(() => {
+        const h = Math.ceil(el("message").getBoundingClientRect().bottom) + 8;
+        if (h !== lastHeight) {
+          lastHeight = h;
+          send("height", h);
+        }
+      });
+      for (const item of [
+        document.querySelector("header"),
+        document.querySelector(".row"),
+        el("message"),
+      ])
+        resize.observe(item);
+      document.querySelectorAll("[data-action]").forEach(
+        (b) =>
+          (b.onclick = () => {
+            el("confirm").hidden = true;
+            send(b.dataset.action);
+          }),
+      );
+      el("nav").onsubmit = (e) => {
+        e.preventDefault();
+        send("go", el("address").value);
+        el("address").blur();
+      };
+      el("clear").onclick = () => (el("confirm").hidden = false);
+      el("cancel").onclick = () => (el("confirm").hidden = true);
+      window.showError = (text) => {
+        el("message").textContent = text;
+        el("status").textContent = "Recording paused";
+        el("toggle").textContent = "Start recording";
+      };
+      window.render = (s) => {
+        if (document.activeElement !== el("address"))
+          el("address").value = s.url === "about:blank" ? "" : s.url;
+        el("status").textContent = s.recording
+          ? "Recording on"
+          : "Recording paused";
+        el("toggle").textContent = s.recording
+          ? "Pause recording"
+          : "Start recording";
+        el("toggle").setAttribute("aria-pressed", s.recording);
+        el("notebook").textContent = s.expanded
+          ? "Return to page"
+          : "View notebook";
+        el("google").textContent = s.account
+          ? "Sign out · " + s.account
+          : "Google sign-in";
+        el("google").disabled = s.waiting;
+        el("message").textContent = s.message;
+        el("book").hidden = !s.expanded;
+        el("engine").textContent = "Chromium-based WebView2 " + s.runtime;
+        el("rows").replaceChildren();
+        for (const r of s.rows) {
+          const li = document.createElement("li");
+          li.textContent = r.title || r.resource;
+          if (r.title) {
+            const address = document.createElement("small");
+            address.textContent = r.resource;
+            li.append(address);
+          }
+          if (r.available_headings.length) {
+            const h = document.createElement("small");
+            h.textContent =
+              "Available headings · " + r.available_headings.join(" · ");
+            li.append(h);
+          }
+          el("rows").append(li);
+        }
+        if (s.expanded && !s.rows.length)
+          el("rows").textContent = "No resources recorded for this lesson yet.";
+      };
+    </script>
+  </body>
+</html>
