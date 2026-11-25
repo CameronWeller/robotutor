@@ -393,3 +393,57 @@ fn duplicate_detection_cannot_rebind_a_receipt_to_a_different_visit() {
     assert!(w.lookup("another#1").unwrap().is_none());
     assert!(w.lookup("case#2").unwrap().is_some());
 }
+
+#[test]
+fn matching_words_and_semantics_jointly_rank_older_turns() {
+    let root = Temp::new();
+    root.write(
+        "2026-02-01",
+        &exchange("I made a cedar cover.", "Check the seam."),
+    );
+    root.write(
+        "2026-02-02",
+        &exchange("I built a wooden sleeve.", "Examine the joint."),
+    );
+    root.write(
+        "2026-02-03",
+        &exchange("I read about cedar.", "The story is set in a forest."),
+    );
+    let mut w = Workspace::open(&root.0).unwrap();
+    w.sync().unwrap();
+    w.fill_vectors(
+        &mut |inputs| {
+            Ok(inputs
+                .iter()
+                .map(|s| {
+                    let mut v = vec![0.; EMBEDDING_DIM];
+                    if s.contains("cedar cover") {
+                        v[0] = 0.9;
+                        v[1] = (1.0_f32 - 0.9_f32.powi(2)).sqrt();
+                    } else if s.contains("wooden sleeve") {
+                        v[0] = 1.;
+                    } else {
+                        v[1] = 1.;
+                    }
+                    v
+                })
+                .collect())
+        },
+        1,
+    )
+    .unwrap();
+    let mut q = vec![0.; EMBEDDING_DIM];
+    q[0] = 1.;
+    let ids = |v: Option<&[f32]>| {
+        w.search("cedar protection", v, "today", 1)
+            .unwrap()
+            .into_iter()
+            .map(|hit| hit.source)
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(
+        ids(Some(&q)),
+        ["2026-02-01#1", "2026-02-02#1", "2026-02-03#1"]
+    );
+    assert_eq!(ids(None), ["2026-02-01#1", "2026-02-03#1"]);
+}
