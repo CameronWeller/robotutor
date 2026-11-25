@@ -3,3 +3,9 @@
 Run the locked lab suite and the tests for each changed client. For learner-facing changes, exercise the interaction using fictional learners and inspect the view before and after at the affected sizes.
 
 Authorized maintainers record visible development exchanges in the private logs submodule after review. Keep credentials and private learner information in the owner’s workspace. Use stable entry IDs and retry the appender with --retry-pending to recover interrupted publishes. Review teaching commitments and source citations inside the archive. Use fictional examples in public tests and issues.
+
+## Transcript preservation
+
+Every commit carries the conversation that produced it. Before a commit, the hook in `.claude/settings.json` and the Git hooks it installs append the session's visible dialogue to `logs/YYYY/MM/DD/claude-session-TAG.md` in the private archive, fast-forward the `logs` submodule to that archive commit, and stage the gitlink with the change. Tool calls appear as one-line summaries. Credentials in known formats are redacted before anything is written. If the archive cannot be reached, the commit stops. Initialize the submodule with `git submodule update --init logs` and commit again. Sessions from other agents follow the same rule through their own recorders.
+
+Archived records and commits are permanent. Append to the archive only through `tools/append_transcript.py` or `tools/claude-transcripts`, which never rewrite an entry. Do not edit or delete files under `logs/`, move the gitlink backwards, commit with `--no-verify`, force-push, or rewrite pushed history with rebase, `filter-branch` or `filter-repo`. The Claude hooks refuse these commands, and the pre-push hook refuses pushes that replace commits. Keep secrets out of the conversation in the first place, since redaction only recognizes common formats. If one is pasted, rotate it and report it to the owner. Do not try to remove it from the archive.
