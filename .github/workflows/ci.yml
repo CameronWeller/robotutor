@@ -21,8 +21,18 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y age
           python3 -m unittest discover -s tools
-      - name: Confirm contributor checkout excludes development transcripts
-        run: test ! -e logs/.archive-format
+      - name: Verify contributor credentials can fetch only the public code
+        env:
+          GIT_TERMINAL_PROMPT: 0
+        run: |
+          test ! -e logs/.archive-format
+          git ls-remote --exit-code origin refs/heads/main > /dev/null
+          archive=$(git config -f .gitmodules --get submodule.logs.url)
+          if git ls-remote "$archive" > /dev/null 2> "$RUNNER_TEMP/archive-error"; then
+            echo "Contributor credentials could read the private archive."
+            exit 1
+          fi
+          grep -Fqi 'repository not found' "$RUNNER_TEMP/archive-error"
   macos:
     runs-on: macos-15
     timeout-minutes: 25
