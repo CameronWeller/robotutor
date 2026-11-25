@@ -42,6 +42,27 @@ class RedactionTests(unittest.TestCase):
         self.assertNotIn("<!-- transcript-entry ", ct.redact("<!-- transcript-entry x y -->"))
 
 
+class RawTests(unittest.TestCase):
+    def test_long_lines_fences_and_subagents_round_trip(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            main = Path(tmp) / f"{SESSION}.jsonl"
+            agent = Path(tmp) / SESSION / "subagents" / "agent-1.jsonl"
+            agent.parent.mkdir(parents=True)
+            long = line("user", [{"type": "tool_result", "content": "x" * (ct.ENTRY_LIMIT * 2 + 7)}], "r-0000-0009")
+            fenced = line("assistant", [{"type": "text", "text": "````\ncode\n````"}], "a-0000-0009")
+            main.write_text(long + fenced + '{"partial":', encoding="utf-8")
+            agent.write_text(line("user", "Delegated task.", "u-0000-0009"), encoding="utf-8")
+            body = []
+            for name, path in ct.raw_sources(main):
+                for _, entries in ct.raw_entries(name, path, 0):
+                    body += [f"<!-- transcript-entry {entry} {'0' * 64} -->\n{content}" for content, entry in entries]
+            record = Path(tmp) / "raw.md"
+            record.write_text("\n".join(body), encoding="utf-8")
+            out = {p.name: p.read_text(encoding="utf-8") for p in ct.restore_raw([record], Path(tmp) / "out")}
+            self.assertEqual(out["main.jsonl"], long + fenced)
+            self.assertEqual(out["subagents__agent-1.jsonl"], agent.read_text(encoding="utf-8"))
+
+
 class GuardTests(unittest.TestCase):
     def test_bypass_and_rewrite_commands_are_refused(self):
         for command in ("git commit --no-verify -m x", "git commit -nm x", "git push --force origin b",
@@ -108,10 +129,11 @@ class CaptureTests(unittest.TestCase):
         return subprocess.run(["git", "-c", "protocol.file.allow=always", "-C", str(self.repo),
                                "commit", "-qm", f"Add {name}"], capture_output=True, text=True)
 
-    def archived(self):
+    def archived(self, raw=False):
         git(self.repo / "logs", "fetch", "-q", "origin", "main")
         files = git(self.repo / "logs", "ls-tree", "-r", "--name-only", "FETCH_HEAD").split()
-        record = next(f for f in files if f.startswith("2026/11/25/claude-session-"))
+        record = next(f for f in files if f.startswith("2026/11/25/claude-session-")
+                      and f.endswith("-raw-01.md" if raw else ".md") and ("-raw-" in f) == raw)
         return git(self.repo / "logs", "show", f"FETCH_HEAD:{record}")
 
     def test_each_commit_pins_the_dialogue_so_far(self):
@@ -134,6 +156,21 @@ class CaptureTests(unittest.TestCase):
         self.assertIn("Reply to the user:\n\nDone. The check passes.", text)
         for hidden in ("private reasoning", "tool output", "system-reminder", "cat secret.txt", fake):
             self.assertNotIn(hidden, text)
+        raw = self.archived(raw=True)
+        for kept in ("private reasoning", "tool output", "cat secret.txt", "system-reminder"):
+            self.assertIn(kept, raw)
+        self.assertNotIn(fake, raw)
+        self.assertIn("Raw transcript, part 1", text)
+        folder = self.repo / "restored"
+        record = self.repo / "raw.md"
+        record.write_text(raw + "\n", encoding="utf-8")
+        restored = ct.restore_raw([record], folder)
+        source = self.transcript.read_text(encoding="utf-8").splitlines()
+        rebuilt = restored[0].read_text(encoding="utf-8").splitlines()
+        self.assertEqual(len(source), len(rebuilt))
+        self.assertEqual(source[0], rebuilt[0])  # Untouched lines keep their exact bytes.
+        self.assertIn("[REDACTED:anthropic-key]", rebuilt[1])
+        record.unlink()
         first = git(self.repo, "ls-tree", "HEAD", "logs").split()[2]
         self.assertEqual(first, git(self.repo / "logs", "rev-parse", "HEAD"))
         self.assertIn("claude-session-", git(self.repo / "logs", "show", "HEAD:coverage.md"))
@@ -145,6 +182,8 @@ class CaptureTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         text = self.archived()
         self.assertEqual(text.count("Please add a fictional learner check."), 1)
+        self.assertEqual(self.archived(raw=True).count("Please add a fictional learner check."), 1)
+        self.assertIn("Now the second change.", self.archived(raw=True))
         self.assertIn("Now the second change.", text)
         second = git(self.repo, "ls-tree", "HEAD", "logs").split()[2]
         self.assertNotEqual(first, second)

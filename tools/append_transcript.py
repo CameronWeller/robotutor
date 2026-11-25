@@ -68,17 +68,21 @@ def publish_many(repo, path, entries, keep_existing=False, message="Append revie
                     raise ValueError("Expected a regular Markdown file")
                 old = git("show", f"{parent}:{path}", binary=True).stdout if record else b""
                 framed, added = b"\n" + old, b""
+                present = set(re.findall(rb"<!-- transcript-entry ([A-Za-z0-9_-]+) ", old))
+                seen = set()
                 for prefix, block in blocks:
-                    if prefix in old:
+                    ident = prefix[len(b"<!-- transcript-entry "):-1]
+                    if ident in present:
                         # Early Windows writers stored whole entries with CRLF.
                         if (keep_existing or b"\n" + block in framed
                                 or b"\n" + block.replace(b"\n", b"\r\n") in framed):
                             continue
                         raise ValueError("Entry ID already has different content")
-                    if prefix in added:
+                    if ident in seen:
                         if b"\n" + block in added:
                             continue
                         raise ValueError("Entry ID repeated with different content")
+                    seen.add(ident)
                     added += b"\n" + block
                 if not added:
                     return parent

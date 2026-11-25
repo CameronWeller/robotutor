@@ -128,6 +128,80 @@ def entries_for(ident, stamp, role, body):
         yield f"**{label}** ({stamp})\n\n{piece}\n", f"m-{ident}" + (f"-{number}" if number else "")
 
 
+RAW_PART_LIMIT = 40_000_000  # Bytes per raw record file, below GitHub's 50 MB warning.
+RAW_ENTRY = re.compile(r"<!-- transcript-entry (r-[0-9a-f]{8}-[0-9]+(?:-[0-9]+)?) [0-9a-f]{64} -->\n"
+                       r"(\S+) @ ([0-9]+)(?: part [0-9]+ of [0-9]+)?\n\n(`{3,})jsonl\n(.*?)\n\4\n", re.S)
+
+
+def redact_value(value):
+    if isinstance(value, str):
+        return redact(value)
+    if isinstance(value, list):
+        return [redact_value(v) for v in value]
+    if isinstance(value, dict):
+        return {redact(k): redact_value(v) for k, v in value.items()}
+    return value
+
+
+def redact_raw(line):
+    """Redact one JSONL record. Lines without a match keep their exact bytes."""
+    text = line.decode("utf-8", errors="replace").rstrip("\r\n")
+    try:
+        record = json.loads(text)
+    except ValueError:
+        return redact(text)
+    cleaned = redact_value(record)
+    return text if cleaned == record else json.dumps(cleaned, ensure_ascii=False, separators=(",", ":"))
+
+
+def raw_sources(main):
+    """The main transcript and the subagent transcripts Claude Code keeps beside it."""
+    found = [("main", main)]
+    folder = main.with_suffix("")
+    if folder.is_dir():
+        found += [(p.relative_to(folder).as_posix(), p) for p in sorted(folder.rglob("*.jsonl"))]
+    return found
+
+
+def raw_entries(name, path, start):
+    """Yield (end offset, [(content, entry)]) for each complete source line after start."""
+    key = hashlib.sha256(name.encode()).hexdigest()[:8]
+    label = re.sub(r"\s", "_", name)
+    with Path(path).open("rb") as stream:
+        stream.seek(start)
+        offset = start
+        for line in stream:
+            if not line.endswith(b"\n"):
+                return
+            text = redact_raw(line)
+            fence = "`" * max(3, max((len(m) for m in re.findall(r"`+", text)), default=0) + 1)
+            pieces = [text[i:i + ENTRY_LIMIT] for i in range(0, len(text), ENTRY_LIMIT)] or [""]
+            out = []
+            for number, piece in enumerate(pieces):
+                part = f" part {number + 1} of {len(pieces)}" if len(pieces) > 1 else ""
+                out.append((f"{label} @ {offset}{part}\n\n{fence}jsonl\n{piece}\n{fence}\n",
+                            f"r-{key}-{offset}" + (f"-{number}" if number else "")))
+            offset += len(line)
+            yield offset, out
+
+
+def restore_raw(records, output):
+    """Rebuild one JSONL file per source from raw record files, in source order."""
+    lines = {}
+    for record in records:
+        for _, name, offset, _, piece in RAW_ENTRY.findall(Path(record).read_text(encoding="utf-8")):
+            lines.setdefault(name, {}).setdefault(int(offset), []).append(piece)
+    output.mkdir(parents=True, exist_ok=True)
+    written = []
+    for name, rows in sorted(lines.items()):
+        target = output / (name.replace("/", "__").removesuffix(".jsonl") + ".jsonl")
+        with target.open("w", encoding="utf-8", newline="\n") as out:
+            for offset in sorted(rows):
+                out.write("".join(rows[offset]) + "\n")
+        written.append(target)
+    return written
+
+
 PARENT = {}  # The index a running git commit uses, which may be a temporary one for path commits.
 
 
@@ -198,7 +272,10 @@ def pending(repo):
         path = Path(row.get("transcript", ""))
         if path.is_file():
             offset = row["offset"] if path.stat().st_size >= row["offset"] else 0
-            if any(True for _ in read_messages(path, offset)):
+            raw = row.get("raw", {})
+            if any(True for _ in read_messages(path, offset)) or any(
+                    any(True for _ in raw_entries(n, p, raw.get(n, 0) if p.stat().st_size >= raw.get(n, 0) else 0))
+                    for n, p in raw_sources(path)):
                 found[session] = row
     return found
 
@@ -207,13 +284,15 @@ def publish_session(repo, session, row):
     path = Path(row["transcript"])
     offset = row["offset"] if path.stat().st_size >= row["offset"] else 0
     messages = list(read_messages(path, offset))
-    if not messages:
-        return False
-    day = (messages[0][2][:10] or datetime.now(timezone.utc).strftime("%Y-%m-%d")).replace("-", "/")
-    record = row.setdefault("record", f"logs/{day}/claude-session-{tag(session)}.md")
+    if "record" not in row:
+        first = messages[0][2][:10] if messages else ""
+        day = (first or datetime.now(timezone.utc).strftime("%Y-%m-%d")).replace("-", "/")
+        row["record"] = f"logs/{day}/claude-session-{tag(session)}.md"
+    record = row["record"]
     header = (f"# Claude Code development session {tag(session)}\n\n"
               "Automatic record of the visible dialogue, captured with each commit. Tool calls appear "
-              "as one-line summaries. Credentials matching known formats are redacted.\n",
+              "as one-line summaries here and in full in the linked raw transcript. Credentials matching "
+              "known formats are redacted.\n",
               "session-" + tag(session))
     batch, size = [header], 0
     for end, ident, stamp, role, body in messages:
@@ -224,15 +303,73 @@ def publish_session(repo, session, row):
         if size >= BATCH_LIMIT:
             publish_many(repo / "logs", record, batch, keep_existing=True, message="Append Claude Code session record")
             row["offset"], batch, size = end, [], 0
-    if batch:
-        publish_many(repo / "logs", record, batch, keep_existing=True, message="Append Claude Code session record")
-    row["offset"] = messages[-1][0]
+    publish_many(repo / "logs", record, batch, keep_existing=True, message="Append Claude Code session record")
+    if messages:
+        row["offset"] = messages[-1][0]
     if not row.get("indexed"):
         publish_many(repo / "logs", "logs/coverage.md",
                      [(f"- [Claude Code development session {tag(session)}]({record[5:]})\n", "index-claude-" + tag(session))],
                      keep_existing=True, message="Index Claude Code session record")
         row["indexed"] = True
+    publish_raw(repo, session, row, path)
     return True
+
+
+def archive_head(repo):
+    archive = repo / "logs"
+    git(archive, "fetch", "--no-tags", "origin", "main")
+    return git(archive, "rev-parse", "FETCH_HEAD")
+
+
+def publish_raw(repo, session, row, main):
+    """Append every new raw source line, splitting the record into numbered parts as it grows."""
+    archive, base = repo / "logs", row["record"].removesuffix(".md") + "-raw"
+    raw = row.setdefault("raw", {})
+    head = archive_head(repo)
+    names = git(archive, "ls-tree", "--name-only", head, "--", str(Path(base[5:]).parent) + "/").split("\n")
+    parts = sorted(n for n in names if re.fullmatch(re.escape(Path(base).name) + r"-[0-9]{2}\.md", Path(n).name))
+    done = set()
+    if not raw:
+        # Local state was lost. Entries already published are skipped instead of repeated.
+        for name in parts:
+            done |= set(re.findall(r"<!-- transcript-entry (r-[0-9a-f-]+) ", git(archive, "show", f"{head}:{name}")))
+    number = len(parts) or 1
+    size = int(git(archive, "cat-file", "-s", f"{head}:{parts[-1]}")) if parts else 0
+
+    def flush(batch):
+        nonlocal number, size
+        if not batch:
+            return
+        if size and size + sum(len(c) for c, _ in batch) > RAW_PART_LIMIT:
+            number, size = number + 1, 0
+        path = f"{base}-{number:02d}.md"
+        header = (f"# Claude Code raw transcript {tag(session)}, part {number}\n\n"
+                  "Every line Claude Code wrote for the session and its subagents, including tool input and "
+                  "output, with credentials in known formats redacted. Each entry is one source line. "
+                  "Rebuild the JSONL files with `sh tools/claude-transcripts restore-raw`.\n",
+                  f"raw-header-{number:02d}")
+        publish_many(archive, path, [header, *batch], keep_existing=True, message="Append Claude Code raw transcript")
+        if size == 0:
+            publish_many(archive, row["record"], [(f"[Raw transcript, part {number}]({Path(path).name})\n",
+                                                   f"raw-link-{number:02d}")],
+                         keep_existing=True, message="Link Claude Code raw transcript")
+        size += sum(len(c.encode()) for c, _ in batch) + 2000
+
+    for name, path in raw_sources(main):
+        start = raw.get(name, 0) if path.stat().st_size >= raw.get(name, 0) else 0
+        batch, total, reached = [], 0, start
+        for end, entries in raw_entries(name, path, start):
+            for content, entry in entries:
+                if entry not in done:
+                    validate(f"{base}-01.md", content, entry)
+                    batch.append((content, entry))
+                    total += len(content)
+            reached = end
+            if total >= BATCH_LIMIT:
+                flush(batch)
+                raw[name], batch, total = end, [], 0
+        flush(batch)
+        raw[name] = reached  # Only after the lines are on the archive.
 
 
 def checkpoint(repo):
@@ -424,7 +561,14 @@ def main():
     cap.add_argument("--session")
     cap.add_argument("--transcript")
     cmds.add_parser("install", help="Install the git hooks in this checkout")
+    back = cmds.add_parser("restore-raw", help="Rebuild JSONL transcripts from raw record files")
+    back.add_argument("records", nargs="+", type=Path)
+    back.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.action == "restore-raw":
+        for path in restore_raw(args.records, args.output):
+            print(path)
+        return 0
     isolate_from_hook()
     repo = Path(git(args.repo or os.environ.get("CLAUDE_PROJECT_DIR") or Path.cwd(), "rev-parse", "--show-toplevel"))
     if args.action == "hook":
