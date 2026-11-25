@@ -37,7 +37,8 @@
           "The wheel makes three turns per pedal turn.",
           "The pedal makes three turns per wheel turn."
         ]
-      }
+      },
+      { "id": "arrow", "label": "Direction arrow", "kind": "arrow" }
     ],
     "next": "graph-transfer",
     "support": "axes",

@@ -299,6 +299,13 @@ fn start(id: &str, visit: &mut Visit, journal: &mut Option<Journal>) -> Result<(
     install(&mut lesson, form);
     crate::discovery::deliver(visit, journal, lesson, text)
 }
+fn numeric_value(f: &Field, value: &str) -> Option<f64> {
+    let unit = f.label.split_once('→').map(|(_, output)| output.trim());
+    let number = unit
+        .and_then(|suffix| value.strip_suffix(suffix))
+        .unwrap_or(value);
+    number.trim().parse::<f64>().ok().filter(|v| v.is_finite())
+}
 fn check(f: &Field, work: &Draft) -> bool {
     let value = work.fields.get(&f.id).map(|v| v.trim()).unwrap_or("");
     match f.kind.as_str() {
@@ -317,7 +324,7 @@ fn check(f: &Field, work: &Draft) -> bool {
             .key
             .as_deref()
             .and_then(|n| n.parse::<f64>().ok())
-            .is_some_and(|k| value.parse::<f64>().ok() == Some(k)),
+            .is_some_and(|k| numeric_value(f, value) == Some(k)),
         _ => f.key.as_ref().is_none_or(|k| k == value),
     }
 }
@@ -342,6 +349,9 @@ fn assess_words(
         .collect();
     if !draft.text.trim().is_empty() {
         writing.insert("explanation", draft.text.as_str());
+    }
+    if let Some(arrow) = draft.fields.get("arrow").filter(|s| !s.is_empty()) {
+        writing.insert("direction arrow", arrow);
     }
     let fields: Vec<_> = writing.keys().copied().collect();
     let schema = crate::lesson::object(
@@ -375,8 +385,10 @@ fn evaluate(
     prior: Option<&Evidence>,
     config: &mut Option<crate::Config>,
 ) -> (String, String, Option<String>) {
+    let drawn_relation =
+        form.id == "graph" && work.fields.get("arrow").is_some_and(|a| !a.is_empty());
     let written_relation = matches!(form.id.as_str(), "graph" | "words")
-        && !work.text.trim().is_empty()
+        && (!work.text.trim().is_empty() || drawn_relation)
         && work
             .fields
             .get("relationship")
@@ -405,6 +417,21 @@ fn evaluate(
     } else {
         format!("You got {exact} right {read_mode}. ")
     };
+    if let Some(field) = failed.iter().find(|f| {
+        f.kind == "number"
+            && f.label.contains('→')
+            && numeric_value(
+                f,
+                work.fields
+                    .get(&f.id)
+                    .map(String::as_str)
+                    .unwrap_or("")
+                    .trim(),
+            )
+            .is_none()
+    }) {
+        return ("input_repair".into(), format!("{observed}I could not read the entry for {}. Enter the number alone or include its displayed unit.", field.label), Some(form.id.clone()));
+    }
     if !failed.is_empty() {
         if form.id == "graph" && failed.len() == 1 && failed[0].id == "relationship" {
             return ("mixed".into(),format!("{observed}Your points fit the ratio. Your sentence reverses which quantity depends on the other. Let’s work on the words."),form.card.mixed.clone());
@@ -423,8 +450,9 @@ fn evaluate(
             form.card.support.clone(),
         );
     }
-    let interpret =
-        form.card.fields.iter().any(|f| f.kind == "rubric") || !work.text.trim().is_empty();
+    let interpret = form.card.fields.iter().any(|f| f.kind == "rubric")
+        || !work.text.trim().is_empty()
+        || drawn_relation;
     if interpret {
         if !observed.is_empty() {
             if std::env::var_os("ROBOTUTOR_DESKTOP").is_some() {
@@ -816,7 +844,21 @@ pub fn command(
 }
 
 pub fn submission(visit: &Visit) -> Result<Option<(Draft, String)>> {
-    build_submission(visit, current(visit))
+    let form = current(visit);
+    if let Some(field) =
+        form.as_ref().and_then(|r| {
+            r.card.fields.iter().find(|f| {
+                f.kind == "number"
+                    && f.label.contains('→')
+                    && visit.draft.fields.get(&f.id).is_some_and(|v| {
+                        !v.trim().is_empty() && numeric_value(f, v.trim()).is_none()
+                    })
+            })
+        })
+    {
+        return Err(format!("I could not read {}. Enter the number alone or include its displayed unit. Your draft is saved.", field.label));
+    }
+    build_submission(visit, form)
 }
 
 // Previously committed form submissions are verified against their original exercise.
@@ -830,9 +872,13 @@ fn build_submission(visit: &Visit, form: Option<Released>) -> Result<Option<(Dra
     };
     let work = &visit.draft;
     for f in &form.card.fields {
+        if f.kind == "arrow" {
+            continue;
+        }
         if f.id == "relationship"
             && matches!(form.id.as_str(), "graph" | "words")
-            && !work.text.trim().is_empty()
+            && (!work.text.trim().is_empty()
+                || work.fields.get("arrow").is_some_and(|a| !a.is_empty()))
             && work.fields.get(&f.id).is_none_or(|s| s.is_empty())
         {
             continue;
@@ -921,8 +967,26 @@ mod tests {
                 .contains("with a hint"));
             work.fields
                 .insert(card.card.fields[0].id.clone(), "wrong".into());
-            assert_eq!(evaluate(&card, &work, None, &mut None).0, "support");
+            assert_eq!(
+                evaluate(&card, &work, None, &mut None).0,
+                if id == "table" {
+                    "input_repair"
+                } else {
+                    "support"
+                }
+            );
         }
+    }
+    #[test]
+    fn ratio_rows_accept_the_displayed_unit() {
+        let (card, mut work) = filled("table");
+        for value in work.fields.values_mut() {
+            value.push_str(" wheel turns");
+        }
+        assert_eq!(evaluate(&card, &work, None, &mut None).0, "advance");
+        work.fields
+            .insert(card.card.fields[0].id.clone(), "8 pedal turns".into());
+        assert_eq!(evaluate(&card, &work, None, &mut None).0, "input_repair");
     }
     #[test]
     fn simulation_needs_two_measurements_and_timing_needs_observation() {

@@ -371,7 +371,6 @@ impl Desktop {
         Ok(())
     }
     fn inspect(&mut self) -> Result<()> {
-
         self.refresh_resources()?;
         let o = runtime::command(&self.runtime.tutor)
             .arg("--inspect-journal")
@@ -610,7 +609,10 @@ impl Desktop {
             }
             let id = ui.make_persistent_id("reply");
             let send_enter = ui.memory(|m| m.has_focus(id))
-                && ui.input_mut(|i| i.consume_key(egui::Modifiers::NONE, egui::Key::Enter));
+                && ui.input_mut(|i| {
+                    let index = i.events.iter().position(|e| matches!(e, egui::Event::Key { key: egui::Key::Enter, pressed: true, modifiers, .. } if modifiers.is_none()));
+                    if let Some(index) = index { i.events.remove(index); true } else { false }
+                });
             let reply = ui.add(
                 egui::TextEdit::multiline(&mut self.draft)
                     .id(id)
@@ -734,7 +736,6 @@ impl Desktop {
 }
 impl eframe::App for Desktop {
     fn update(&mut self, ctx: &egui::Context, _: &mut eframe::Frame) {
-
         if self.research.finished_with_error() {
             self.notice =
                 "The research browser closed unexpectedly. Reopen it from this lesson.".into();

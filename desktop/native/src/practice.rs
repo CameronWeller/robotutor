@@ -15,6 +15,9 @@ pub fn editor(
         let key = s(&f["id"]);
         let label = s(&f["label"]);
         let kind = s(&f["kind"]);
+        if kind == "arrow" {
+            continue;
+        }
         if kind == "timing" {
             if ui.button("Tap beat").clicked() {
                 cmd = Some("/tap".into())
@@ -140,6 +143,90 @@ pub fn editor(
                 changed = true;
             }
         }
+    }
+    if form["fields"]
+        .as_array()
+        .is_some_and(|list| list.iter().any(|field| field["kind"] == "arrow"))
+    {
+        ui.collapsing("Draw a direction arrow", |ui| {
+            ui.label("Drag from the driver to the follower, or choose a direction below.");
+            let (rect, response) = ui.allocate_exact_size(
+                egui::vec2(ui.available_width().min(300.), 68.),
+                egui::Sense::drag(),
+            );
+            let pedal = egui::pos2(rect.left() + 45., rect.center().y);
+            let wheel = egui::pos2(rect.right() - 45., rect.center().y);
+            for (center, label) in [(pedal, "Pedal"), (wheel, "Wheel")] {
+                ui.painter().text(
+                    center,
+                    egui::Align2::CENTER_CENTER,
+                    label,
+                    egui::FontId::proportional(15.),
+                    theme::NAVY,
+                );
+            }
+            let current = fields.get("arrow").and_then(Value::as_str).unwrap_or("");
+            let forward = "Pedal → Wheel";
+            let reverse = "Wheel → Pedal";
+            let left = pedal + egui::vec2(28., 0.);
+            let right = wheel - egui::vec2(28., 0.);
+            if current == forward || current == reverse {
+                let (start, end) = if current == forward {
+                    (left, right)
+                } else {
+                    (right, left)
+                };
+                ui.painter()
+                    .arrow(start, end - start, egui::Stroke::new(2., theme::NAVY));
+            }
+            let mut selected = None;
+            if response.drag_started() {
+                if let Some(start) = ui.input(|i| i.pointer.press_origin()) {
+                    ui.data_mut(|d| d.insert_temp(response.id, start));
+                }
+            }
+            if response.drag_stopped() {
+                if let Some((start, end)) = ui
+                    .data_mut(|d| d.remove_temp::<egui::Pos2>(response.id))
+                    .zip(ui.input(|i| i.pointer.latest_pos()))
+                {
+                    if rect.contains(start)
+                        && rect.contains(end)
+                        && (start.x < rect.center().x) != (end.x < rect.center().x)
+                    {
+                        selected = Some(if start.x < end.x { forward } else { reverse });
+                    }
+                }
+            }
+            ui.horizontal_wrapped(|ui| {
+                for direction in [forward, reverse] {
+                    if ui
+                        .selectable_label(
+                            current == direction,
+                            if direction == forward {
+                                "Pedal to wheel"
+                            } else {
+                                "Wheel to pedal"
+                            },
+                        )
+                        .clicked()
+                    {
+                        selected = Some(direction);
+                    }
+                }
+                if !current.is_empty() && ui.button("Clear arrow").clicked() {
+                    selected = Some("");
+                }
+            });
+            if let Some(direction) = selected {
+                if direction.is_empty() {
+                    fields.remove("arrow");
+                } else {
+                    fields.insert("arrow".into(), direction.into());
+                }
+                changed = true;
+            }
+        });
     }
     if form["id"] == "measure" && ui.button("Run measurement").clicked() {
         cmd = Some("/run".into());
