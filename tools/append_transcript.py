@@ -30,12 +30,15 @@ def publish(repo, path, content, entry):
     digest = hashlib.sha256(content.encode()).hexdigest()
     prefix = f"<!-- transcript-entry {entry} "
     marker = f"{prefix}{digest} -->"
-    block = marker + "\n" + content.rstrip("\n") + "\n"
+    block = (marker + "\n" + content.rstrip("\n") + "\n").encode("utf-8")
     with tempfile.TemporaryDirectory() as tmp:
         env = {**os.environ, "GIT_INDEX_FILE": str(Path(tmp) / "index")}
-        def git(*args, data=None, check=True):
-            return subprocess.run(["git","-C",str(repo),*args], input=data, text=True, encoding='utf-8',
-                                  capture_output=True, check=check, env=env, **quiet_process())
+        def git(*args, data=None, check=True, binary=False):
+            return subprocess.run(
+                ["git", "-C", str(repo), *args], input=data,
+                encoding=None if binary else "utf-8", capture_output=True,
+                check=check, env=env, **quiet_process()
+            )
         def fetch_snapshot(ref):
             # Keep the caller’s FETCH_HEAD and remote-tracking refs out of concurrent fetches.
             git("fetch", "--no-tags", "--no-write-fetch-head", "--refmap=", "origin", f"{BRANCH}:{ref}")
@@ -52,9 +55,11 @@ def publish(repo, path, content, entry):
                 record = git("ls-tree",parent,"--",path).stdout
                 if record and not record.startswith("100644 blob "):
                     raise ValueError("Expected a regular Markdown file")
-                old = git("show",f"{parent}:{path}").stdout if record else ""
-                if prefix in old:
-                    if ("\n"+block) in old:
+                old = git("show", f"{parent}:{path}", binary=True).stdout if record else b""
+                if prefix.encode("ascii") in old:
+                    # Early Windows writers stored whole entries with CRLF.
+                    framed = b"\n" + old
+                    if b"\n" + block in framed or b"\n" + block.replace(b"\n", b"\r\n") in framed:
                         return parent
                     raise ValueError("Entry ID already has different content")
                 for ancestor in Path(path).parents:
@@ -62,7 +67,8 @@ def publish(repo, path, content, entry):
                         obj = git("ls-tree",parent,"--",str(ancestor)).stdout
                         if obj and not obj.startswith("040000 tree "):
                             raise ValueError("Transcript directory is not a Git tree")
-                blob = git("hash-object","-w","--stdin",data=old+"\n"+marker+"\n"+content.rstrip("\n")+"\n").stdout.strip()
+                blob = git("hash-object", "-w", "--stdin", data=old + b"\n" + block,
+                           binary=True).stdout.decode("ascii").strip()
                 git("read-tree",parent)
                 git("update-index","--add","--cacheinfo",f"100644,{blob},{path}")
                 tree = git("write-tree").stdout.strip()
@@ -71,7 +77,7 @@ def publish(repo, path, content, entry):
                 if push.returncode == 0:
                     fetch_snapshot(ref)
                     git("merge-base", "--is-ancestor", commit, ref)
-                    if ("\n" + block) not in git("show", f"{ref}:{path}").stdout:
+                    if b"\n" + block not in git("show", f"{ref}:{path}", binary=True).stdout:
                         raise RuntimeError("Remote transcript verification failed")
                     return commit
                 if "rejected" not in push.stderr and "failed to update ref" not in push.stderr:

@@ -17,7 +17,10 @@ jobs:
       - run: cargo test --locked --manifest-path lab/Cargo.toml --all-targets
       - run: cargo test --locked --manifest-path lms/Cargo.toml
       - run: python3 -m unittest discover -s tests
-      - run: python3 -m unittest discover -s tools -p 'test_append_transcript.py'
+      - name: Exercise transcript tooling with disposable fixtures
+        run: |
+          sudo apt-get update && sudo apt-get install -y age
+          python3 -m unittest discover -s tools
       - name: Confirm contributor checkout excludes development transcripts
         run: test ! -e logs/.archive-format
   macos:
@@ -32,8 +35,10 @@ jobs:
           cargo test --locked --manifest-path lab/Cargo.toml --bin tutor
           cargo test --locked --manifest-path desktop/native/Cargo.toml
           cargo build --locked --manifest-path desktop/native/Cargo.toml
+          cargo test --locked --manifest-path lms/Cargo.toml --all-targets
           cargo build --locked --manifest-path lms/Cargo.toml
           cargo build --locked --manifest-path lab/Cargo.toml --bin tutor
+          cargo test --locked --manifest-path desktop/course-window/Cargo.toml --all-targets
           cargo build --locked --manifest-path desktop/course-window/Cargo.toml
       - name: Exercise the course webview handoff
         run: |
@@ -72,3 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: cargo test --locked --manifest-path desktop/course-window/Cargo.toml --bin robotutor-research
+      - name: Exercise Windows transcript capture and append behavior
+        run: |
+          python -m unittest discover -s tools -p test_append_transcript.py
+          python -m unittest discover -s tools -p test_session_archive.py

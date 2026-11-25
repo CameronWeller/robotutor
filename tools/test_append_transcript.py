@@ -1,4 +1,5 @@
 import concurrent.futures
+import hashlib
 from contextlib import closing
 from pathlib import Path
 import subprocess
@@ -17,6 +18,16 @@ class TranscriptTest(unittest.TestCase):
             subprocess.run(["git","init","-q",repo],check=True)
             git("config","user.name","Test")
             git("config","user.email","test@example.invalid")
+            original = "**User:** First line.\nSecond line."
+            digest = hashlib.sha256(original.encode()).hexdigest()
+            historical = (f"<!-- transcript-entry first {digest} -->\n{original}\n"
+                          .replace("\n", "\r\n").encode())
+            transcript = "2026/11/20/test-concurrent-01.md"
+            (repo/transcript).parent.mkdir(parents=True)
+            (repo/transcript).write_bytes(historical)
+            # Keep the fixture bytes independent of the developer's checkout settings.
+            git("config", "core.autocrlf", "false")
+            git("add", transcript)
             (repo/".archive-format").write_text("robotutor-development-transcripts-v1")
             git("add",".archive-format")
             git("commit","--allow-empty","-qm","base")
@@ -25,10 +36,20 @@ class TranscriptTest(unittest.TestCase):
             (repo/"unrelated").write_text("unrelated")
             git("add","unrelated")
             path="logs/2026/11/20/test-concurrent-01.md"
+            self.assertEqual(append(repo, path, original, "first"), git("rev-parse", "HEAD").strip())
+            second = Path(tmp) / "second"
+            subprocess.run(["git", "clone", "-q", "-b", "main", remote, second], check=True)
+            subprocess.run(["git", "-C", second, "config", "user.name", "Test"], check=True)
+            subprocess.run(["git", "-C", second, "config", "user.email", "test@example.invalid"], check=True)
             with concurrent.futures.ThreadPoolExecutor(4) as pool:
-                list(pool.map(lambda i: append(repo,path,f"Message {i}",str(i)),range(4)))
+                futures = [pool.submit(append, writer, path, f"Message {i}", str(i))
+                           for i, writer in enumerate((repo, second, repo, second))]
+                for future in futures:
+                    future.result()
             head=append(repo,path,"Message 1","1")
-            saved=git("show",f"{head}:{path[5:]}")
+            blob = subprocess.check_output(["git", "-C", repo, "show", f"{head}:{transcript}"])
+            self.assertTrue(blob.startswith(historical))
+            saved = blob.decode("utf-8")
             for i in range(4):
                 self.assertEqual(saved.count(f"Message {i}"),1)
             self.assertEqual(git("ls-tree","--name-only",head),".archive-format\n2026\n")
