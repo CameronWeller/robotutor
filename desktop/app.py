@@ -631,7 +631,7 @@ class Pilot(Gtk.Application):
         self.started = time.monotonic()
         self.note = "Opening lesson"
         env = dict(os.environ, ROBOTUTOR_DESKTOP="1")
-        review_args = ["--astra"] if env.get("ROBOTUTOR_ASTRA_REVIEW", "1") != "0" else []
+        review_args = ["--astra"] if env.get("ROBOTUTOR_ASTRA_REVIEW") == "1" else []
         if self.test_learner:
             env.update(ROBOTUTOR_WORKSPACE=str(self.personal), ROBOTUTOR_ASSIGNMENTS=str(self.cache),
                        ROBOTUTOR_PORT="1")

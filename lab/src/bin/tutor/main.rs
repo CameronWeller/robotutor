@@ -19,10 +19,12 @@ mod pilot;
 mod practice;
 mod preparation;
 mod progression;
+mod question_check;
 mod recall;
 mod recovery;
 mod replay;
 mod session;
+mod student_recall;
 mod study;
 mod supervisor;
 mod terminal;
@@ -37,7 +39,11 @@ use std::{
 };
 use tutor_lab::openrouter::{assistant_text, Config, Role};
 
-const TEACHER: &str = include_str!("teacher.txt");
+const TEACHER: &str = concat!(
+    include_str!("teacher.txt"),
+    "\n",
+    include_str!("question-design.txt")
+);
 const HELP:&str="tutor [--lesson CARD] [--session FILE] [--workspace DIR | --ephemeral] [--index] [--astra]
 tutor --tui opens or reconnects the persistent desktop terminal.
 --workspace opens a private learner archive and defaults to today's journal.
@@ -102,7 +108,7 @@ fn request(
         // objective here, so presenting that fallback as an assignment would anchor its choice.
         task.as_object_mut().unwrap().remove("target");
         task["working_plan"]["just_demonstrated"] = task["previous_objective"].clone();
-        task["instruction"] = json!("Look at the learner's answer and choose the next skill within their goal. Skip any operation in the provisional plan they have already carried out. Put the single new operation required by your exercise in objective, using a short, specific title. Teach it now with a concrete example and one fresh exercise. Rust supplies the acknowledgment.");
+        task["instruction"] = json!("Look at the learner's answer and choose the next skill within their goal. Skip any operation in the provisional plan they have already carried out. Put the single new operation required by your exercise in objective, using a short, specific title. Use a concrete situation. Model a genuinely unfamiliar prerequisite when needed. Leave the new decision and its method open for the fresh exercise. Rust supplies the acknowledgment.");
     }
     if task["task"] == "review" {
         // The tutor saves its provisional plan independently. Only the current
@@ -459,8 +465,7 @@ fn respond(
         })
         .collect();
     let lesson = &visit.lesson;
-    let context:Vec<_>=skills.iter().filter(|s|s.target.label()==lesson.selected.as_deref().unwrap_or(&lesson.topic) || s.due).take(8)
-        .map(|s|json!({"objective":s.target.objective,"state":s.status(),"completed_exercise":s.latest_assessment.as_ref().filter(|o| o.demonstrated()).map(|o|json!({"objective":o.target.objective,"with_support":o.assisted})),"review_due":s.due,"last_action":s.last_action,"source":s.last_source})).collect();
+    let context = study::teaching_context(&skills, &study::Target::from_lesson(lesson));
     let source = format!("{}#{}", session, visit.history.len() + 1);
     let external_findings = optional_context(
         "earlier findings",
@@ -660,14 +665,18 @@ fn respond(
                     enriched["skill_record"] = json!(context);
                     enriched["workspace_recall"] = json!(recalled);
                 }
-                let result = match infer(&enriched, schema) {
-                    Err(error)
-                        if packet["task"] == "check_meaning"
-                            && !error.starts_with("Cannot save the session") =>
-                    {
-                        json!({"result":"unverified","quote":""})
+                let result = if let Some(revision) = question_check::arithmetic_cue(&enriched) {
+                    revision
+                } else {
+                    match infer(&enriched, schema) {
+                        Err(error)
+                            if packet["task"] == "check_meaning"
+                                && !error.starts_with("Cannot save the session") =>
+                        {
+                            json!({"result":"unverified","quote":""})
+                        }
+                        other => other?,
                     }
-                    other => other?,
                 };
                 if packet["task"] == "review" {
                     work.record(&Event::Review {
@@ -1154,6 +1163,7 @@ fn run() -> Result<(), String> {
         .and_then(|s| s.to_str())
         .unwrap_or("ephemeral")
         .to_owned();
+    let supervision_enabled = astra || env::var_os("OPENROUTER_SUPERVISOR_MODEL").is_some();
     if astra {
         let dir = workspace_dir
             .as_deref()
@@ -1422,11 +1432,14 @@ fn run() -> Result<(), String> {
         if !shadow {
             optional_context(
                 "activity preparation",
-                background.schedule(&visit, journal.as_ref(), queue.as_ref()),
+                background.schedule(&visit, journal.as_ref(), queue.as_ref(), workspace.as_mut()),
             );
         }
         if let (Some(q), Some(dir)) = (&queue, &workspace_dir) {
-            if preparation::consolidate() && !discovery::active(&visit) && !visit.history.is_empty()
+            if supervision_enabled
+                && preparation::consolidate()
+                && !discovery::active(&visit)
+                && !visit.history.is_empty()
             {
                 let scheduled = q
                     .schedule(
@@ -1616,6 +1629,7 @@ fn run() -> Result<(), String> {
                 continue;
             }
             if command == "/quit"
+                && supervision_enabled
                 && preparation::consolidate()
                 && !discovery::active(&visit)
                 && !visit.history.is_empty()
@@ -2070,7 +2084,13 @@ fn run() -> Result<(), String> {
         let before = visit.history.len();
         if !practice::respond(&mut visit, &mut journal, &session, &prepared, &mut config)?
             && (shadow
-                || !preparation::deliver(&mut visit, &mut journal, queue.as_ref(), &mut config)?)
+                || !preparation::deliver(
+                    &mut visit,
+                    &mut journal,
+                    queue.as_ref(),
+                    &mut config,
+                    workspace.as_mut(),
+                )?)
         {
             respond(
                 &mut config,

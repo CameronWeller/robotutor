@@ -1,5 +1,6 @@
 //! Learner-facing projections of delivered work. Each judgment stays attached to the task it concerns.
 use crate::lesson::Lesson;
+use crate::student_recall::{Estimate, StudentRecall};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 use tutor_lab::curriculum::OutcomeId;
@@ -100,6 +101,8 @@ pub struct Skill {
     pub due: bool,
     pub due_in: Option<u32>,
     pub latest_day: u32,
+    recall: StudentRecall,
+    pub estimate: Option<Estimate>,
     prior: Option<Prior>,
     exposures: Vec<Exposure>,
     seen_tasks: BTreeSet<String>,
@@ -123,6 +126,8 @@ impl Skill {
             due: false,
             due_in: None,
             latest_day: 0,
+            recall: StudentRecall::default(),
+            estimate: None,
             prior: None,
             exposures: vec![],
             seen_tasks: BTreeSet::new(),
@@ -164,7 +169,7 @@ impl Skill {
                 .collect::<Vec<_>>()
                 .join(" ")
                 .to_lowercase();
-            let fresh = self.seen_tasks.insert(task_key);
+            let fresh = !task_key.is_empty() && self.seen_tasks.insert(task_key);
             let validated = obs.verified();
             let judge = match obs.action.as_str() {
                 "complete" => Judgment::Correct,
@@ -188,6 +193,8 @@ impl Skill {
                 && day.is_some()
                 && matches!(judge, Judgment::Correct | Judgment::Incorrect)
             {
+                self.recall
+                    .check(at.day, judge == Judgment::Correct, &work.source);
                 let mut attempt = Attempt {
                     scope: cell.scope,
                     id: sequence,
@@ -259,9 +266,14 @@ impl Skill {
                     self.changed_form = false;
                     self.prior = None;
                 }
+            } else {
+                self.recall.exposure();
             }
-        } else if !work.exercise.is_empty() {
-            self.last_task = work.exercise.clone();
+        } else {
+            self.recall.exposure();
+            if !work.exercise.is_empty() {
+                self.last_task = work.exercise.clone();
+            }
         }
         if day.is_some() {
             self.exposures.push(Exposure { cell, at });
@@ -269,10 +281,13 @@ impl Skill {
     }
     pub fn schedule(&mut self, today: u32, next_day_guided_review: bool) {
         let interval = if self.prior.is_none() {
-            let guided_success = self.latest_assessment.as_ref().is_some_and(|observation| {
-                observation.assisted && observation.demonstrated()
-            });
-            if (next_day_guided_review && guided_success) || matches!(self.last_action.as_str(), "repair" | "partial") {
+            let guided_success = self
+                .latest_assessment
+                .as_ref()
+                .is_some_and(|observation| observation.assisted && observation.demonstrated());
+            if (next_day_guided_review && guided_success)
+                || matches!(self.last_action.as_str(), "repair" | "partial")
+            {
                 1
             } else {
                 7
@@ -297,6 +312,12 @@ impl Skill {
                 _ => 7,
             }
         };
+        self.estimate = self.recall.at(today);
+        let interval = self
+            .recall
+            .review_interval()
+            .filter(|_| self.estimate.is_some())
+            .unwrap_or(interval);
         if self.latest_day > 0 {
             let cell = self.cell();
             let checkpoint = reconcile(
@@ -315,6 +336,14 @@ impl Skill {
             self.due = remaining == 0;
             self.due_in = Some(remaining);
         }
+    }
+    pub fn estimate_unavailable(&self) -> Option<&'static str> {
+        self.estimate
+            .is_none()
+            .then(|| self.recall.unavailable_reason())
+    }
+    pub fn recall_scores(&self) -> Option<(usize, f64, f64)> {
+        self.recall.brier()
     }
     pub fn prior_tasks(&self) -> Vec<String> {
         self.seen_tasks.iter().cloned().collect()
@@ -336,6 +365,31 @@ impl Skill {
             "introduced"
         }
     }
+}
+
+pub fn teaching_context(skills: &[Skill], target: &Target) -> Vec<serde_json::Value> {
+    use serde_json::json;
+
+    let active = target.key();
+    let mut relevant: Vec<_> = skills
+        .iter()
+        .filter(|s| s.target.key() == active || s.target.label() == target.label() || s.due)
+        .collect();
+    relevant.sort_by_key(|s| s.target.key() != active);
+    relevant
+        .into_iter()
+        .take(8)
+        .map(|s| {
+            json!({
+                "objective": s.target.objective, "active_objective": s.target.key() == active,
+                "state": s.status(), "unaided_recall_estimate": s.estimate,
+            "estimate_unavailable_reason": s.estimate_unavailable(),
+                "completed_exercise": s.latest_assessment.as_ref().filter(|o| o.demonstrated())
+                    .map(|o| json!({"objective":o.target.objective,"with_support":o.assisted})),
+                "review_due": s.due, "last_action": s.last_action, "source": s.last_source
+            })
+        })
+        .collect()
 }
 
 #[cfg(test)]
@@ -365,6 +419,56 @@ mod tests {
             }),
         }
     }
+    #[test]
+    fn active_objective_forecast_survives_a_full_list_of_due_reviews() {
+        let target = work(10, "a", false).target;
+        let mut skills: Vec<_> = (0..9)
+            .map(|i| {
+                let mut s = Skill::new(Target {
+                    topic: format!("Other {i}"),
+                    ..Default::default()
+                });
+                s.due = true;
+                s
+            })
+            .collect();
+        let mut active = Skill::new(target.clone());
+        active.encounter(&work(10, "a", false), 1, true);
+        active.encounter(&work(30, "b", false), 2, true);
+        active.schedule(35, false);
+        skills.push(active);
+        let packet = teaching_context(&skills, &target);
+        assert_eq!(packet.len(), 8);
+        assert_eq!(packet[0]["active_objective"], true);
+        assert_eq!(packet[0]["unaided_recall_estimate"]["source"], "day-30#1");
+        assert_eq!(packet[0]["unaided_recall_estimate"]["delayed_checks"], 1);
+        assert!(packet[1]["unaided_recall_estimate"].is_null());
+    }
+
+    #[test]
+    fn repeated_assisted_undated_and_unverified_work_cannot_establish_a_forecast() {
+        let first = work(1, "a", false);
+        for kind in ["repeated", "assisted", "undated", "unverified", "empty"] {
+            let mut skill = Skill::new(first.target.clone());
+            skill.encounter(&first, 1, true);
+            let mut middle = work(10, "b", kind == "assisted");
+            let obs = middle.observation.as_mut().unwrap();
+            match kind {
+                "repeated" => obs.exercise.clone_from(&first.exercise),
+                "undated" => middle.day = None,
+                "unverified" => obs.validation = "luna_only".into(),
+                "empty" => obs.exercise.clear(),
+                _ => {}
+            }
+            skill.encounter(&middle, 2, true);
+            skill.schedule(12, false);
+            assert!(skill.estimate.is_none(), "{kind}");
+            skill.encounter(&work(25, "c", false), 3, true);
+            skill.schedule(26, false);
+            assert_eq!(skill.estimate.unwrap().delayed_checks, 0, "{kind}");
+        }
+    }
+
     #[test]
     fn guided_probability_success_schedules_a_fresh_independent_check() {
         let case: serde_json::Value = serde_json::from_str(include_str!("../../../fixtures/conditional-probability-v1.json")).unwrap();

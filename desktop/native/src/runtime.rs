@@ -316,7 +316,7 @@ pub struct Tutor {
 impl Tutor {
     pub fn start(rt: &Runtime, folder: &Path, visit: &str) -> Result<Self> {
         let mut cmd = command(&rt.tutor);
-        if env::var("ROBOTUTOR_ASTRA_REVIEW").as_deref() != Ok("0") {
+        if env::var("ROBOTUTOR_ASTRA_REVIEW").as_deref() == Ok("1") {
             cmd.arg("--astra");
         }
         let mut child = cmd

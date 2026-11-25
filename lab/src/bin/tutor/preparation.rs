@@ -67,7 +67,11 @@ pub fn consolidated(v: &Visit) -> Value {
         "practice":v.practice_history.iter().rev().filter(|e|!v.practice_corrections.iter().any(|c|c.source==e.source)).take(3).map(|e|json!({"source":e.source,"activity":e.activity,"assisted":e.work.helped || e.earlier_help,"decision":e.decision,"evidence":e.feedback})).collect::<Vec<_>>(),
         "corrections":v.practice_corrections.iter().rev().take(3).collect::<Vec<_>>()})
 }
-fn packet(v: &Visit, j: &Journal) -> Option<Value> {
+fn packet(
+    v: &Visit,
+    j: &Journal,
+    workspace: Option<&mut crate::memory::Workspace>,
+) -> Option<Value> {
     let l = &v.lesson;
     if !j.workspace_mode
         || l.prepared_selection
@@ -88,6 +92,20 @@ fn packet(v: &Visit, j: &Journal) -> Option<Value> {
         return None;
     }
     let mut context = json!({"goal":l.declared_goal,"objective":l.objective,"exercise":l.active_step(),"criterion":l.rubric.as_ref()?.criterion,"assignment":j.assignment,"recent_questions":v.recent_questions.iter().rev().take(2).collect::<Vec<_>>()});
+    if let Some(w) = workspace {
+        let key = crate::study::Target::from_lesson(l).key();
+        if let Some(skills) =
+            crate::optional_context("practice recall", w.sync().and_then(|_| w.skills()))
+        {
+            if let Some(estimate) = skills
+                .into_iter()
+                .find(|s| s.target.key() == key)
+                .and_then(|s| s.estimate)
+            {
+                context["unaided_recall_estimate"] = json!(estimate);
+            }
+        }
+    }
     if consolidate() {
         context["prior_evidence"] = consolidated(v);
     }
@@ -98,7 +116,7 @@ fn key(v: &Visit, j: &Journal, q: &Queue, ctx: &Value) -> Result<String> {
         q.0.query_row("SELECT coalesce(max(id),0) FROM notes", [], |r| r.get(0))
             .map_err(|e| e.to_string())?;
     Ok(digest(&(
-        "ordinary-preparation/2",
+        "ordinary-preparation/3",
         j.path.file_name().and_then(|s| s.to_str()),
         v.history.len(),
         v.history.last(),
@@ -178,7 +196,7 @@ fn prepare(dir: PathBuf, id: String, ctx: Value, cancel: Arc<AtomicBool>) -> Res
             credentials::existing()?.ok_or("No saved provider connection for preparation.")?;
         let string = json!({"type":"string"});
         let form = crate::lesson::object(json!({"exercise":string,"criterion":string}));
-        let req=schema_request("Prepare two standalone, keyboard-accessible practice moves on this exact objective. The challenge requires a fresh application after a successful answer. The support move addresses the likely difficulty with a small scaffold. Keep both within the assignment. Give a precise criterion including the correct answer, acceptable reasoning, and units for each new problem. Start each exercise directly with its scenario. The two branches are independent alternatives. Avoid labels, references to another problem, or instructions to complete another branch first. No learner answer has been received.",&ctx,crate::lesson::object(json!({"challenge":form,"support":form})),900);
+        let req=schema_request("Prepare two standalone, keyboard-accessible practice moves on this exact objective. The challenge requires a fresh application after a successful answer. The support move addresses the likely difficulty with a small scaffold. Keep both within the assignment. Give a precise criterion including the correct answer, acceptable reasoning, and units for each new problem. Start each exercise directly with its scenario. The two branches are independent alternatives. Avoid labels, references to another problem, or instructions to complete another branch first. Use the dated recall estimate when available. Embed an unaided check after a long gap or miss. Change a meaningful condition after recent independent success. Keep the method out of the challenge question. No learner answer has been received.",&ctx,crate::lesson::object(json!({"challenge":form,"support":form})),900);
         let moves: Pair = serde_json::from_value(background_call(&q, &id, &req, &cfg)?)
             .map_err(|e| e.to_string())?;
         if cancel.load(Ordering::Acquire) {
@@ -232,7 +250,13 @@ impl Background {
     pub fn interrupt(&self) {
         self.cancel.store(true, Ordering::Release);
     }
-    pub fn schedule(&mut self, v: &Visit, j: Option<&Journal>, q: Option<&Queue>) -> Result<()> {
+    pub fn schedule(
+        &mut self,
+        v: &Visit,
+        j: Option<&Journal>,
+        q: Option<&Queue>,
+        workspace: Option<&mut crate::memory::Workspace>,
+    ) -> Result<()> {
         if !enabled() || v.pending.is_some() {
             return Ok(());
         }
@@ -244,7 +268,7 @@ impl Background {
             self.key = None;
             return Ok(());
         }
-        let Some(ctx) = packet(v, j) else {
+        let Some(ctx) = packet(v, j, workspace) else {
             self.interrupt();
             self.key = None;
             return Ok(());
@@ -281,6 +305,7 @@ pub fn deliver(
     journal: &mut Option<Journal>,
     queue: Option<&Queue>,
     config: &mut Option<crate::Config>,
+    workspace: Option<&mut crate::memory::Workspace>,
 ) -> Result<bool> {
     let (Some(j), Some(q)) = (journal.as_ref(), queue) else {
         return Ok(false);
@@ -294,7 +319,7 @@ pub fn deliver(
     {
         return Ok(false);
     }
-    let Some(ctx) = packet(visit, j) else {
+    let Some(ctx) = packet(visit, j, workspace) else {
         return Ok(false);
     };
     let saved = || -> Result<Option<(String, Reviewed)>> {

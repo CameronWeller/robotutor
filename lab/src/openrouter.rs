@@ -296,7 +296,7 @@ impl Config {
     }
     pub fn supervise(&self, request: &Value) -> Result<(String, Value), String> {
         let model = env::var("OPENROUTER_SUPERVISOR_MODEL")
-            .unwrap_or_else(|_| "openai/gpt-6.2-astra".into());
+            .map_err(|_| "Paid supervision requires an explicitly configured supervisor model")?;
         if !valid_model(&model)
             || matches_reported(&model, &self.luna)
             || matches_reported(&model, &self.jev)

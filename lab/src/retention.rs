@@ -60,6 +60,11 @@ pub enum ReadError {
     InvalidChronology,
 }
 
+/// Expected recall at an elapsed whole-day gap for a given stability.
+pub fn retrievability(elapsed_days: u32, stability_days: f64) -> f64 {
+    1.0 / (1.0 + f64::from(elapsed_days) / (9.0 * stability_days))
+}
+
 /// `Some(exposures)` attests complete coverage since the prior performance, including an empty set.
 /// `None` means unknown coverage. This slice requires a prior eligible performance for positive
 /// durability, where the full reference fold can start its clock from a guided encounter.
@@ -106,7 +111,7 @@ pub fn read(
         let memory_gap = 9.0 * p.stability_days * (1.0 / p.threshold - 1.0);
         let horizon = f64::from(target_day.unwrap_or(as_of.day).saturating_sub(as_of.day));
         Some(Forecast {
-            recall: 1.0 / (1.0 + elapsed / (9.0 * p.stability_days)),
+            recall: retrievability(as_of.day - p.verified.day, p.stability_days),
             refresh_due: elapsed >= memory_gap,
             days_since_exposure: exposures
                 .map(|_| as_of.day - last.unwrap_or(p.verified).max(p.verified).day),

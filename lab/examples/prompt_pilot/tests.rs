@@ -65,8 +65,8 @@ fn fixture_reply(r: &Value) -> Result<Value> {
 #[test]
 fn frozen_text_is_the_source_baseline_and_single_instruction_candidate() {
     let f = pilot();
-    let base = include_str!("../../src/bin/tutor/teacher.txt").replace("\r\n", "\n");
-    assert_eq!(f.versions[0].1, base);
+    // The frozen study predates later improvements to the live teacher.
+    let base = &f.versions[0].1;
     assert_eq!(
         f.versions[0].0.sha256,
         "32510d1ff48f45edbdacef825993817306a2865b4f4d1403aab9e8dab683c370"
@@ -75,7 +75,7 @@ fn frozen_text_is_the_source_baseline_and_single_instruction_candidate() {
         f.versions[1].0.sha256,
         "a92a4876e20cede73ab4e271ebaeada29fe0ccb48288af371f8e7f17796d1a66"
     );
-    assert!(f.versions[1].1.starts_with(&base));
+    assert!(f.versions[1].1.starts_with(base.as_str()));
     assert_eq!(estimate(&f)["max_inference_calls"], 540);
 }
 

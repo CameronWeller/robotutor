@@ -84,6 +84,23 @@ pub fn list(skills: &[Skill], arg: &str) -> Result<(), String> {
             s.status(),
             display(&s.history.join("\n"))
         );
+        if let Some(e) = &s.estimate {
+            println!(
+                "Estimated unaided recall · {:.0}% after {} days · {} delayed checks · {}",
+                100. * e.probability,
+                e.elapsed_days,
+                e.delayed_checks,
+                e.source
+            );
+        } else if let Some(reason) = s.estimate_unavailable() {
+            println!("Unaided recall estimate unavailable · {reason}");
+        }
+        if let Some((count, learned, fixed)) = s.recall_scores() {
+            println!(
+                "Forecast error on {} delayed checks · Brier {:.3} · fixed 14-day baseline {:.3}",
+                count, learned, fixed
+            );
+        }
         println!("Latest source · {}", s.last_source);
     } else {
         if skills.is_empty() {
