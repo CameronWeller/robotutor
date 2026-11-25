@@ -10,6 +10,12 @@ Robotutor is licensed under AGPL-3.0. Nunito is distributed under the accompanyi
 
 Begin with a small, useful discovery question. A learner can correct what Robotutor inferred, inspect why the tutor chose its next move, and return to unfinished work. Credit independent reasoning at the point where it appears, record the help given, and revisit the skill in a different task to assess retention. The same lesson state supports terminal and native desktop clients. The [educational charter](docs/foundation/educational-charter.md) describes how these choices serve the learner.
 
+The contributor suite exercises these decisions with fictional learners.
+
+- During discovery, a learner correction withdraws a proposal that depends on the corrected observation. The tutor waits for agreement before delivering the proposed exercise. [Discovery tests](lab/src/bin/tutor/discovery/tests.rs)
+- Sufficient reasoning can move the learner to a new exercise while the saved assessment still records partial understanding. A guided solution schedules another opportunity to try independently. [Advancement tests](lab/src/bin/tutor/judgment/tests.rs) · [Independent review tests](lab/src/bin/tutor/study.rs)
+- Reopening a native assignment restores its private plan and preserves a draft saved by another writer. The macOS workflow also opens a fictional course page and checks that selecting its assignment returns the expected ID to the lesson. [Draft recovery tests](desktop/native/src/assignment.rs) · [Course handoff check](desktop/check_native_courses.py)
+
 ## Maintaining the private archive
 
 After a reviewed append, refresh the submodule with `git -C logs fetch origin main` and `git -C logs merge --ff-only origin/main` from a clean submodule checkout. Run `python3 tools/transcript_changes.py` to compare dated records to the private review inventory. Run `python3 tools/check_handoffs.py` to verify the recorded code and archive commits. Stage the gitlink with `git add logs` only when recording a new checkpoint.
