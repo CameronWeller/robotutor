@@ -196,6 +196,7 @@ fn review(
     draft: &Value,
     rubric: &mut Option<Rubric>,
     approved_feedback: &mut Option<String>,
+    assisted: &mut bool,
 ) -> Result<Option<String>, String> {
     let mut shape = object(
         json!({"verdict":{"type":"string","enum":["accept","revise"]},"reason":{"type":"string"},"criterion":{"type":"string"},"mode":{"type":"string","enum":["written","witness","private","unassessable"]}}),
@@ -241,6 +242,15 @@ fn review(
     }
     checked(generate, &review, &shape, |v| match v["verdict"].as_str() {
         Some("accept") => {
+            if let Some(cue) = v["method_cue"].as_str().map(str::trim).filter(|c| !c.is_empty()) {
+                let visible_fields = [
+                    "bridge_and_instruction", "worked_example", "explanation", "exercise",
+                    "feedback", "visible_reply", "new_fact",
+                ];
+                *assisted |= visible_fields.iter().any(|field| {
+                    draft[field].as_str().is_some_and(|text| text.contains(cue))
+                });
+            }
             *rubric = v["criterion"]
                 .as_str()
                 .zip(v["mode"].as_str())
@@ -631,6 +641,7 @@ impl Lesson {
                     &json!({"move":"review","exercise":exercise}),
                     &mut pending.rubric,
                     &mut None,
+                    &mut pending.assisted,
                 )? {
                     packet["revision"] = json!({"issue":reason});
                     if attempt == 1 {
@@ -1483,6 +1494,7 @@ impl Lesson {
                         &turn,
                         &mut reviewed_rubric,
                         &mut approved_feedback,
+                        &mut self.assisted,
                     )?
                 };
                 if let Some(reason) = issue {

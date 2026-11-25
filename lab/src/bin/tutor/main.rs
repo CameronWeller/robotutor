@@ -137,6 +137,14 @@ fn request(
     task["earlier_exchanges_outside_window"] = json!(history.len() - turns.len());
     messages.extend(turns.into_iter().rev().flatten());
     messages.push(json!({"role":"user","content":task.to_string()}));
+    // Enrich the live provider contract while retaining the historical replay signature.
+    let mut schema = schema.clone();
+    if task["task"] == "review" && schema["properties"]["verdict"].is_object() {
+        schema["properties"]["method_cue"] = json!({"type":"string"});
+        if let Some(required) = schema["required"].as_array_mut() {
+            required.push(json!("method_cue"));
+        }
+    }
     Ok(
         json!({"messages":messages,"max_tokens":2400,"provider":{"require_parameters":true},
        "response_format":{"type":"json_schema","json_schema":{"name":"lesson_turn","strict":true,"schema":schema}}}),

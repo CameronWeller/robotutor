@@ -83,6 +83,17 @@ fn probability_probe_keeps_the_original_task_and_marks_followup_as_guided() {
 }
 
 #[test]
+fn reviewed_method_cue_marks_the_new_exercise_as_assisted() {
+    let mut lesson = active();
+    let mut draft = advanced("Which source distinguishes the accounts?");
+    draft["turn"]["bridge_and_instruction"] = json!("Compare the timestamps on the two photographs.");
+    let mut verdict = accepted();
+    verdict["method_cue"] = json!("Compare the timestamps");
+    play(&mut lesson, Some("Give me a harder one."), vec![route("harder", ""), draft, verdict]).unwrap();
+    assert!(lesson.assisted);
+}
+
+#[test]
 fn changing_nouns_is_rejected_and_skipping_never_awards_credit() {
     let mut lesson = active();
     let old = lesson.exercise.clone();
