@@ -33,6 +33,22 @@ fn fresh() -> Lesson {
 }
 
 #[test]
+fn provisional_evidence_questions_use_the_learners_words_and_change_on_return() {
+    let mut lesson = fresh();
+    let words = "The measurements are tentative.";
+    let mut proposal = response("follow", "Which instrument did you use?");
+    proposal["qualified_claim"] = json!(words);
+    assert!(turn(&mut lesson, words, "one#1", proposal.clone())
+        .unwrap()
+        .contains("What in your observations"));
+    assert!(turn(&mut lesson, words, "one#2", proposal.clone())
+        .unwrap()
+        .contains("What new observation"));
+    proposal["qualified_claim"] = json!("The measurements were wrong.");
+    assert!(turn(&mut lesson, words, "one#3", proposal).is_err());
+}
+
+#[test]
 fn reflection_and_an_explicit_choice_guard_each_transition() {
     let mut l = fresh();
     assert!(turn(

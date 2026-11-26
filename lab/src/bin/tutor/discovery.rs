@@ -111,6 +111,8 @@ struct Decision {
 #[derive(Deserialize)]
 struct Move {
     decision: Decision,
+    #[serde(default)]
+    qualified_claim: String,
     subject: String,
     areas: Vec<String>,
     findings: Vec<Finding>,
@@ -171,7 +173,8 @@ fn shape(state: &Discovery, early: bool) -> Value {
     object(json!({
         "decision":{"anyOf":choices}, "subject":s, "areas":list,
         "findings":{"type":"array","items":finding}, "area":s,
-        "reply":required_text,"reason":required_text
+        "reply":required_text,"reason":required_text,
+        "qualified_claim":{"type":"string","maxLength":180}
     }))
 }
 pub const OLD_OPENING: &str =
@@ -357,12 +360,21 @@ impl Discovery {
         // A proposal cites its rationale. The next lesson also needs corrections
         // and the conditions under which other relevant work was demonstrated.
         let superseded = self.profile.superseded();
-        let mut sources: Vec<_> = self.profile.facts.iter().rev()
-            .filter(|(id, fact)| !superseded.contains(id)
-                && (fact.subject.is_empty() || fact.subject == self.subject))
+        let mut sources: Vec<_> = self
+            .profile
+            .facts
+            .iter()
+            .rev()
+            .filter(|(id, fact)| {
+                !superseded.contains(id)
+                    && (fact.subject.is_empty() || fact.subject == self.subject)
+            })
             .collect();
         sources.sort_by_key(|(id, fact)| {
-            let cited = self.proposal.as_ref().is_some_and(|p| p.sources.contains(id));
+            let cited = self
+                .proposal
+                .as_ref()
+                .is_some_and(|p| p.sources.contains(id));
             (!cited, fact.kind != "correction")
         });
         let observations: Vec<_> = sources.into_iter().take(8)
@@ -535,6 +547,24 @@ impl Discovery {
         let prior_question = self.question.clone();
         self.reason = m.reason;
         self.question = m.reply;
+        let claim = m.qualified_claim.trim();
+        if self.phase == Phase::Learner && m.decision.action == "follow" && !claim.is_empty() {
+            if !words.contains(claim) || claim.contains('?') || claim.chars().count() > 180 {
+                return Err(
+                    "Quote the learner's qualified claim exactly, or leave qualified_claim empty."
+                        .into(),
+                );
+            }
+            self.question =
+                if prior_question.starts_with("What in your observations led you to write") {
+                    format!("What new observation would change your confidence in “{claim}”?")
+                } else {
+                    format!("What in your observations led you to write “{claim}”?")
+                };
+            self.reason =
+                "You qualified a conclusion. Your reason will help me choose what to work on next."
+                    .into();
+        }
         if m.decision.action == "pause" {
             let reply = self.question.clone();
             self.question = prior_question;
