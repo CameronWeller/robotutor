@@ -1,6 +1,58 @@
 use crate::{runtime::s, theme};
 use eframe::egui::{self, Ui};
 use serde_json::{Map, Value};
+fn coordinates(value: &str) -> (&str, &str) {
+    let value = value.trim();
+    let pair = value
+        .strip_prefix('(')
+        .and_then(|v| v.strip_suffix(')'))
+        .unwrap_or(value);
+    pair.split_once(',')
+        .map_or((pair, ""), |(x, y)| (x.trim(), y.trim()))
+}
+
+fn coordinate_entry(ui: &mut Ui, key: &str, value: &mut String) {
+    let (x, y) = coordinates(value);
+    let (mut x, mut y) = (x.to_owned(), y.to_owned());
+    let changed = ui
+        .push_id(key, |ui| {
+            ui.horizontal(|ui| {
+                let edit = |ui: &mut Ui, axis: &str, text: &mut String| {
+                    let label = ui.label(axis);
+                    ui.add(
+                        egui::TextEdit::singleline(text)
+                            .id_salt(axis)
+                            .desired_width(64.0),
+                    )
+                    .labelled_by(label.id)
+                };
+                let edit_x = edit(ui, "X", &mut x);
+                if edit_x.changed() && x.contains(',') {
+                    // Keep paste support for ordered pairs from existing lessons.
+                    let (a, b) = coordinates(&x);
+                    (x, y) = (a.to_owned(), b.to_owned());
+                }
+                let edit_y = edit(ui, "Y", &mut y);
+                edit_x.changed() || edit_y.changed()
+            })
+            .inner
+        })
+        .inner;
+    if changed {
+        *value = if x.is_empty() && y.is_empty() {
+            String::new()
+        } else {
+            format!("{x},{y}")
+        };
+    }
+    if [&x, &y]
+        .iter()
+        .any(|v| !v.is_empty() && v.parse::<f64>().map_or(true, |n| !n.is_finite()))
+    {
+        ui.label("Enter a number for each coordinate.");
+    }
+}
+
 pub fn editor(
     ui: &mut Ui,
     form: &Value,
@@ -52,14 +104,10 @@ pub fn editor(
                     .desired_rows(3)
                     .desired_width(f32::INFINITY),
             );
+        } else if kind == "point" {
+            coordinate_entry(ui, key, &mut value);
         } else {
-            ui.add(
-                egui::TextEdit::singleline(&mut value).hint_text(if kind == "point" {
-                    "x,y"
-                } else {
-                    ""
-                }),
-            );
+            ui.add(egui::TextEdit::singleline(&mut value));
         }
         if value != old {
             fields.insert(key.into(), value.into());
