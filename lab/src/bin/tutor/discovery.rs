@@ -121,6 +121,37 @@ struct Move {
     reason: String,
 }
 
+// A standalone closing judgment in a written observation is already a source quote.
+// Recognize this unambiguous wording even when the generated move omits its quotation.
+fn closing_evidence_claim(words: &str) -> Option<&str> {
+    if words.contains('?') {
+        return None;
+    }
+    let (observations, claim) = words.trim().rsplit_once('\n')?;
+    if observations.trim().is_empty() {
+        return None;
+    }
+    let claim = claim.trim();
+    let lower = claim.trim_end_matches('.').to_ascii_lowercase();
+    let mut terms = lower.split_whitespace();
+    if terms.next() == Some("the")
+        && matches!(
+            terms.next(),
+            Some("evidence" | "reading" | "measurements" | "results" | "findings")
+        )
+        && matches!(terms.next(), Some("is" | "are" | "was" | "were"))
+        && matches!(
+            terms.next(),
+            Some("preliminary" | "tentative" | "uncertain" | "inconclusive")
+        )
+        && terms.next().is_none()
+    {
+        Some(claim)
+    } else {
+        None
+    }
+}
+
 fn shape(state: &Discovery, early: bool) -> Value {
     let mut actions = vec!["follow", "pause"];
     match state.phase {
@@ -547,7 +578,11 @@ impl Discovery {
         let prior_question = self.question.clone();
         self.reason = m.reason;
         self.question = m.reply;
-        let claim = m.qualified_claim.trim();
+        let claim = if m.qualified_claim.trim().is_empty() {
+            closing_evidence_claim(words).unwrap_or("")
+        } else {
+            m.qualified_claim.trim()
+        };
         if self.phase == Phase::Learner && m.decision.action == "follow" && !claim.is_empty() {
             if !words.contains(claim) || claim.contains('?') || claim.chars().count() > 180 {
                 return Err(
@@ -555,12 +590,13 @@ impl Discovery {
                         .into(),
                 );
             }
-            self.question =
-                if prior_question.starts_with("What in your observations led you to write") {
-                    "Looking back at the original observation, what about it made you hesitate to draw a firmer conclusion?".into()
-                } else {
-                    format!("What in your observations led you to write “{claim}”?")
-                };
+            self.question = if prior_question
+                .starts_with("What in your observations led you to write")
+            {
+                "Looking back at the original observation, what about it made you hesitate to draw a firmer conclusion?".into()
+            } else {
+                format!("What in your observations led you to write “{claim}”?")
+            };
             self.reason =
                 "You qualified a conclusion. Your reason will help me choose what to work on next."
                     .into();

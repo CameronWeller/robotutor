@@ -33,6 +33,28 @@ fn fresh() -> Lesson {
 }
 
 #[test]
+fn discovery_reads_an_explicit_closing_evidence_judgment_if_the_model_omits_it() {
+    let words = "I sampled twice.\n\nThe results were inconclusive.";
+    let mut lesson = fresh();
+    let question = turn(
+        &mut lesson,
+        words,
+        "one#1",
+        response("follow", "Which instrument?"),
+    )
+    .unwrap();
+    assert!(question.contains("The results were inconclusive."));
+    assert!(
+        closing_evidence_claim("Can we change subjects?\nThe results were inconclusive.").is_none()
+    );
+    assert!(closing_evidence_claim(
+        "I sampled twice.\nThe results were inconclusive because the readings varied."
+    )
+    .is_none());
+    assert!(closing_evidence_claim("I was uncertain.").is_none());
+}
+
+#[test]
 fn provisional_evidence_questions_use_the_learners_words_and_change_on_return() {
     let mut lesson = fresh();
     let words = "The measurements are tentative.";
