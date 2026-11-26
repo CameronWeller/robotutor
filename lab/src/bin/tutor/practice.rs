@@ -860,11 +860,20 @@ pub fn submission(visit: &Visit) -> Result<Option<(Draft, String)>> {
     {
         return Err(format!("I could not read {}. Enter the number alone or include its displayed unit. Your draft is saved.", field.label));
     }
-    if let Some(field) = form.as_ref().and_then(|r| r.card.fields.iter().find(|f| {
-        f.kind == "point" && visit.draft.fields.get(&f.id)
-            .is_some_and(|v| !v.trim().is_empty() && pair(v.trim()).is_none())
-    })) {
-        return Err(format!("Enter a finite number for both X and Y in {}. Your draft is saved.", field.label));
+    if let Some(field) = form.as_ref().and_then(|r| {
+        r.card.fields.iter().find(|f| {
+            f.kind == "point"
+                && visit
+                    .draft
+                    .fields
+                    .get(&f.id)
+                    .is_some_and(|v| !v.trim().is_empty() && pair(v.trim()).is_none())
+        })
+    }) {
+        return Err(format!(
+            "Enter a finite number for both X and Y in {}. Your draft is saved.",
+            field.label
+        ));
     }
     build_submission(visit, form)
 }
@@ -996,7 +1005,9 @@ mod tests {
         assert_eq!(evaluate(&card, &visit.draft, None, &mut None).0, "advance");
         for value in ["2,", ",6", "NaN,3", "1,inf", "one,3"] {
             visit.draft.fields.insert("second".into(), value.into());
-            assert!(submission(&visit).unwrap_err().contains("Your draft is saved"));
+            assert!(submission(&visit)
+                .unwrap_err()
+                .contains("Your draft is saved"));
             assert_eq!(visit.draft.fields["second"], value);
         }
     }
