@@ -43,7 +43,7 @@ fn provisional_evidence_questions_use_the_learners_words_and_change_on_return() 
         .contains("What in your observations"));
     assert!(turn(&mut lesson, words, "one#2", proposal.clone())
         .unwrap()
-        .contains("What new observation"));
+        .contains("what about it made you hesitate"));
     proposal["qualified_claim"] = json!("The measurements were wrong.");
     assert!(turn(&mut lesson, words, "one#3", proposal).is_err());
 }

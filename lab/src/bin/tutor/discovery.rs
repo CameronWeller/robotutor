@@ -557,7 +557,7 @@ impl Discovery {
             }
             self.question =
                 if prior_question.starts_with("What in your observations led you to write") {
-                    format!("What new observation would change your confidence in “{claim}”?")
+                    "Looking back at the original observation, what about it made you hesitate to draw a firmer conclusion?".into()
                 } else {
                     format!("What in your observations led you to write “{claim}”?")
                 };
