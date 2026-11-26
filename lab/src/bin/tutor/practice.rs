@@ -438,6 +438,11 @@ fn evaluate(
         if form.id == "graph" && failed.len() == 1 && failed[0].id == "relationship" {
             return ("mixed".into(),format!("{observed}Your points fit the ratio. Your sentence reverses which quantity depends on the other. Let’s work on the words."),form.card.mixed.clone());
         }
+        let hint = if form.id == "table" && work.helped {
+            "One pedal turn gives a group of four wheel turns. For three pedal turns, count three groups: 4 + 4 + 4 = 12 wheel turns. Count the groups for each row of your table."
+        } else {
+            &form.card.hint
+        };
         return (
             "support".into(),
             format!(
@@ -447,7 +452,7 @@ fn evaluate(
                     .map(|f| f.label.as_str())
                     .collect::<Vec<_>>()
                     .join(", "),
-                form.card.hint
+                hint
             ),
             form.card.support.clone(),
         );

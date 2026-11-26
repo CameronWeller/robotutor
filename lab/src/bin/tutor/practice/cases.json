@@ -79,15 +79,15 @@
   "words": {
     "topic": "gear ratios",
     "title": "Explain the ratio in words",
-    "prompt": "Your points show (1,3) and (2,6). When pedal turns double, what happens to wheel turns, and why?",
-    "criterion": "Explain how doubling the input doubles the output while the ratio stays constant.",
-    "hint": "Compare the change from three wheel turns to six with the change from one pedal turn to two.",
+    "prompt": "Read (1,3) with its units. Which quantity makes three turns for each turn of the other? Choose the sentence that matches your point.",
+    "criterion": "Identify the input and output of the plotted unit rate.",
+    "hint": "Read the horizontal coordinate as pedal turns and the vertical coordinate as wheel turns.",
     "fields": [
       {
         "id": "relationship",
         "label": "Explain the change",
         "kind": "choice",
-        "choices": ["Wheel turns double because each pedal turn still gives three wheel turns.", "Wheel turns stay at three because the ratio stays at three."],
+        "choices": ["Wheel turns double because each pedal turn still gives three wheel turns.", "Wheel turns double because each wheel turn gives three pedal turns."],
         "key": "Wheel turns double because each pedal turn still gives three wheel turns."
       }
     ],
