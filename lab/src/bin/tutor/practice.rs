@@ -328,9 +328,11 @@ fn check(f: &Field, work: &Draft) -> bool {
         _ => f.key.as_ref().is_none_or(|k| k == value),
     }
 }
-fn pair(value: &str) -> Option<(i32, i32)> {
+fn pair(value: &str) -> Option<(f64, f64)> {
     let (x, y) = value.trim_matches(['(', ')']).split_once(',')?;
-    Some((x.trim().parse().ok()?, y.trim().parse().ok()?))
+    let x = x.trim().parse::<f64>().ok()?;
+    let y = y.trim().parse::<f64>().ok()?;
+    (x.is_finite() && y.is_finite()).then_some((x, y))
 }
 
 fn assess_words(
@@ -858,6 +860,12 @@ pub fn submission(visit: &Visit) -> Result<Option<(Draft, String)>> {
     {
         return Err(format!("I could not read {}. Enter the number alone or include its displayed unit. Your draft is saved.", field.label));
     }
+    if let Some(field) = form.as_ref().and_then(|r| r.card.fields.iter().find(|f| {
+        f.kind == "point" && visit.draft.fields.get(&f.id)
+            .is_some_and(|v| !v.trim().is_empty() && pair(v.trim()).is_none())
+    })) {
+        return Err(format!("Enter a finite number for both X and Y in {}. Your draft is saved.", field.label));
+    }
     build_submission(visit, form)
 }
 
@@ -975,6 +983,21 @@ mod tests {
                     "support"
                 }
             );
+        }
+    }
+    #[test]
+    fn decimal_points_receive_credit_and_incomplete_coordinates_keep_the_draft() {
+        let (card, mut work) = filled("graph");
+        work.fields.insert("first".into(), "(1.0,3.00)".into());
+        let mut visit = Visit::default();
+        install(&mut visit.lesson, card.clone());
+        visit.draft = work;
+        assert!(submission(&visit).unwrap().is_some());
+        assert_eq!(evaluate(&card, &visit.draft, None, &mut None).0, "advance");
+        for value in ["2,", ",6", "NaN,3", "1,inf", "one,3"] {
+            visit.draft.fields.insert("second".into(), value.into());
+            assert!(submission(&visit).unwrap_err().contains("Your draft is saved"));
+            assert_eq!(visit.draft.fields["second"], value);
         }
     }
     #[test]
