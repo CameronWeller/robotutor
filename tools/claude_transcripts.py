@@ -240,6 +240,7 @@ def restore_raw(records, output):
     return written
 
 
+CODE_REPO = None
 PARENT = {}  # The index a running git commit uses, which may be a temporary one for path commits.
 
 
@@ -253,7 +254,7 @@ def isolate_from_hook():
 
 
 def git(repo, *args, check=True):
-    env = dict(os.environ, **PARENT) if PARENT and Path(repo).name != "logs" else None
+    env = dict(os.environ, **PARENT) if PARENT and Path(repo).resolve() == CODE_REPO else None
     return subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True,
                           check=check, env=env).stdout.strip()
 
@@ -307,14 +308,23 @@ def register(repo, session, transcript=None, client="claude"):
         save_state(repo, state)
 
 
+def archive_checkout(repo):
+    separate = git(repo, "config", "--local", "--get", "robotutor.sessionArchivePath", check=False)
+    return Path(separate).resolve() if separate else repo / "logs"
+
+
+def separate_archive(repo):
+    return archive_checkout(repo) != repo / "logs"
+
+
 def archive_ready(repo):
-    archive = repo / "logs"
+    archive = archive_checkout(repo)
     return (archive / ".archive-format").is_file() and \
         (archive / ".archive-format").read_text(encoding="utf-8").strip() == ARCHIVE_FORMAT
 
 
 def verify_destination(repo):
-    archive = repo / "logs"
+    archive = archive_checkout(repo)
     urls = set(git(archive, "remote", "get-url", "--all", "origin").splitlines())
     urls.update(git(archive, "remote", "get-url", "--push", "--all", "origin").splitlines())
     if os.environ.get("GIT_ALLOW_PROTOCOL") == "file" and all(url.startswith("file://") for url in urls):
@@ -372,13 +382,13 @@ def publish_session(repo, session, row):
             batch.append((content, entry))
             size += len(content)
         if size >= BATCH_LIMIT:
-            publish_many(repo / "logs", record, batch, keep_existing=True, message="Append Claude Code session record")
+            publish_many(archive_checkout(repo), record, batch, keep_existing=True, message="Append Claude Code session record")
             row["offset"], batch, size = end, [], 0
-    publish_many(repo / "logs", record, batch, keep_existing=True, message="Append Claude Code session record")
+    publish_many(archive_checkout(repo), record, batch, keep_existing=True, message="Append Claude Code session record")
     if messages:
         row["offset"] = messages[-1][0]
     if not row.get("indexed"):
-        publish_many(repo / "logs", "logs/coverage.md",
+        publish_many(archive_checkout(repo), "logs/coverage.md",
                      [(f"- [{client.title()} development session {tag(session, client)}]({record[5:]})\n", "index-" + client + "-" + tag(session, client))],
                      keep_existing=True, message="Index Claude Code session record")
         row["indexed"] = True
@@ -387,14 +397,14 @@ def publish_session(repo, session, row):
 
 
 def archive_head(repo):
-    archive = repo / "logs"
+    archive = archive_checkout(repo)
     git(archive, "fetch", "--no-tags", "origin", "main")
     return git(archive, "rev-parse", "FETCH_HEAD")
 
 
 def publish_raw(repo, session, row, main):
     """Append every new raw source line, splitting the record into numbered parts as it grows."""
-    archive, base = repo / "logs", row["record"].removesuffix(".md") + "-raw"
+    archive, base = archive_checkout(repo), row["record"].removesuffix(".md") + "-raw"
     client = row.get("client", "claude")
     raw = row.setdefault("raw", {})
     head = archive_head(repo)
@@ -446,13 +456,20 @@ def publish_raw(repo, session, row, main):
 
 def checkpoint(repo):
     """Fast-forward the submodule to the archive's main branch and stage the gitlink."""
-    archive = repo / "logs"
+    archive = archive_checkout(repo)
     if git(archive, "status", "--porcelain"):
         raise RuntimeError("The logs submodule has local changes. Archive records are only appended by the tools.")
     before = git(archive, "rev-parse", "HEAD")
     git(archive, "fetch", "--no-tags", "origin", "main")
     git(archive, "merge", "--ff-only", "FETCH_HEAD")
-    git(repo, "add", "logs")
+    if separate_archive(repo):
+        pointer = repo / "logs" / "archive-revision"
+        if pointer.is_symlink():
+            raise ValueError("Expected a regular archive checkpoint file")
+        pointer.write_text(git(archive, "rev-parse", "HEAD") + "\n", encoding="ascii")
+        git(repo, "add", "logs/archive-revision")
+    else:
+        git(repo, "add", "logs")
     return before != git(archive, "rev-parse", "HEAD")
 
 
@@ -483,13 +500,20 @@ def stage_published(repo):
     """Include an archive checkpoint made earlier, for example by the Claude Code hook before a path commit."""
     if not archive_ready(repo) or not any(row.get("record") for row in load_state(repo).values()):
         return
+    if separate_archive(repo):
+        pointer = repo / "logs" / "archive-revision"
+        if pointer.is_file():
+            git(repo, "add", "logs/archive-revision")
+        return
     staged = git(repo, "ls-files", "-s", "--", "logs").split()
-    if not staged or staged[1] != git(repo / "logs", "rev-parse", "HEAD"):
+    if not staged or staged[1] != git(archive_checkout(repo), "rev-parse", "HEAD"):
         git(repo, "add", "logs")
 
 
 def verify_gitlink(repo, old_rev, new_rev=None):
     """The staged or committed logs gitlink may only move forward along the archive history."""
+    if separate_archive(repo):
+        return []  # Legacy repositories store a regular checkpoint, not a submodule.
     def link(rev):
         if rev is None:
             out = git(repo, "ls-files", "-s", "--", "logs").split()
@@ -501,7 +525,7 @@ def verify_gitlink(repo, old_rev, new_rev=None):
         return ["The logs submodule must not be removed."]
     if not old or old == new or not archive_ready(repo):
         return []
-    if subprocess.run(["git", "-C", str(repo / "logs"), "merge-base", "--is-ancestor", old, new],
+    if subprocess.run(["git", "-C", str(archive_checkout(repo)), "merge-base", "--is-ancestor", old, new],
                       capture_output=True).returncode:
         return [f"The logs gitlink moved from {old[:12]} to {new[:12]}, which is not a fast-forward."]
     return []
@@ -521,6 +545,8 @@ def install_git_hooks(repo):
         hook = hooks / name
         body = ("#!/bin/sh\n" + MARKER + "\n"
                 "tool=\"$(git rev-parse --show-toplevel)/tools/claude-transcripts\"\n"
+                "configured=$(git config --local --get robotutor.sessionArchiveTool || true)\n"
+                "[ -z \"$configured\" ] || tool=$configured\n"
                 "[ -f \"$tool\" ] || exit 0\n"
                 f"exec sh \"$tool\" {action}\n")
         if hook.exists() and MARKER not in hook.read_text(encoding="utf-8", errors="replace"):
@@ -563,7 +589,7 @@ def guard(command):
 
 def touches_archive(repo, path):
     try:
-        return Path(path).resolve().is_relative_to((repo / "logs").resolve())
+        return Path(path).resolve().is_relative_to((archive_checkout(repo)).resolve())
     except (OSError, ValueError):
         return False
 
@@ -603,7 +629,7 @@ def hook(repo, event, client="claude"):
             return 2
         if COMMIT.search(command):
             try:
-                capture(repo, event.get("session_id"), event.get("transcript_path"))
+                capture(repo)
             except Exception as exc:  # An unarchived commit must not proceed.
                 print(f"Transcript capture failed, so the commit was blocked: {exc}", file=sys.stderr)
                 return 2
@@ -650,6 +676,8 @@ def main():
         return 0
     isolate_from_hook()
     repo = Path(git(args.repo or os.environ.get("CLAUDE_PROJECT_DIR") or Path.cwd(), "rev-parse", "--show-toplevel"))
+    global CODE_REPO
+    CODE_REPO = repo.resolve()
     if args.action == "pre-push":
         problems = pre_push(repo, sys.stdin.read().splitlines())
         for problem in problems:
