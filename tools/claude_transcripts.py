@@ -473,8 +473,8 @@ def checkpoint(repo):
     return before != git(archive, "rev-parse", "HEAD")
 
 
-def capture(repo, session=None, transcript=None):
-    register(repo, session or os.environ.get("CLAUDE_CODE_SESSION_ID"), transcript)
+def capture(repo, session=None, transcript=None, client="claude"):
+    register(repo, session or (os.environ.get("CLAUDE_CODE_SESSION_ID") if client == "claude" else None), transcript, client)
     todo = pending(repo)
     if not todo:
         return []
@@ -663,6 +663,7 @@ def main():
     push.add_argument("remote", nargs="?")
     push.add_argument("url", nargs="?")
     cap = cmds.add_parser("capture", help="Archive a session now")
+    cap.add_argument("--client", choices=("claude", "codex"), default="claude")
     cap.add_argument("--session")
     cap.add_argument("--transcript")
     cmds.add_parser("install", help="Install the git hooks in this checkout")
@@ -698,8 +699,9 @@ def dispatch(repo, args):
             print(note, file=sys.stderr)
         return 0
     try:
-        for record in capture(repo, getattr(args, "session", None), getattr(args, "transcript", None)):
-            print(f"Archived Claude Code dialogue in {record}", file=sys.stderr)
+        for record in capture(repo, getattr(args, "session", None), getattr(args, "transcript", None),
+                              getattr(args, "client", "claude")):
+            print(f"Archived development dialogue in {record}", file=sys.stderr)
     except Exception as exc:
         print(f"Transcript capture failed, so the commit was stopped: {exc}", file=sys.stderr)
         return 1

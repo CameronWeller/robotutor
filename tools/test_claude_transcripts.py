@@ -224,6 +224,21 @@ class CaptureTests(unittest.TestCase):
         self.assertEqual(git(self.repo, "ls-files", "-s", "--", "logs").split()[1],
                          git(self.repo / "logs", "rev-parse", "HEAD"))
 
+    def test_linked_legacy_checkout_records_private_archive_revision(self):
+        legacy = self.repo.parent / "legacy"
+        subprocess.run(["git", "init", "-q", "-b", "main", str(legacy)], check=True)
+        (legacy / "logs").mkdir()
+        git(legacy, "config", "robotutor.sessionArchivePath", str(self.repo / "logs"))
+        self.write(line("user", "A legacy study session.", "u-0000-0032"))
+        env = dict(os.environ, GIT_AUTHOR_NAME="Test", GIT_AUTHOR_EMAIL="test@example.invalid",
+                   GIT_COMMITTER_NAME="Test", GIT_COMMITTER_EMAIL="test@example.invalid")
+        subprocess.run(["sh", str(self.repo / "tools/claude-transcripts"), "--repo", str(legacy),
+                        "capture", "--session", SESSION, "--transcript", str(self.transcript)],
+                       env=env, check=True, capture_output=True)
+        self.assertEqual((legacy / "logs/archive-revision").read_text().strip(),
+                         git(self.repo / "logs", "rev-parse", "HEAD"))
+        self.assertEqual(git(legacy, "diff", "--cached", "--name-only"), "logs/archive-revision")
+
     def test_path_commit_and_agent_hook_include_the_checkpoint(self):
         self.write(line("user", "Commit only this file.", "u-0000-0004"))
         event = {"hook_event_name": "PreToolUse", "session_id": SESSION, "tool_name": "Bash",
