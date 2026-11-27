@@ -9,3 +9,4 @@ lab/tests/fixtures/*.json text eol=lf
 
 tools/windows/*.sh text eol=lf
 lab/fixtures/prompt-pilot/* text eol=lf
+tools/claude-transcripts text eol=lf

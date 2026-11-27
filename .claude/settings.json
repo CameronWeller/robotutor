@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {"hooks": [{"type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/tools/claude-transcripts\" hook", "timeout": 120}]}
+    ],
+    "PreToolUse": [
+      {"matcher": "Bash|Edit|Write|MultiEdit|NotebookEdit",
+       "hooks": [{"type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/tools/claude-transcripts\" hook", "timeout": 300}]}
+    ],
+    "Stop": [
+      {"hooks": [{"type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/tools/claude-transcripts\" hook", "timeout": 180}]}
+    ]
+  }
+}

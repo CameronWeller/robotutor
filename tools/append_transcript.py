@@ -26,11 +26,22 @@ def validate(path, content, entry):
 
 
 def publish(repo, path, content, entry):
+    return publish_many(repo, path, [(content, entry)])
+
+
+def publish_many(repo, path, entries, keep_existing=False, message="Append reviewed development record"):
+    """Publish several entries to one record in a single archive commit.
+
+    An entry already present is left as it is. With keep_existing, an entry ID that is present with
+    different content is also left as it is instead of raising, so recapture never rewrites a record.
+    """
     path = path.removeprefix("logs/")
-    digest = hashlib.sha256(content.encode()).hexdigest()
-    prefix = f"<!-- transcript-entry {entry} "
-    marker = f"{prefix}{digest} -->"
-    block = (marker + "\n" + content.rstrip("\n") + "\n").encode("utf-8")
+    blocks = []
+    for content, entry in entries:
+        digest = hashlib.sha256(content.encode()).hexdigest()
+        prefix = f"<!-- transcript-entry {entry} "
+        block = (f"{prefix}{digest} -->" + "\n" + content.rstrip("\n") + "\n").encode("utf-8")
+        blocks.append((prefix.encode("ascii"), block))
     with tempfile.TemporaryDirectory() as tmp:
         env = {**os.environ, "GIT_INDEX_FILE": str(Path(tmp) / "index")}
         def git(*args, data=None, check=True, binary=False):
@@ -56,28 +67,42 @@ def publish(repo, path, content, entry):
                 if record and not record.startswith("100644 blob "):
                     raise ValueError("Expected a regular Markdown file")
                 old = git("show", f"{parent}:{path}", binary=True).stdout if record else b""
-                if prefix.encode("ascii") in old:
-                    # Early Windows writers stored whole entries with CRLF.
-                    framed = b"\n" + old
-                    if b"\n" + block in framed or b"\n" + block.replace(b"\n", b"\r\n") in framed:
-                        return parent
-                    raise ValueError("Entry ID already has different content")
+                framed, added = b"\n" + old, b""
+                present = set(re.findall(rb"<!-- transcript-entry ([A-Za-z0-9_-]+) ", old))
+                seen = set()
+                for prefix, block in blocks:
+                    ident = prefix[len(b"<!-- transcript-entry "):-1]
+                    if ident in present:
+                        # Early Windows writers stored whole entries with CRLF.
+                        if (keep_existing or b"\n" + block in framed
+                                or b"\n" + block.replace(b"\n", b"\r\n") in framed):
+                            continue
+                        raise ValueError("Entry ID already has different content")
+                    if ident in seen:
+                        if b"\n" + block in added:
+                            continue
+                        raise ValueError("Entry ID repeated with different content")
+                    seen.add(ident)
+                    added += b"\n" + block
+                if not added:
+                    return parent
                 for ancestor in Path(path).parents:
                     if str(ancestor) != ".":
                         obj = git("ls-tree",parent,"--",str(ancestor)).stdout
                         if obj and not obj.startswith("040000 tree "):
                             raise ValueError("Transcript directory is not a Git tree")
-                blob = git("hash-object", "-w", "--stdin", data=old + b"\n" + block,
+                blob = git("hash-object", "-w", "--stdin", data=old + added,
                            binary=True).stdout.decode("ascii").strip()
                 git("read-tree",parent)
                 git("update-index","--add","--cacheinfo",f"100644,{blob},{path}")
                 tree = git("write-tree").stdout.strip()
-                commit = git("commit-tree",tree,"-p",parent,"-m","Append reviewed development record").stdout.strip()
+                commit = git("commit-tree",tree,"-p",parent,"-m",message).stdout.strip()
                 push = git("push","origin",f"{commit}:{BRANCH}",check=False)
                 if push.returncode == 0:
                     fetch_snapshot(ref)
                     git("merge-base", "--is-ancestor", commit, ref)
-                    if b"\n" + block not in git("show", f"{ref}:{path}", binary=True).stdout:
+                    published = git("show", f"{ref}:{path}", binary=True).stdout
+                    if not published.startswith(old + added):
                         raise RuntimeError("Remote transcript verification failed")
                     return commit
                 if "rejected" not in push.stderr and "failed to update ref" not in push.stderr:
