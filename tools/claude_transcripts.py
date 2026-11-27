@@ -20,6 +20,9 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from append_transcript import publish_many, validate
+from local_platform import lock_file
+import session_records
+from collections import Counter
 
 MARKER = "# robotutor-claude-transcripts"
 ARCHIVE_FORMAT = "robotutor-development-transcripts-v1"
@@ -58,8 +61,8 @@ def redact(text):
     return text.replace("<!-- transcript-entry ", "<!-- transcript-entry​ ")
 
 
-def tag(session):
-    return hashlib.sha256(("robotutor/claude/" + session).encode()).hexdigest()[:24]
+def tag(session, client="claude"):
+    return hashlib.sha256(("robotutor/" + client + "/" + session).encode()).hexdigest()[:24]
 
 
 def summary(block):
@@ -101,23 +104,55 @@ def visible(record):
     return None
 
 
-def read_messages(path, start=0):
+def read_messages(path, start=0, client="claude"):
     """Yield (end offset, message ID, timestamp, role, body) for complete lines after start."""
+    completed = []
+    emitted = Counter()
     with Path(path).open("rb") as stream:
         stream.seek(start)
         offset = start
         for line in stream:
             if not line.endswith(b"\n"):
-                return  # Claude Code is still writing this line.
+                break  # The client is still writing this line.
             offset += len(line)
             try:
                 record = json.loads(line)
             except ValueError:
                 continue
+            if not isinstance(record, dict):
+                continue
+            if client == "codex":
+                record = session_records.codex(record)
+                if record is None:
+                    continue
+                obj = record["payload"]
+                if obj["type"] == "item_completed":
+                    item = obj["item"]
+                    role = "User" if item["type"] == "UserMessage" else "Assistant"
+                    body = item.get("text") or "\n".join(part["text"] for part in item.get("content", []))
+                    if body:
+                        completed.append((offset, f"codex-{offset}", record.get("timestamp", ""), role, body))
+                    continue
+                if obj["type"] not in ("user_message", "agent_message"):
+                    continue
+                role = "User" if obj["type"] == "user_message" else "Assistant"
+                emitted[(role, obj["message"])] += 1
+                yield offset, f"codex-{offset}", record.get("timestamp", ""), role, obj["message"]
+                continue
+            record = session_records.claude(record)
+            if record is None:
+                continue
             found = visible(record)
             ident = record.get("uuid")
             if found and found[1].strip() and ident and re.fullmatch(r"[A-Za-z0-9-]{8,80}", ident):
                 yield offset, ident, record.get("timestamp", ""), found[0], found[1]
+
+    for event in completed:
+        key = event[3:]
+        if emitted[key]:
+            emitted[key] -= 1
+        else:
+            yield event
 
 
 def entries_for(ident, stamp, role, body):
@@ -143,27 +178,30 @@ def redact_value(value):
     return value
 
 
-def redact_raw(line):
+def redact_raw(line, client="claude"):
     """Redact one JSONL record. Lines without a match keep their exact bytes."""
     text = line.decode("utf-8", errors="replace").rstrip("\r\n")
     try:
         record = json.loads(text)
     except ValueError:
-        return redact(text)
-    cleaned = redact_value(record)
+        record = None
+    select = session_records.codex if client == "codex" else session_records.claude
+    selected = select(record) if isinstance(record, dict) else None
+    cleaned = redact_value(selected or {"type": "omitted"})
     return text if cleaned == record else json.dumps(cleaned, ensure_ascii=False, separators=(",", ":"))
 
 
-def raw_sources(main):
+def raw_sources(main, client="claude"):
     """The main transcript and the subagent transcripts Claude Code keeps beside it."""
     found = [("main", main)]
     folder = main.with_suffix("")
-    if folder.is_dir():
-        found += [(p.relative_to(folder).as_posix(), p) for p in sorted(folder.rglob("*.jsonl"))]
+    if client == "claude" and folder.is_dir():
+        found += [(p.relative_to(folder).as_posix(), p) for p in sorted(folder.glob("subagents/agent-*.jsonl"))
+                  if p.resolve().is_relative_to(folder.resolve()) and not p.is_symlink()]
     return found
 
 
-def raw_entries(name, path, start):
+def raw_entries(name, path, start, client="claude"):
     """Yield (end offset, [(content, entry)]) for each complete source line after start."""
     key = hashlib.sha256(name.encode()).hexdigest()[:8]
     label = re.sub(r"\s", "_", name)
@@ -173,7 +211,7 @@ def raw_entries(name, path, start):
         for line in stream:
             if not line.endswith(b"\n"):
                 return
-            text = redact_raw(line)
+            text = redact_raw(line, client)
             fence = "`" * max(3, max((len(m) for m in re.findall(r"`+", text)), default=0) + 1)
             pieces = [text[i:i + ENTRY_LIMIT] for i in range(0, len(text), ENTRY_LIMIT)] or [""]
             out = []
@@ -245,17 +283,27 @@ def find_transcript(session):
     return matches[0] if len(matches) == 1 else None
 
 
-def register(repo, session, transcript=None):
+def register(repo, session, transcript=None, client="claude"):
     """Remember a session so that a later commit from an ordinary terminal still captures it."""
     if not session or not SESSION.fullmatch(session):
         return
-    transcript = transcript or find_transcript(session)
+    transcript = transcript or (find_transcript(session) if client == "claude" else None)
     if not transcript:
         return
+    path = Path(transcript).resolve()
+    if client == "codex":
+        home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")).resolve()
+        if not any(path.is_relative_to(home / k) for k in ("sessions", "archived_sessions")) or not path.name.endswith(session + ".jsonl"):
+            raise ValueError("Unexpected Codex transcript path")
+    else:
+        home = Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude")).resolve()
+        if not path.is_relative_to(home / "projects") or path.name != session + ".jsonl":
+            raise ValueError("Unexpected Claude transcript path")
     state = load_state(repo)
     row = state.setdefault(session, {"offset": 0, "indexed": False})
     if row.get("transcript") != str(transcript):
-        row["transcript"] = str(transcript)
+        row["transcript"] = str(path)
+        row["client"] = client
         save_state(repo, state)
 
 
@@ -265,6 +313,27 @@ def archive_ready(repo):
         (archive / ".archive-format").read_text(encoding="utf-8").strip() == ARCHIVE_FORMAT
 
 
+def verify_destination(repo):
+    archive = repo / "logs"
+    urls = set(git(archive, "remote", "get-url", "--all", "origin").splitlines())
+    urls.update(git(archive, "remote", "get-url", "--push", "--all", "origin").splitlines())
+    if os.environ.get("GIT_ALLOW_PROTOCOL") == "file" and all(url.startswith("file://") for url in urls):
+        return  # Offline test fixtures cannot use a network transport.
+    slug = "CameronWeller/robotutor-transcripts"
+    allowed = {f"https://github.com/{slug}.git", f"git@github.com:{slug}.git",
+               f"ssh://git@github.com/{slug}.git"}
+    if not urls or not urls.issubset(allowed):
+        raise ValueError("Expected the owner's Robotutor transcript archive as fetch and push destination.")
+    def api(path, query):
+        return subprocess.check_output(["gh", "api", "--hostname", "github.com", "--paginate", path,
+                                        "--jq", query], text=True).splitlines()
+    owner = slug.split("/")[0]
+    if (api("user", ".login") != [owner]
+            or api(f"repos/{slug}", ".visibility") != ["private"]
+            or set(api(f"repos/{slug}/collaborators", ".[].login")) != {owner}):
+        raise ValueError("Automatic capture requires the owner's private, single-collaborator archive.")
+
+
 def pending(repo):
     """Sessions with dialogue not yet published."""
     found = {}
@@ -272,10 +341,11 @@ def pending(repo):
         path = Path(row.get("transcript", ""))
         if path.is_file():
             offset = row["offset"] if path.stat().st_size >= row["offset"] else 0
+            client = row.get("client", "claude")
             raw = row.get("raw", {})
-            if any(True for _ in read_messages(path, offset)) or any(
-                    any(True for _ in raw_entries(n, p, raw.get(n, 0) if p.stat().st_size >= raw.get(n, 0) else 0))
-                    for n, p in raw_sources(path)):
+            if any(True for _ in read_messages(path, offset, client)) or any(
+                    any(True for _ in raw_entries(n, p, raw.get(n, 0) if p.stat().st_size >= raw.get(n, 0) else 0, client))
+                    for n, p in raw_sources(path, client)):
                 found[session] = row
     return found
 
@@ -283,17 +353,18 @@ def pending(repo):
 def publish_session(repo, session, row):
     path = Path(row["transcript"])
     offset = row["offset"] if path.stat().st_size >= row["offset"] else 0
-    messages = list(read_messages(path, offset))
+    client = row.get("client", "claude")
+    messages = sorted(read_messages(path, offset, client), key=lambda event: event[0])
     if "record" not in row:
         first = messages[0][2][:10] if messages else ""
         day = (first or datetime.now(timezone.utc).strftime("%Y-%m-%d")).replace("-", "/")
-        row["record"] = f"logs/{day}/claude-session-{tag(session)}.md"
+        row["record"] = f"logs/{day}/{client}-session-{tag(session, client)}.md"
     record = row["record"]
-    header = (f"# Claude Code development session {tag(session)}\n\n"
+    header = (f"# {client.title()} development session {tag(session, client)}\n\n"
               "Automatic record of the visible dialogue, captured with each commit. Tool calls appear "
-              "as one-line summaries here and in full in the linked raw transcript. Credentials matching "
+              "as one-line summaries here and as native event metadata in the linked JSONL record. Credentials matching "
               "known formats are redacted.\n",
-              "session-" + tag(session))
+              "session-" + tag(session, client))
     batch, size = [header], 0
     for end, ident, stamp, role, body in messages:
         for content, entry in entries_for(ident, stamp, role, body):
@@ -308,7 +379,7 @@ def publish_session(repo, session, row):
         row["offset"] = messages[-1][0]
     if not row.get("indexed"):
         publish_many(repo / "logs", "logs/coverage.md",
-                     [(f"- [Claude Code development session {tag(session)}]({record[5:]})\n", "index-claude-" + tag(session))],
+                     [(f"- [{client.title()} development session {tag(session, client)}]({record[5:]})\n", "index-" + client + "-" + tag(session, client))],
                      keep_existing=True, message="Index Claude Code session record")
         row["indexed"] = True
     publish_raw(repo, session, row, path)
@@ -324,6 +395,7 @@ def archive_head(repo):
 def publish_raw(repo, session, row, main):
     """Append every new raw source line, splitting the record into numbered parts as it grows."""
     archive, base = repo / "logs", row["record"].removesuffix(".md") + "-raw"
+    client = row.get("client", "claude")
     raw = row.setdefault("raw", {})
     head = archive_head(repo)
     names = git(archive, "ls-tree", "--name-only", head, "--", str(Path(base[5:]).parent) + "/").split("\n")
@@ -343,9 +415,9 @@ def publish_raw(repo, session, row, main):
         if size and size + sum(len(c) for c, _ in batch) > RAW_PART_LIMIT:
             number, size = number + 1, 0
         path = f"{base}-{number:02d}.md"
-        header = (f"# Claude Code raw transcript {tag(session)}, part {number}\n\n"
-                  "Every line Claude Code wrote for the session and its subagents, including tool input and "
-                  "output, with credentials in known formats redacted. Each entry is one source line. "
+        header = (f"# {client.title()} JSONL transcript {tag(session, client)}, part {number}\n\n"
+                   "Native dialogue and tool metadata, with private events represented by omission markers. "
+                  "Credentials in known formats are redacted. Each entry corresponds to one source line. "
                   "Rebuild the JSONL files with `sh tools/claude-transcripts restore-raw`.\n",
                   f"raw-header-{number:02d}")
         publish_many(archive, path, [header, *batch], keep_existing=True, message="Append Claude Code raw transcript")
@@ -355,10 +427,10 @@ def publish_raw(repo, session, row, main):
                          keep_existing=True, message="Link Claude Code raw transcript")
         size += sum(len(c.encode()) for c, _ in batch) + 2000
 
-    for name, path in raw_sources(main):
+    for name, path in raw_sources(main, client):
         start = raw.get(name, 0) if path.stat().st_size >= raw.get(name, 0) else 0
         batch, total, reached = [], 0, start
-        for end, entries in raw_entries(name, path, start):
+        for end, entries in raw_entries(name, path, start, client):
             for content, entry in entries:
                 if entry not in done:
                     validate(f"{base}-01.md", content, entry)
@@ -391,6 +463,7 @@ def capture(repo, session=None, transcript=None):
         return []
     if not archive_ready(repo):
         raise RuntimeError("Run `git submodule update --init logs` so this session's transcript can be archived.")
+    verify_destination(repo)
     for name, value in (("GIT_AUTHOR_NAME", "Robotutor Session Archive"), ("GIT_AUTHOR_EMAIL", "archive@localhost"),
                         ("GIT_COMMITTER_NAME", "Robotutor Session Archive"), ("GIT_COMMITTER_EMAIL", "archive@localhost")):
         os.environ.setdefault(name, value)
@@ -495,10 +568,12 @@ def touches_archive(repo, path):
         return False
 
 
-def hook(repo, event):
+def hook(repo, event, client="claude"):
     """Claude Code hook entry point. Exit status 2 blocks the tool call and tells the agent why."""
     name = event.get("hook_event_name")
-    register(repo, event.get("session_id"), event.get("transcript_path"))
+    if git(repo, "config", "--bool", "--get", "robotutor.archiveSessions", check=False) != "true":
+        return 0
+    register(repo, event.get("session_id"), event.get("transcript_path"), client)
     if name == "SessionStart":
         notes = install_git_hooks(repo)
         if not archive_ready(repo):
@@ -509,6 +584,9 @@ def hook(repo, event):
                              "be stopped until it is initialized.")
         for note in notes:
             print(note, file=sys.stderr)
+        return 0
+    if name in ("Stop", "SessionEnd"):
+        capture(repo)
         return 0
     if name != "PreToolUse":
         return 0
@@ -552,6 +630,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", type=Path)
     cmds = parser.add_subparsers(dest="action", required=True)
+    cmds.add_parser("codex-hook", help="Receive a Codex hook event on stdin")
     cmds.add_parser("hook", help="Claude Code hook entry point (event JSON on stdin)")
     cmds.add_parser("pre-commit", help="Archive registered sessions and stage the logs gitlink")
     push = cmds.add_parser("pre-push", help="Refuse pushes that replace commits")
@@ -571,25 +650,35 @@ def main():
         return 0
     isolate_from_hook()
     repo = Path(git(args.repo or os.environ.get("CLAUDE_PROJECT_DIR") or Path.cwd(), "rev-parse", "--show-toplevel"))
-    if args.action == "hook":
-        return hook(repo, json.load(sys.stdin))
+    if args.action == "pre-push":
+        problems = pre_push(repo, sys.stdin.read().splitlines())
+        for problem in problems:
+            print(problem, file=sys.stderr)
+        return int(bool(problems))
+    # Git and client lifecycle hooks can fire concurrently, including from sibling worktrees.
+    with state_file(repo).with_suffix(".lock").open("a+b") as stream:
+        lock_file(stream)
+        return dispatch(repo, args)
+
+
+def dispatch(repo, args):
+    if args.action in ("hook", "codex-hook"):
+        return hook(repo, json.load(sys.stdin), "codex" if args.action == "codex-hook" else "claude")
     if args.action == "install":
+        git(repo, "config", "--local", "robotutor.archiveSessions", "true")
         for note in install_git_hooks(repo):
             print(note, file=sys.stderr)
         return 0
-    if args.action == "pre-push":
-        problems = pre_push(repo, sys.stdin.read().splitlines())
-    else:
-        try:
-            for record in capture(repo, getattr(args, "session", None), getattr(args, "transcript", None)):
-                print(f"Archived Claude Code dialogue in {record}", file=sys.stderr)
-        except Exception as exc:
-            print(f"Transcript capture failed, so the commit was stopped: {exc}", file=sys.stderr)
-            return 1
-        if args.action == "pre-commit":
-            stage_published(repo)
-        head = git(repo, "rev-parse", "--verify", "-q", "HEAD", check=False)
-        problems = verify_gitlink(repo, head or None, None) if head and args.action == "pre-commit" else []
+    try:
+        for record in capture(repo, getattr(args, "session", None), getattr(args, "transcript", None)):
+            print(f"Archived Claude Code dialogue in {record}", file=sys.stderr)
+    except Exception as exc:
+        print(f"Transcript capture failed, so the commit was stopped: {exc}", file=sys.stderr)
+        return 1
+    if args.action == "pre-commit":
+        stage_published(repo)
+    head = git(repo, "rev-parse", "--verify", "-q", "HEAD", check=False)
+    problems = verify_gitlink(repo, head or None, None) if head and args.action == "pre-commit" else []
     for problem in problems:
         print(problem, file=sys.stderr)
     return 1 if problems else 0

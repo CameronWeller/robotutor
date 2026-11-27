@@ -8,7 +8,7 @@
        "hooks": [{"type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/tools/claude-transcripts\" hook", "timeout": 300}]}
     ],
     "Stop": [
-      {"hooks": [{"type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/tools/claude-transcripts\" hook", "timeout": 30}]}
+      {"hooks": [{"type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/tools/claude-transcripts\" hook", "timeout": 180}]}
     ]
   }
 }

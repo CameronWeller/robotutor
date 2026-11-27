@@ -48,7 +48,7 @@ class RawTests(unittest.TestCase):
             main = Path(tmp) / f"{SESSION}.jsonl"
             agent = Path(tmp) / SESSION / "subagents" / "agent-1.jsonl"
             agent.parent.mkdir(parents=True)
-            long = line("user", [{"type": "tool_result", "content": "x" * (ct.ENTRY_LIMIT * 2 + 7)}], "r-0000-0009")
+            long = line("user", [{"type": "text", "text": "x" * (ct.ENTRY_LIMIT * 2 + 7)}], "r-0000-0009")
             fenced = line("assistant", [{"type": "text", "text": "````\ncode\n````"}], "a-0000-0009")
             main.write_text(long + fenced + '{"partial":', encoding="utf-8")
             agent.write_text(line("user", "Delegated task.", "u-0000-0009"), encoding="utf-8")
@@ -102,13 +102,14 @@ class CaptureTests(unittest.TestCase):
         git(self.repo / "logs", "config", "user.name", "Test")
         git(self.repo / "logs", "config", "user.email", "test@example.invalid")
         (self.repo / "tools").mkdir()
-        for name in ("claude-transcripts", "claude_transcripts.py", "append_transcript.py"):
+        for name in ("claude-transcripts", "claude_transcripts.py", "append_transcript.py", "session_records.py"):
             (self.repo / "tools" / name).write_bytes((TOOL / name).read_bytes())
         (self.repo / "desktop").mkdir()
         (self.repo / "desktop/local_platform.py").write_bytes(
             (TOOL.parent / "desktop/local_platform.py").read_bytes())
         git(self.repo, "add", ".")
         git(self.repo, "commit", "-qm", "Start code")
+        git(self.repo, "config", "robotutor.archiveSessions", "true")
         self.assertEqual(ct.install_git_hooks(self.repo), [])
 
         self.transcript = root / "claude" / "projects" / "-code" / f"{SESSION}.jsonl"
@@ -158,7 +159,7 @@ class CaptureTests(unittest.TestCase):
             self.assertNotIn(hidden, text)
         raw = self.archived(raw=True)
         for kept in ("private reasoning", "tool output", "cat secret.txt", "system-reminder"):
-            self.assertIn(kept, raw)
+            self.assertNotIn(kept, raw)
         self.assertNotIn(fake, raw)
         self.assertIn("Raw transcript, part 1", text)
         folder = self.repo / "restored"
@@ -193,6 +194,35 @@ class CaptureTests(unittest.TestCase):
         result = self.commit("three.txt")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(second, git(self.repo, "ls-tree", "HEAD", "logs").split()[2])
+
+    def test_codex_stop_archives_native_dialogue_without_private_model_input(self):
+        codex_home = self.repo.parent / "codex-home"
+        path = codex_home / "sessions" / f"rollout-{SESSION}.jsonl"
+        path.parent.mkdir(parents=True)
+        rows = [
+            {"type": "event_msg", "payload": {"type": "user_message", "message": "Review my visit."}},
+            {"type": "response_item", "payload": {"type": "message", "role": "user", "content": [{"type": "input_text", "text": "injected-context"}]}},
+            {"type": "response_item", "payload": {"type": "reasoning", "content": "hidden-reason"}},
+            {"type": "turn_context", "payload": {"developer_instructions": "private-instructions"}},
+            {"type": "event_msg", "payload": {"type": "agent_message", "message": "Reviewed."}},
+        ]
+        path.write_text("".join(json.dumps(dict(row, timestamp="2026-11-25T21:00:00Z")) + "\n" for row in rows))
+        event = {"session_id": SESSION, "transcript_path": str(path), "hook_event_name": "Stop"}
+        env = dict(os.environ, CODEX_HOME=str(codex_home))
+        env.pop("CLAUDE_CODE_SESSION_ID", None)
+        for _ in range(2):
+            subprocess.run(["sh", "tools/claude-transcripts", "codex-hook"], cwd=self.repo,
+                           input=json.dumps(event), env=env, text=True, check=True)
+        name = f"2026/11/25/codex-session-{ct.tag(SESSION, 'codex')}"
+        raw = git(self.repo / "logs", "show", f"HEAD:{name}-raw-01.md")
+        dialogue = git(self.repo / "logs", "show", f"HEAD:{name}.md")
+        for body in (raw, dialogue):
+            self.assertEqual(body.count("Review my visit."), 1)
+            self.assertIn("Reviewed.", body)
+            for hidden in ("injected-context", "private-instructions", "hidden-reason"):
+                self.assertNotIn(hidden, body)
+        self.assertEqual(git(self.repo, "ls-files", "-s", "--", "logs").split()[1],
+                         git(self.repo / "logs", "rev-parse", "HEAD"))
 
     def test_path_commit_and_agent_hook_include_the_checkpoint(self):
         self.write(line("user", "Commit only this file.", "u-0000-0004"))
